@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Atividades</title>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        .dark {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --primary: 210 40% 98%;
+            --primary-foreground: 222.2 47.4% 11.2%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 217.2 32.6% 17.5%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 212.7 26.8% 83.9%;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+        .badge-green { background-color: #D1FAE5; color: #065F46; }
+        .badge-yellow { background-color: #FEF3C7; color: #92400E; }
+        .badge-red { background-color: #FEE2E2; color: #991B1B; }
+        .badge-blue { background-color: #DBEAFE; color: #1E40AF; }
+        .badge-gray { background-color: #F3F4F6; color: #4B5563; }
+
+        .dark .badge-green { background-color: #064E3B; color: #A7F3D0; }
+        .dark .badge-yellow { background-color: #78350F; color: #FDE68A; }
+        .dark .badge-red { background-color: #7F1D1D; color: #FECACA; }
+        .dark .badge-blue { background-color: #1E3A8A; color: #BFDBFE; }
+        .dark .badge-gray { background-color: #374151; color: #D1D5DB; }
+
+        .toast-popup {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 220ms ease, transform 220ms ease;
+        }
+
+        .toast-popup.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-danger {
+            background-color: hsl(var(--destructive));
+            color: hsl(var(--destructive-foreground));
+            border-color: hsl(var(--destructive-foreground) / 0.25);
+        }
+
+        .toast-danger-icon {
+            border-color: hsl(var(--destructive-foreground) / 0.5);
+        }
+
+        @media (max-width: 1024px) { .hide-on-mobile { display: none; } }
+    </style>
+</head>
+<body class="bg-secondary/50 dark:bg-background">
+    <div id="main-container" class="w-full h-full p-4 lg:p-6 flex flex-col gap-6">
+
+        <!-- Header -->
+        <header class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="flex -space-x-4">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </div>
+                <h1 class="text-2xl font-bold text-foreground">Gestão de Atividades</h1>
+            </div>
+            <img src="https://mitra-multitenant-prod.s3.amazonaws.com/tenant_4312/label-images/20250820T181042088Z_Sankhya-logo-s.webp" alt="Logomarca da Empresa" class="h-10">
+        </header>
+
+        <!-- KPI Cards -->
+        <div id="kpi-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Skeletons -->
+            <div class="bg-background dark:bg-secondary border border-border rounded-lg p-5 animate-pulse"><div class="h-6 bg-muted rounded w-1/4"></div><div class="h-8 bg-muted rounded w-1/2 mt-2"></div></div>
+            <div class="bg-background dark:bg-secondary border border-border rounded-lg p-5 animate-pulse"><div class="h-6 bg-muted rounded w-1/4"></div><div class="h-8 bg-muted rounded w-1/2 mt-2"></div></div>
+            <div class="bg-background dark:bg-secondary border border-border rounded-lg p-5 animate-pulse"><div class="h-6 bg-muted rounded w-1/4"></div><div class="h-8 bg-muted rounded w-1/2 mt-2"></div></div>
+            <div class="bg-background dark:bg-secondary border border-border rounded-lg p-5 animate-pulse"><div class="h-6 bg-muted rounded w-1/4"></div><div class="h-8 bg-muted rounded w-1/2 mt-2"></div></div>
+        </div>
+
+        <!-- Tabela Container -->
+        <div class="flex-1 flex flex-col bg-background dark:bg-secondary border border-border rounded-lg min-h-0">
+            <!-- Table Action Bar -->
+            <div class="p-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-semibold text-foreground">Lista de Atividades</h2>
+                    <p class="text-sm text-muted-foreground">Visualize e gerencie as atividades pendentes e concluídas.</p>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <div class="relative w-full md:w-64">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"></i>
+                        <input id="search-input" type="text" placeholder="Buscar atividades..." class="flex h-10 w-full rounded-md border border-input bg-background dark:bg-muted px-3 py-2 pl-10 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                    </div>
+                    <button id="add-activity-btn" class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90">
+                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Atividade
+                    </button>
+                    <button id="add-playbook-btn" class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-muted dark:hover:bg-muted/80">
+                        <i data-lucide="book-plus" class="w-4 h-4 mr-2"></i> Playbook
+                    </button>
+                     <button id="export-btn" class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground">
+                        <i data-lucide="download" class="w-4 h-4 mr-2"></i> Exportar
+                    </button>
+                </div>
+            </div>
+            <div id="validation-toast" class="hidden fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] sm:w-auto sm:max-w-md" role="alert" aria-live="assertive">
+                <div id="validation-toast-content" class="toast-popup toast-danger flex items-start gap-3 rounded-md border px-4 py-3 shadow-lg">
+                    <span class="toast-danger-icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">!</span>
+                    <p id="validation-toast-text" class="text-sm font-medium"></p>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="flex-1 overflow-auto">
+                <table class="w-full text-sm">
+                    <thead class="sticky top-0 z-10 bg-white border-b border-border shadow-sm">
+                        <tr>
+                            <th class="text-left text-base text-muted-foreground font-bold p-4">Atividade</th>
+                            <th class="text-left text-base text-muted-foreground font-bold p-4">Responsável</th>
+                            <th class="text-left text-base text-muted-foreground font-bold p-4 hide-on-mobile">Parceiro</th>
+                            <th class="text-left text-base text-muted-foreground font-bold p-4 hide-on-mobile">Playbook</th>
+                            <th class="text-left text-base text-muted-foreground font-bold p-4 min-w-[200px]">Data</th>
+                            <th class="text-left text-base text-muted-foreground font-bold p-4">Categoria</th>
+                            <th class="text-left text-base text-muted-foreground font-bold p-4 hide-on-mobile">Data Criação</th>
+                            <th class="text-left text-base text-muted-foreground font-bold px-2 py-4 hide-on-mobile">Anotações</th>
+                            <th class="text-center text-base text-muted-foreground font-bold p-4">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activities-tbody" class="divide-y divide-border">
+                        <!-- Loading State -->
+                        <tr><td colspan="9" class="p-8 text-center text-muted-foreground">Carregando atividades...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MITRA_UPDATE_EVENT_NAME = 'mitra-update-gestao-atividades';
+
+        function updateMitra() {
+            console.log("Sinal de update para [Gestão Atividades] recebido. Disparando evento.");
+            document.body.dispatchEvent(new CustomEvent(MITRA_UPDATE_EVENT_NAME));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const kpiContainer = document.getElementById('kpi-cards-container');
+            const tableBody = document.getElementById('activities-tbody');
+            const searchInput = document.getElementById('search-input');
+            const addActivityBtn = document.getElementById('add-activity-btn');
+            const addPlaybookBtn = document.getElementById('add-playbook-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const validationToast = document.getElementById('validation-toast');
+            const validationToastContent = document.getElementById('validation-toast-content');
+            const validationToastText = document.getElementById('validation-toast-text');
+            let searchDebounceTimeout;
+            let validationToastTimeout;
+            let validationToastHideTimeout;
+
+            const showValidationMessage = (message) => {
+                if (!validationToast || !validationToastContent || !validationToastText) return;
+
+                clearTimeout(validationToastTimeout);
+                clearTimeout(validationToastHideTimeout);
+                validationToastText.textContent = message;
+                validationToast.classList.remove('hidden');
+                validationToastContent.classList.remove('show');
+
+                requestAnimationFrame(() => {
+                    validationToastContent.classList.add('show');
+                });
+
+                validationToastTimeout = setTimeout(() => {
+                    clearValidationMessage();
+                }, 5000);
+            };
+
+            const clearValidationMessage = () => {
+                if (!validationToast || !validationToastContent || !validationToastText) return;
+                clearTimeout(validationToastTimeout);
+                clearTimeout(validationToastHideTimeout);
+
+                validationToastContent.classList.remove('show');
+
+                validationToastHideTimeout = setTimeout(() => {
+                    validationToastText.textContent = '';
+                    validationToast.classList.add('hidden');
+                }, 220);
+            };
+
+            const renderKpiCard = (id, icon, label, value, onClick) => {
+                const valueEl = document.getElementById(`kpi-${id}-value`);
+                if(valueEl) {
+                    valueEl.textContent = value;
+                    return;
+                }
+                const card = document.createElement('div');
+                card.className = `bg-background dark:bg-secondary border border-border rounded-lg p-5 flex flex-col justify-between${onClick ? ' cursor-pointer' : ''}`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm font-medium text-muted-foreground">${label}</p>
+                        <i data-lucide="${icon}" class="w-5 h-5 text-muted-foreground"></i>
+                    </div>
+                    <h3 id="kpi-${id}-value" class="text-3xl font-bold text-foreground mt-2">${value}</h3>
+                `;
+
+                if (onClick) {
+                    card.addEventListener('click', onClick);
+                }
+                return card;
+            };
+
+            const loadKpiData = async () => {
+                try {
+                    const result = await queryMitra({ query: componentData.cardQuery });
+                    if (!result || !result.data || result.data.length === 0) {
+                        throw new Error("A query dos cards não retornou dados.");
+                    }
+                    
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const data = result.data[0];
+                    const kpiMap = {
+                        TOTAL: headers.indexOf('TOTAL'),
+                        VENCE_HOJE: headers.indexOf('VENCE_HOJE'),
+                        ATRASADAS: headers.indexOf('ATRASADAS'),
+                        A_VENCER: headers.indexOf('A_VENCER')
+                    };
+
+                    kpiContainer.innerHTML = '';
+                    kpiContainer.appendChild(renderKpiCard('total', 'list', 'Todos', data[kpiMap.TOTAL] || 0));
+                    kpiContainer.appendChild(renderKpiCard('hoje', 'clock', 'Vence Hoje', data[kpiMap.VENCE_HOJE] || 0));
+                    kpiContainer.appendChild(renderKpiCard('atrasadas', 'alert-triangle', 'Atrasadas', data[kpiMap.ATRASADAS] || 0));
+                    kpiContainer.appendChild(renderKpiCard('vencer', 'calendar-check', 'A Vencer', data[kpiMap.A_VENCER] || 0, async () => {
+                        await setVariableMitra({ name: ':VAR_ATIV_FILTRO_SELECIONADO', content: 'A Vencer' });
+                    }));
+                    
+                    lucide.createIcons();
+                } catch (error) {
+                    console.error("Falha ao carregar dados dos KPIs:", error);
+                    kpiContainer.innerHTML = `<div class="col-span-full p-4 bg-destructive/10 text-destructive rounded-md">Erro ao carregar os indicadores.</div>`;
+                }
+            };
+            
+            const loadTableData = async () => {
+                tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-muted-foreground"><div class="flex justify-center items-center gap-2"><i data-lucide="loader-2" class="animate-spin w-5 h-5"></i>Carregando atividades...</div></td></tr>`;
+                lucide.createIcons();
+
+                try {
+                    const result = await queryMitra({ query: componentData.tableQuery });
+                    if (!result || !result.data || result.data.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-muted-foreground">Nenhuma atividade encontrada.</td></tr>`;
+                        return;
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const colMap = {
+                        ID: headers.indexOf('ID'),
+                        ATIVIDADE: headers.indexOf('ATIVIDADE'),
+                        RESPONSAVEL: headers.indexOf('RESPONSAVEL'),
+                        PARCEIRO: headers.indexOf('PARCEIRO'),
+                        PLAYBOOK: headers.indexOf('PLAYBOOK'),
+                        STATUS_LABEL: headers.indexOf('STATUS_LABEL'),
+                        STATUS_COLOR: headers.indexOf('STATUS_COLOR'),
+                        CATEGORIA: headers.indexOf('CATEGORIA'),
+                        DATA_CRIACAO: headers.indexOf('DATA_CRIACAO'),
+                        ANOTACOES: headers.indexOf('ANOTACOES')
+                    };
+
+                    const truncateText = (text, maxLength = 5) => {
+                        if (!text) return '-';
+                        const str = String(text).trim();
+                        return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+                    };
+
+                    const normalizeStatus = (value) => String(value || '')
+                        .trim()
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+
+                    const fragment = document.createDocumentFragment();
+                    result.data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-muted/50';
+                        const statusColor = row[colMap.STATUS_COLOR] || 'gray';
+                        const statusLabelRaw = row[colMap.STATUS_LABEL] || '';
+                        const notesText = String(row[colMap.ANOTACOES] || '').trim();
+                        const notesLength = notesText.length;
+                        const statusLabelNormalized = normalizeStatus(statusLabelRaw);
+                        const isCompletedStatus =
+                            statusLabelNormalized === 'concluida' ||
+                            statusLabelNormalized === 'concluida com atraso' ||
+                            statusLabelNormalized === 'concluida com atrasada' ||
+                            statusLabelNormalized === 'concluida com atrasado';
+                        const isLateCompletedStatus =
+                            statusLabelNormalized === 'concluida com atraso' ||
+                            statusLabelNormalized === 'concluida com atrasada' ||
+                            statusLabelNormalized === 'concluida com atrasado';
+                        const completeIconColorStyle = !isCompletedStatus
+                            ? ''
+                            : (isLateCompletedStatus ? 'color: #92400E;' : 'color: #065F46;');
+                        const disabledButtonClass = 'opacity-50 cursor-not-allowed';
+
+                        tr.innerHTML = `
+                            <td class="p-4 align-top font-medium text-foreground">${row[colMap.ATIVIDADE] || '-'}</td>
+                            <td class="p-4 align-top text-muted-foreground">${row[colMap.RESPONSAVEL] || '-'}</td>
+                            <td class="p-4 align-top text-muted-foreground hide-on-mobile">${row[colMap.PARCEIRO] || '-'}</td>
+                            <td class="p-4 align-top text-muted-foreground hide-on-mobile">${row[colMap.PLAYBOOK] || '-'}</td>
+                            <td class="p-4 align-top min-w-[200px]"><span class="badge badge-${statusColor}">${statusLabelRaw || '-'}</span></td>
+                            <td class="p-4 align-top text-muted-foreground">${row[colMap.CATEGORIA] || '-'}</td>
+                            <td class="p-4 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CRIACAO] || '-'}</td>
+                            <td class="px-2 py-4 align-top text-muted-foreground hide-on-mobile" title="${row[colMap.ANOTACOES] || '-'}">${truncateText(row[colMap.ANOTACOES], 50)}</td>
+                            <td class="p-4 align-top text-center">
+                                <div class="flex justify-center items-center gap-2">
+                                    <button data-action="edit" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" class="p-2 rounded-md text-muted-foreground ${isCompletedStatus ? disabledButtonClass : 'hover:bg-accent hover:text-accent-foreground'}" title="${isCompletedStatus ? 'Atividade já concluída' : 'Visualizar/Editar'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="eye" class="w-4 h-4 pointer-events-none"></i></button>
+                                    <button data-action="complete" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" data-notes-length="${notesLength}" class="p-2 rounded-md text-muted-foreground ${isCompletedStatus ? disabledButtonClass : 'hover:bg-accent hover:text-accent-foreground'}" title="${isCompletedStatus ? 'Atividade já concluída' : 'Concluir Atividade'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="check" class="w-4 h-4 pointer-events-none" style="${completeIconColorStyle}"></i></button>
+                                </div>
+                            </td>
+                        `;
+                        fragment.appendChild(tr);
+                    });
+                    
+                    tableBody.innerHTML = '';
+                    tableBody.appendChild(fragment);
+                    lucide.createIcons();
+                } catch (error) {
+                    console.error("Falha ao carregar dados da tabela:", error);
+                    tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-destructive">Erro ao carregar atividades. Verifique o console.</td></tr>`;
+                }
+            };
+
+            const refreshAllData = async () => {
+                await Promise.all([loadKpiData(), loadTableData()]);
+            };
+            
+            const setupEventListeners = () => {
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchDebounceTimeout);
+                    searchDebounceTimeout = setTimeout(async () => {
+                        try {
+                            const searchTerm = e.target.value;
+                            await setVariableMitra({ name: componentData.variableSearch, content: searchTerm });
+                            await loadTableData();
+                        } catch (error) {
+                            console.error("Erro ao executar busca:", error);
+                        }
+                    }, 300);
+                });
+
+                addActivityBtn.addEventListener('click', async () => {
+                    try {
+                        const formId = parseInt(componentData.addActivityFormId, 10);
+                        if (!isNaN(formId)) {
+                            await formMitra({ id: formId });
+                            await refreshAllData();
+                        }
+                    } catch(e) {
+                        console.error("Erro ao abrir formulário de atividade:", e);
+                    }
+                });
+
+                addPlaybookBtn.addEventListener('click', async () => {
+                    try {
+                        const formId = parseInt(componentData.addPlaybookFormId, 10);
+                        if (!isNaN(formId)) {
+                            await formMitra({ id: formId });
+                            await refreshAllData();
+                        }
+                    } catch(e) {
+                        console.error("Erro ao abrir formulário de playbook:", e);
+                    }
+                });
+                
+                exportBtn.addEventListener('click', () => {
+                    console.log("Funcionalidade 'Exportar XLSX' a ser implementada.");
+                });
+
+                tableBody.addEventListener('click', async (e) => {
+                    const button = e.target.closest('button[data-action]');
+                    if (!button || button.disabled || button.dataset.locked === 'true') return;
+
+                    const id = button.dataset.id;
+                    const action = button.dataset.action;
+
+                    try {
+                        if (action === 'edit') {
+                            clearValidationMessage();
+                            const formId = parseInt(componentData.editActivityFormId, 10);
+                            await formMitra({ id: formId, contentId: parseInt(id, 10) });
+                            await refreshAllData();
+                        } else if (action === 'complete') {
+                            const notesLength = Number(button.dataset.notesLength || 0);
+                            if (notesLength < 20) {
+                                showValidationMessage('Anotações da atividade precisam ter no mínimo 20 caracteres');
+                                return;
+                            }
+
+                            clearValidationMessage();
+                            await setVariableMitra({ name: componentData.variableSelectedId, content: id });
+                            const dbActionId = parseInt(componentData.completeDbActionId, 10);
+                            await dbactionMitra(dbActionId);
+                            
+                            if (typeof updateComponentsMitra === 'function') {
+                                await updateComponentsMitra({ all: true });
+                            }
+                            await refreshAllData();
+                        }
+                    } catch (error) {
+                        console.error(`Erro ao executar ação '${action}' para o ID ${id}:`, error);
+                    }
+                });
+            };
+
+            const initializeComponent = async () => {
+                lucide.createIcons();
+                setupEventListeners();
+                await refreshAllData();
+            };
+            
+            document.body.addEventListener(MITRA_UPDATE_EVENT_NAME, refreshAllData);
+
+            const waitForMitraAndInit = () => {
+                const maxWaitTime = 5000;
+                const intervalTime = 100;
+                const startTime = Date.now();
+                const checkInterval = setInterval(() => {
+                    if (window.componentData && window.componentData.tableQuery && window.componentData.cardQuery) {
+                        clearInterval(checkInterval);
+                        initializeComponent();
+                    } else if (Date.now() - startTime > maxWaitTime) {
+                        clearInterval(checkInterval);
+                        console.error("Erro: As configurações do componente (componentData) não foram carregadas a tempo.");
+                        document.getElementById('main-container').innerHTML = `<div class="p-8 text-center text-destructive bg-destructive/10 h-full flex items-center justify-center rounded-lg">Erro Crítico: As configurações do componente não foram carregadas da plataforma.</div>`;
+                    }
+                }, intervalTime);
+            };
+
+            waitForMitraAndInit();
+        });
+    </script>
+</body>
+</html>
