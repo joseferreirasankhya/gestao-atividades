@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Atividades</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --background: 0 0% 99%;
+            --foreground: 224 71% 4%;
+            --primary: 221 83% 53%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 220 14% 96%;
+            --secondary-foreground: 224 71% 4%;
+            --muted: 220 14% 95%;
+            --muted-foreground: 220 9% 46%;
+            --accent: 220 14% 95%;
+            --accent-foreground: 224 71% 4%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 220 13% 91%;
+            --input: 220 13% 91%;
+            --ring: 221 83% 53%;
+            --radius: 0.75rem;
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+            --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.05);
+            --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.08);
+        }
+
+        .dark {
+            --background: 224 71% 4%;
+            --foreground: 210 40% 98%;
+            --primary: 217 91% 60%;
+            --primary-foreground: 224 71% 4%;
+            --secondary: 224 32% 12%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 224 32% 12%;
+            --muted-foreground: 215 20% 58%;
+            --accent: 224 32% 16%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 224 32% 14%;
+            --input: 224 32% 14%;
+            --ring: 217 91% 60%;
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.35);
+            --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.25);
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Work Sans', sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ===================== BADGES ===================== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.65rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.72rem;
+            line-height: 1.4;
+            letter-spacing: 0.01em;
+            text-transform: capitalize;
+            white-space: nowrap;
+            border: 1px solid transparent;
+        }
+
+        .badge-green {
+            background-color: #ecfdf5;
+            color: #047857;
+            border-color: #a7f3d0;
+        }
+
+        .badge-yellow {
+            background-color: #fffbeb;
+            color: #b45309;
+            border-color: #fde68a;
+        }
+
+        .badge-red {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .badge-blue {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .badge-gray {
+            background-color: #f9fafb;
+            color: #4b5563;
+            border-color: #e5e7eb;
+        }
+
+        .dark .badge-green {
+            background-color: #052e16;
+            color: #4ade80;
+            border-color: #166534;
+        }
+
+        .dark .badge-yellow {
+            background-color: #1c1400;
+            color: #fbbf24;
+            border-color: #78350f;
+        }
+
+        .dark .badge-red {
+            background-color: #1c0000;
+            color: #f87171;
+            border-color: #7f1d1d;
+        }
+
+        .dark .badge-blue {
+            background-color: #0a1628;
+            color: #60a5fa;
+            border-color: #1e3a8a;
+        }
+
+        .dark .badge-gray {
+            background-color: #111827;
+            color: #9ca3af;
+            border-color: #374151;
+        }
+
+        /* ===================== TOAST ===================== */
+        .toast-popup {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 220ms ease, transform 220ms ease;
+        }
+
+        .toast-popup.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-danger {
+            background-color: hsl(var(--destructive));
+            color: hsl(var(--destructive-foreground));
+            border-color: hsl(var(--destructive-foreground) / 0.25);
+        }
+
+        .toast-danger-icon {
+            border-color: hsl(var(--destructive-foreground) / 0.5);
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width: 1024px) {
+            .hide-on-mobile {
+                display: none;
+            }
+        }
+
+        /* ===================== KPI CARD ===================== */
+        .kpi-card {
+            background-color: hsl(var(--background));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-card);
+            transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-card.cursor-pointer:hover {
+            border-color: hsl(var(--primary) / 0.3);
+        }
+
+        .dark .kpi-card {
+            background-color: hsl(var(--secondary));
+        }
+
+        .kpi-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            background-color: hsl(var(--primary) / 0.1);
+            color: hsl(var(--primary));
+            flex-shrink: 0;
+        }
+
+        /* Icon container backgrounds por tipo (light) */
+        .kpi-icon-total {
+            background-color: #f3f4f6;
+        }
+
+        .kpi-icon-hoje {
+            background-color: #fffbeb;
+        }
+
+        .kpi-icon-atrasadas {
+            background-color: #fef2f2;
+        }
+
+        .kpi-icon-vencer {
+            background-color: #eff6ff;
+        }
+
+        /* Dark mode: fundo neutro próximo ao card, ícone mantém cor via inline style */
+        .dark .kpi-icon-total,
+        .dark .kpi-icon-hoje,
+        .dark .kpi-icon-atrasadas,
+        .dark .kpi-icon-vencer {
+            background-color: hsl(var(--accent));
+        }
+
+        .kpi-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            color: hsl(var(--foreground));
+            margin-top: 0.75rem;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: hsl(var(--muted-foreground));
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        /* ===================== TABLE ===================== */
+        .table-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: hsl(var(--background));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+
+        .dark .table-container {
+            background-color: hsl(var(--secondary));
+        }
+
+        .table-header-sticky thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: hsl(var(--background) / 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .dark .table-header-sticky thead {
+            background-color: hsl(var(--secondary) / 0.85);
+        }
+
+        .table-row-hover {
+            transition: background-color 200ms ease;
+        }
+
+        .table-row-hover:hover {
+            background-color: hsl(var(--muted) / 0.6);
+        }
+
+        /* ===================== BUTTONS ===================== */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem;
+            border-radius: 0.5rem;
+            color: hsl(var(--muted-foreground));
+            transition: background-color 180ms ease, color 180ms ease, transform 120ms ease;
+        }
+
+        .btn-action:hover:not(:disabled) {
+            background-color: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+        }
+
+        .btn-action:active:not(:disabled) {
+            transform: scale(0.9);
+        }
+
+        .btn-action:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        /* ===================== SKELETON ===================== */
+        .skeleton-card {
+            background-color: hsl(var(--background));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .dark .skeleton-card {
+            background-color: hsl(var(--secondary));
+        }
+
+        /* ===================== INPUT ===================== */
+        .search-input {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 0.9rem;
+            transition: box-shadow 180ms ease, border-color 180ms ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: hsl(var(--primary) / 0.5);
+            box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
+        }
+
+        /* ===================== SCROLLBAR ===================== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: hsl(var(--border));
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: hsl(var(--muted-foreground) / 0.4);
+        }
+
+        /* ===================== THEME TOGGLE ===================== */
+        #theme-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid hsl(var(--border));
+            background-color: hsl(var(--background));
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 120ms ease;
+        }
+
+        #theme-toggle-btn:hover {
+            background-color: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+            border-color: hsl(var(--primary) / 0.3);
+        }
+
+        #theme-toggle-btn:active {
+            transform: scale(0.9);
+        }
+
+        #theme-toggle-btn .theme-icon {
+            width: 1rem;
+            height: 1rem;
+            transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease;
+        }
+    </style>
+</head>
+
+<body class="bg-secondary/50 dark:bg-background">
+    <div id="main-container" class="w-full h-full p-4 lg:p-6 flex flex-col gap-6">
+
+        <!-- Header -->
+        <header class="flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center -space-x-2">
+                    <div
+                        class="w-8 h-8 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="hsl(221,83%,53%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </div>
+                    <div
+                        class="w-8 h-8 rounded-full bg-primary/15 border-2 border-background flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="hsl(221,83%,53%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </div>
+                    <div
+                        class="w-8 h-8 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="hsl(221,83%,53%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h1 class="text-xl font-700 text-foreground leading-tight tracking-tight" style="font-weight:700">
+                        Gestão de Atividades</h1>
+                    <p class="text-xs text-muted-foreground font-400" style="font-weight:400">Painel de controle</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button id="theme-toggle-btn" aria-label="Alternar tema" title="Alternar modo claro/escuro">
+                    <i data-lucide="sun" id="theme-icon-light" class="theme-icon"></i>
+                    <i data-lucide="moon" id="theme-icon-dark" class="theme-icon" style="display:none"></i>
+                </button>
+                <img src="https://mitra-multitenant-prod.s3.amazonaws.com/tenant_4312/label-images/20250820T181042088Z_Sankhya-logo-s.webp"
+                    alt="Logomarca da Empresa" class="h-9"
+                    style="filter: saturate(1.8) brightness(0.95) hue-rotate(0deg);">
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div id="kpi-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Skeletons -->
+            <div class="skeleton-card animate-pulse">
+                <div class="flex justify-between items-center">
+                    <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                    <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                </div>
+                <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
+            </div>
+            <div class="skeleton-card animate-pulse">
+                <div class="flex justify-between items-center">
+                    <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                    <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                </div>
+                <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
+            </div>
+            <div class="skeleton-card animate-pulse">
+                <div class="flex justify-between items-center">
+                    <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                    <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                </div>
+                <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
+            </div>
+            <div class="skeleton-card animate-pulse">
+                <div class="flex justify-between items-center">
+                    <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                    <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                </div>
+                <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
+            </div>
+        </div>
+
+        <!-- Tabela Container -->
+        <div class="table-container min-h-0 flex-1">
+            <!-- Table Action Bar -->
+            <div
+                class="px-5 py-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista de
+                        Atividades</h2>
+                    <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie as
+                        atividades pendentes e concluídas.</p>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <div class="relative w-full md:w-64">
+                        <i data-lucide="search"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                        <input id="search-input" type="text" placeholder="Buscar atividades..."
+                            class="search-input flex h-9 w-full rounded-lg border border-input dark:border-border/60 bg-background dark:bg-transparent px-3 py-2 pl-9 text-sm placeholder:text-muted-foreground">
+                    </div>
+                    <button id="add-activity-btn"
+                        class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 shadow-sm"
+                        style="font-weight:500">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Atividade
+                    </button>
+                    <button id="add-playbook-btn"
+                        class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-muted dark:hover:bg-muted/80 active:scale-95"
+                        style="font-weight:500">
+                        <i data-lucide="book-plus" class="w-4 h-4 mr-1.5"></i> Playbook
+                    </button>
+                    <button id="export-btn"
+                        class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
+                        style="font-weight:500">
+                        <i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Exportar
+                    </button>
+                </div>
+            </div>
+
+            <div id="validation-toast"
+                class="hidden fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] sm:w-auto sm:max-w-md" role="alert"
+                aria-live="assertive">
+                <div id="validation-toast-content"
+                    class="toast-popup toast-danger flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg">
+                    <span
+                        class="toast-danger-icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">!</span>
+                    <p id="validation-toast-text" class="text-sm font-medium"></p>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="flex-1 overflow-auto">
+                <table class="table-header-sticky w-full text-sm">
+                    <thead>
+                        <tr>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                style="font-weight:600">Atividade</th>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                style="font-weight:600">Responsável</th>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                style="font-weight:600">Parceiro</th>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                style="font-weight:600">Playbook</th>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider min-w-[200px]"
+                                style="font-weight:600">Status</th>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                style="font-weight:600">Categoria</th>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                style="font-weight:600">Data Criação</th>
+                            <th class="text-left text-xs text-muted-foreground font-600 px-3 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                style="font-weight:600">Anotações</th>
+                            <th class="text-center text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                style="font-weight:600">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activities-tbody" class="divide-y divide-border">
+                        <!-- Loading State -->
+                        <tr>
+                            <td colspan="9" class="p-8 text-center text-muted-foreground">Carregando atividades...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MITRA_UPDATE_EVENT_NAME = 'mitra-update-gestao-atividades';
+
+        function updateMitra() {
+            console.log("Sinal de update para [Gestão Atividades] recebido. Disparando evento.");
+            document.body.dispatchEvent(new CustomEvent(MITRA_UPDATE_EVENT_NAME));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const kpiContainer = document.getElementById('kpi-cards-container');
+            const tableBody = document.getElementById('activities-tbody');
+            const searchInput = document.getElementById('search-input');
+            const addActivityBtn = document.getElementById('add-activity-btn');
+            const addPlaybookBtn = document.getElementById('add-playbook-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const validationToast = document.getElementById('validation-toast');
+            const validationToastContent = document.getElementById('validation-toast-content');
+            const validationToastText = document.getElementById('validation-toast-text');
+            let searchDebounceTimeout;
+            let validationToastTimeout;
+            let validationToastHideTimeout;
+
+            const showValidationMessage = (message) => {
+                if (!validationToast || !validationToastContent || !validationToastText) return;
+
+                clearTimeout(validationToastTimeout);
+                clearTimeout(validationToastHideTimeout);
+                validationToastText.textContent = message;
+                validationToast.classList.remove('hidden');
+                validationToastContent.classList.remove('show');
+
+                requestAnimationFrame(() => {
+                    validationToastContent.classList.add('show');
+                });
+
+                validationToastTimeout = setTimeout(() => {
+                    clearValidationMessage();
+                }, 5000);
+            };
+
+            const clearValidationMessage = () => {
+                if (!validationToast || !validationToastContent || !validationToastText) return;
+                clearTimeout(validationToastTimeout);
+                clearTimeout(validationToastHideTimeout);
+
+                validationToastContent.classList.remove('show');
+
+                validationToastHideTimeout = setTimeout(() => {
+                    validationToastText.textContent = '';
+                    validationToast.classList.add('hidden');
+                }, 220);
+            };
+
+            const renderKpiCard = (id, icon, label, value, onClick) => {
+                const valueEl = document.getElementById(`kpi-${id}-value`);
+                if (valueEl) {
+                    valueEl.textContent = value;
+                    return;
+                }
+
+                const iconColorMap = {
+                    'total': '#4b5563',
+                    'hoje': '#b45309',
+                    'atrasadas': '#b91c1c',
+                    'vencer': '#1d4ed8'
+                };
+                const iconColor = iconColorMap[id] || 'currentColor';
+
+                const card = document.createElement('div');
+                card.className = `kpi-card${onClick ? ' cursor-pointer' : ''}`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <p class="kpi-label">${label}</p>
+                        <div class="kpi-icon-container kpi-icon-${id}">
+                            <i data-lucide="${icon}" class="w-4 h-4" style="color:${iconColor}"></i>
+                        </div>
+                    </div>
+                    <p id="kpi-${id}-value" class="kpi-value">${value}</p>
+                `;
+
+                if (onClick) {
+                    card.addEventListener('click', onClick);
+                }
+                return card;
+            };
+
+            const loadKpiData = async () => {
+                try {
+                    const result = await queryMitra({ query: componentData.cardQuery });
+                    if (!result || !result.data || result.data.length === 0) {
+                        throw new Error("A query dos cards não retornou dados.");
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const data = result.data[0];
+                    const kpiMap = {
+                        TOTAL: headers.indexOf('TOTAL'),
+                        VENCE_HOJE: headers.indexOf('VENCE_HOJE'),
+                        ATRASADAS: headers.indexOf('ATRASADAS'),
+                        A_VENCER: headers.indexOf('A_VENCER')
+                    };
+
+                    kpiContainer.innerHTML = '';
+                    kpiContainer.appendChild(renderKpiCard('total', 'list', 'Todos', data[kpiMap.TOTAL] || 0, async () => {
+                        await setVariableMitra({ name: ':VAR_ATIV_FILTRO_SELECIONADO', content: 'Todos' });
+                        await loadTableData();
+                    }));
+                    kpiContainer.appendChild(renderKpiCard('hoje', 'clock', 'Vencem Hoje', data[kpiMap.VENCE_HOJE] || 0, async () => {
+                        await setVariableMitra({ name: ':VAR_ATIV_FILTRO_SELECIONADO', content: 'Vencem Hoje' });
+                        await loadTableData();
+                    }));
+                    kpiContainer.appendChild(renderKpiCard('atrasadas', 'alert-triangle', 'Atrasadas', data[kpiMap.ATRASADAS] || 0, async () => {
+                        await setVariableMitra({ name: ':VAR_ATIV_FILTRO_SELECIONADO', content: 'Atrasadas' });
+                        await loadTableData();
+                    }));
+                    kpiContainer.appendChild(renderKpiCard('vencer', 'calendar-check', 'A Vencer', data[kpiMap.A_VENCER] || 0, async () => {
+                        await setVariableMitra({ name: ':VAR_ATIV_FILTRO_SELECIONADO', content: 'A Vencer' });
+                        await loadTableData();
+                    }));
+
+                    lucide.createIcons();
+                } catch (error) {
+                    console.error("Falha ao carregar dados dos KPIs:", error);
+                    kpiContainer.innerHTML = `<div class="col-span-full p-4 bg-destructive/10 text-destructive rounded-lg">Erro ao carregar os indicadores.</div>`;
+                }
+            };
+
+            const loadTableData = async () => {
+                tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-muted-foreground"><div class="flex justify-center items-center gap-2"><i data-lucide="loader-2" class="animate-spin w-5 h-5"></i>Carregando atividades...</div></td></tr>`;
+                lucide.createIcons();
+
+                try {
+                    const result = await queryMitra({ query: componentData.tableQuery });
+                    if (!result || !result.data || result.data.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>Nenhuma atividade encontrada.</span></div></td></tr>`;
+                        lucide.createIcons();
+                        return;
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const colMap = {
+                        ID: headers.indexOf('ID'),
+                        ATIVIDADE: headers.indexOf('ATIVIDADE'),
+                        RESPONSAVEL: headers.indexOf('RESPONSAVEL'),
+                        PARCEIRO: headers.indexOf('PARCEIRO'),
+                        PLAYBOOK: headers.indexOf('PLAYBOOK'),
+                        STATUS_LABEL: headers.indexOf('STATUS_LABEL'),
+                        STATUS_COLOR: headers.indexOf('STATUS_COLOR'),
+                        CATEGORIA: headers.indexOf('CATEGORIA'),
+                        DATA_CRIACAO: headers.indexOf('DATA_CRIACAO'),
+                        ANOTACOES: headers.indexOf('ANOTACOES')
+                    };
+
+                    const truncateText = (text, maxLength = 5) => {
+                        if (!text) return '-';
+                        const str = String(text).trim();
+                        return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+                    };
+
+                    const normalizeStatus = (value) => String(value || '')
+                        .trim()
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+
+                    const fragment = document.createDocumentFragment();
+                    result.data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'table-row-hover';
+                        const statusColor = row[colMap.STATUS_COLOR] || 'gray';
+                        const statusLabelRaw = row[colMap.STATUS_LABEL] || '';
+                        const notesText = String(row[colMap.ANOTACOES] || '').trim();
+                        const notesLength = notesText.length;
+                        const statusLabelNormalized = normalizeStatus(statusLabelRaw);
+                        const isCompletedStatus =
+                            statusLabelNormalized === 'concluida' ||
+                            statusLabelNormalized === 'concluida com atraso' ||
+                            statusLabelNormalized === 'concluida com atrasada' ||
+                            statusLabelNormalized === 'concluida com atrasado';
+                        const isLateCompletedStatus =
+                            statusLabelNormalized === 'concluida com atraso' ||
+                            statusLabelNormalized === 'concluida com atrasada' ||
+                            statusLabelNormalized === 'concluida com atrasado';
+                        const completeIconColorStyle = !isCompletedStatus
+                            ? ''
+                            : (isLateCompletedStatus ? 'color: #b45309;' : 'color: #047857;');
+
+                        tr.innerHTML = `
+                            <td class="px-5 py-3.5 align-top font-medium text-foreground" style="font-weight:500">${row[colMap.ATIVIDADE] || '-'}</td>
+                            <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.RESPONSAVEL] || '-'}</td>
+                            <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.PARCEIRO] || '-'}</td>
+                            <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.PLAYBOOK] || '-'}</td>
+                            <td class="px-5 py-3.5 align-top min-w-[200px]"><span class="badge badge-${statusColor}">${statusLabelRaw || '-'}</span></td>
+                            <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.CATEGORIA] || '-'}</td>
+                            <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CRIACAO] || '-'}</td>
+                            <td class="px-3 py-3.5 align-top text-muted-foreground hide-on-mobile" title="${row[colMap.ANOTACOES] || '-'}">${truncateText(row[colMap.ANOTACOES], 50)}</td>
+                            <td class="px-5 py-3.5 align-top text-center">
+                                <div class="flex justify-center items-center gap-1">
+                                    <button data-action="edit" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Visualizar/Editar'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="eye" class="w-4 h-4 pointer-events-none"></i></button>
+                                    <button data-action="complete" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" data-notes-length="${notesLength}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Concluir Atividade'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="check" class="w-4 h-4 pointer-events-none" style="${completeIconColorStyle}"></i></button>
+                                </div>
+                            </td>
+                        `;
+                        fragment.appendChild(tr);
+                    });
+
+                    tableBody.innerHTML = '';
+                    tableBody.appendChild(fragment);
+                    lucide.createIcons();
+                } catch (error) {
+                    console.error("Falha ao carregar dados da tabela:", error);
+                    tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-destructive">Erro ao carregar atividades. Verifique o console.</td></tr>`;
+                }
+            };
+
+            const refreshAllData = async () => {
+                await Promise.all([loadKpiData(), loadTableData()]);
+            };
+
+            const setupEventListeners = () => {
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchDebounceTimeout);
+                    searchDebounceTimeout = setTimeout(async () => {
+                        try {
+                            const searchTerm = e.target.value;
+                            await setVariableMitra({ name: componentData.variableSearch, content: searchTerm });
+                            await loadTableData();
+                        } catch (error) {
+                            console.error("Erro ao executar busca:", error);
+                        }
+                    }, 300);
+                });
+
+                addActivityBtn.addEventListener('click', async () => {
+                    try {
+                        const formId = parseInt(componentData.addActivityFormId, 10);
+                        if (!isNaN(formId)) {
+                            await formMitra({ id: formId });
+                            await refreshAllData();
+                        }
+                    } catch (e) {
+                        console.error("Erro ao abrir formulário de atividade:", e);
+                    }
+                });
+
+                addPlaybookBtn.addEventListener('click', async () => {
+                    try {
+                        const formId = parseInt(componentData.addPlaybookFormId, 10);
+                        if (!isNaN(formId)) {
+                            await formMitra({ id: formId });
+                            await refreshAllData();
+                        }
+                    } catch (e) {
+                        console.error("Erro ao abrir formulário de playbook:", e);
+                    }
+                });
+
+                exportBtn.addEventListener('click', () => {
+                    console.log("Funcionalidade 'Exportar XLSX' a ser implementada.");
+                });
+
+                tableBody.addEventListener('click', async (e) => {
+                    const button = e.target.closest('button[data-action]');
+                    if (!button || button.disabled || button.dataset.locked === 'true') return;
+
+                    const id = button.dataset.id;
+                    const action = button.dataset.action;
+
+                    try {
+                        if (action === 'edit') {
+                            clearValidationMessage();
+                            const formId = parseInt(componentData.editActivityFormId, 10);
+                            await formMitra({ id: formId, contentId: parseInt(id, 10) });
+                            await refreshAllData();
+                        } else if (action === 'complete') {
+                            const notesLength = Number(button.dataset.notesLength || 0);
+                            if (notesLength < 20) {
+                                showValidationMessage('Anotações da atividade precisam ter no mínimo 20 caracteres');
+                                return;
+                            }
+
+                            clearValidationMessage();
+                            await setVariableMitra({ name: componentData.variableSelectedId, content: id });
+                            const dbActionId = parseInt(componentData.completeDbActionId, 10);
+                            await dbactionMitra(dbActionId);
+
+                            if (typeof updateComponentsMitra === 'function') {
+                                await updateComponentsMitra({ all: true });
+                            }
+                            await refreshAllData();
+                        }
+                    } catch (error) {
+                        console.error(`Erro ao executar ação '${action}' para o ID ${id}:`, error);
+                    }
+                });
+            };
+
+            const initializeComponent = async () => {
+                lucide.createIcons();
+                setupEventListeners();
+                await refreshAllData();
+            };
+
+            document.body.addEventListener(MITRA_UPDATE_EVENT_NAME, refreshAllData);
+
+            const waitForMitraAndInit = () => {
+                const maxWaitTime = 5000;
+                const intervalTime = 100;
+                const startTime = Date.now();
+                const checkInterval = setInterval(() => {
+                    if (window.componentData && window.componentData.tableQuery && window.componentData.cardQuery) {
+                        clearInterval(checkInterval);
+                        initializeComponent();
+                    } else if (Date.now() - startTime > maxWaitTime) {
+                        clearInterval(checkInterval);
+                        console.error("Erro: As configurações do componente (componentData) não foram carregadas a tempo.");
+                        document.getElementById('main-container').innerHTML = `<div class="p-8 text-center text-destructive bg-destructive/10 h-full flex items-center justify-center rounded-lg">Erro Crítico: As configurações do componente não foram carregadas da plataforma.</div>`;
+                    }
+                }, intervalTime);
+            };
+
+            // ===================== THEME TOGGLE LOGIC =====================
+            const htmlEl = document.documentElement;
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const iconLight = document.getElementById('theme-icon-light');
+            const iconDark = document.getElementById('theme-icon-dark');
+
+            const applyTheme = (isDark) => {
+                if (isDark) {
+                    htmlEl.classList.add('dark');
+                    iconLight.style.display = 'none';
+                    iconDark.style.display = '';
+                } else {
+                    htmlEl.classList.remove('dark');
+                    iconLight.style.display = '';
+                    iconDark.style.display = 'none';
+                }
+                lucide.createIcons();
+            };
+
+            // Inicializar tema a partir do localStorage
+            const savedTheme = localStorage.getItem('theme');
+            applyTheme(savedTheme === 'dark');
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = htmlEl.classList.contains('dark');
+                const newTheme = isDark ? 'light' : 'dark';
+                localStorage.setItem('theme', newTheme);
+                applyTheme(!isDark);
+            });
+            // ================================================================
+
+            waitForMitraAndInit();
+        });
+    </script>
+</body>
+
+</html>
