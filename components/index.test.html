@@ -845,11 +845,11 @@
                     <div class="h-full flex flex-col justify-between gap-4">
                         <div class="flex justify-between items-start gap-4">
                             <div class="min-w-0">
-                                <p class="text-xs uppercase tracking-[0.14em] text-muted-foreground">KPI de Execucao</p>
-                                <h3 class="text-lg font-semibold text-foreground break-words mt-1">${titulo || 'Passagem de Bastao'}</h3>
-                                <p class="text-sm text-muted-foreground mt-1 break-words">${subtitulo || 'Conclusao no prazo'}</p>
+                                <p class="text-xs uppercase tracking-[0.14em] text-muted-foreground">KPI de Execução</p>
+                                <h3 class="text-lg font-semibold text-foreground break-words mt-1">${titulo || 'Passagem de Bastão'}</h3>
+                                <p class="text-sm text-muted-foreground mt-1 break-words">${subtitulo || 'Conclusão no prazo'}</p>
                             </div>
-                            <button type="button" data-tippy-content="Momento que marca a transicao oficial para a proxima etapa da jornada do cliente. Ponto obrigatorio para todos os clientes acompanhados." class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                            <button type="button" data-tippy-content="Momento que marca a transição oficial para a próxima etapa da jornada do cliente. Ponto obrigatório para todos os clientes acompanhados." class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
                                 <i data-lucide="info" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -859,7 +859,7 @@
                             <p class="text-sm font-semibold text-foreground">${Math.round(percentual)}%</p>
                         </div>
 
-                        <div class="passagem-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentual)}" aria-label="Percentual de conclusao da passagem de bastao">
+                        <div class="passagem-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentual)}" aria-label="Percentual de conclusão da passagem de bastão">
                             <div class="passagem-progress-fill" style="width:${percentualLimitado}%; background-color:${progressColor};"></div>
                         </div>
                     </div>
@@ -883,13 +883,13 @@
 
                 try {
                     if (!componentData.passagemBastaoQuery) {
-                        renderPassagemBastaoError('Configure a variavel passagemBastaoQuery para carregar este card.');
+                        renderPassagemBastaoError('Configure a variável passagemBastaoQuery para carregar este card.');
                         return;
                     }
 
                     const result = await queryMitra({ query: componentData.passagemBastaoQuery });
                     if (!result || !result.data || result.data.length === 0) {
-                        throw new Error('A query nao retornou dados.');
+                        throw new Error('A query não retornou dados.');
                     }
 
                     const headers = result.headers.map(h => h.name.toUpperCase());
@@ -912,8 +912,8 @@
                         previsto: row[map.PREVISTO]
                     });
                 } catch (error) {
-                    console.error('Falha ao carregar KPI de Passagem de Bastao:', error);
-                    renderPassagemBastaoError('Nao foi possivel carregar os dados deste indicador.');
+                    console.error('Falha ao carregar KPI de Passagem de Bastão:', error);
+                    renderPassagemBastaoError('Não foi possível carregar os dados deste indicador.');
                 }
             };
 
