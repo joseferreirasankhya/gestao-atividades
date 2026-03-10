@@ -270,8 +270,8 @@
         }
 
         .donut-placeholder-ring {
-            width: 8.5rem;
-            height: 8.5rem;
+            width: 7rem;
+            height: 7rem;
             border-radius: 9999px;
             background: conic-gradient(hsl(var(--primary) / 0.26) 0 42%, hsl(var(--muted)) 42% 100%);
             display: grid;
@@ -280,8 +280,8 @@
 
         .donut-placeholder-ring::before {
             content: '';
-            width: 5.25rem;
-            height: 5.25rem;
+            width: 4.3rem;
+            height: 4.3rem;
             border-radius: 9999px;
             background-color: hsl(var(--background));
             border: 1px solid hsl(var(--border));
@@ -291,29 +291,18 @@
             background-color: hsl(var(--secondary));
         }
 
-        .passagem-progress-track {
+        .execution-progress-track {
             width: 100%;
-            height: 0.8rem;
+            height: 0.65rem;
             border-radius: 9999px;
             background-color: hsl(var(--muted));
             overflow: hidden;
         }
 
-        .passagem-progress-fill {
+        .execution-progress-fill {
             height: 100%;
             border-radius: 9999px;
             transition: width 420ms ease;
-        }
-
-        .kpi-future-card {
-            border: 1px dashed hsl(var(--border));
-            border-radius: var(--radius);
-            background-color: hsl(var(--background));
-            min-height: 10.8rem;
-        }
-
-        .dark .kpi-future-card {
-            background-color: hsl(var(--secondary));
         }
 
         /* ===================== TABLE ===================== */
@@ -569,8 +558,8 @@
             </header>
 
             <!-- KPI Section (Topo) -->
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div class="kpi-layout-card p-5 flex flex-col min-h-[240px]">
+            <section class="grid grid-cols-1 xl:grid-cols-4 gap-4">
+                <div class="kpi-layout-card p-4 flex flex-col min-h-[220px]">
                     <div class="flex items-start justify-between gap-3">
                         <div>
                             <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">Visão geral</p>
@@ -579,14 +568,14 @@
                         <span class="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[0.68rem] font-medium text-muted-foreground">Template</span>
                     </div>
 
-                    <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                    <div class="flex-1 flex flex-col items-center justify-center gap-3">
                         <div class="donut-placeholder-ring" aria-hidden="true"></div>
-                        <p class="text-xs text-muted-foreground text-center max-w-[16rem]">Espaço reservado para o gráfico de rosca. Os dados serão conectados na etapa seguinte.</p>
+                        <p class="text-xs text-muted-foreground text-center max-w-[12rem]">Espaço reservado para o gráfico de rosca. Os dados serão conectados na etapa seguinte.</p>
                     </div>
                 </div>
 
-                <div id="top-kpis-right-container" class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div id="passagem-bastao-card" class="kpi-layout-card min-h-[240px] p-5 animate-pulse">
+                <div id="top-kpis-right-container" class="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                    <div id="passagem-bastao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
                         <div class="flex justify-between items-start mb-4">
                             <div>
                                 <div class="h-3 bg-muted rounded-full w-28"></div>
@@ -597,13 +586,115 @@
                         <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
                         <div class="h-3 bg-muted rounded-full w-full"></div>
                     </div>
-
-                    <div class="kpi-future-card p-5 flex flex-col justify-between">
-                        <div>
-                            <p class="text-xs uppercase tracking-[0.14em] text-muted-foreground">Próximo KPI</p>
-                            <h3 class="text-base font-semibold text-foreground mt-1">Espaço para novo card</h3>
+                    <div id="checkin-experiencia-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
                         </div>
-                        <p class="text-sm text-muted-foreground">Container preparado para os próximos indicadores desta seção.</p>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="acompanhamento-inicial-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="acompanhamento-evolutivo-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="monitoramento-nps-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="follow-detratores-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="follow-neutros-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="clube-gestao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="entrega-valor-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="reversao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                    </div>
+                    <div id="outras-atividades-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <div class="h-3 bg-muted rounded-full w-28"></div>
+                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            </div>
+                            <div class="h-8 bg-muted rounded-lg w-20"></div>
+                        </div>
+                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                        <div class="h-3 bg-muted rounded-full w-full"></div>
                     </div>
                 </div>
             </section>
@@ -742,7 +833,123 @@
             const addActivityBtn = document.getElementById('add-activity-btn');
             const addPlaybookBtn = document.getElementById('add-playbook-btn');
             const exportBtn = document.getElementById('export-btn');
-            const passagemBastaoContainer = document.getElementById('passagem-bastao-card');
+            const executionCardConfigs = [
+                {
+                    key: 'passagemBastao',
+                    containerId: 'passagem-bastao-card',
+                    queryKey: 'passagemBastaoQuery',
+                    defaultTitle: 'Passagem de Bastão',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão da passagem de bastão',
+                    errorLabel: 'Passagem de Bastão',
+                    tooltip: 'Momento que marca a transição oficial para a próxima etapa da jornada do cliente. Ponto obrigatório para todos os clientes acompanhados.'
+                },
+                {
+                    key: 'checkinExperiencia',
+                    containerId: 'checkin-experiencia-card',
+                    queryKey: 'checkinExperienciaQuery',
+                    defaultTitle: 'Check-in de Experiência',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão do check-in de experiência',
+                    errorLabel: 'Check-in de Experiência',
+                    tooltip: 'Acompanhamento inicial da percepção do cliente sobre valor, adoção e relacionamento.'
+                },
+                {
+                    key: 'acompanhamentoInicial',
+                    containerId: 'acompanhamento-inicial-card',
+                    queryKey: 'acompanhamentoInicialQuery',
+                    defaultTitle: 'Acompanhamento Inicial (AI)',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão do acompanhamento inicial',
+                    errorLabel: 'Acompanhamento Inicial (AI)',
+                    tooltip: 'Marco inicial para validar avanços da implantação e primeiros resultados da jornada.'
+                },
+                {
+                    key: 'acompanhamentoEvolutivo',
+                    containerId: 'acompanhamento-evolutivo-card',
+                    queryKey: 'acompanhamentoEvolutivoQuery',
+                    defaultTitle: 'Acompanhamento Evolutivo (AE)',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão do acompanhamento evolutivo',
+                    errorLabel: 'Acompanhamento Evolutivo (AE)',
+                    tooltip: 'Ritual recorrente de evolução para acompanhar metas, entregas e maturidade do cliente.'
+                },
+                {
+                    key: 'monitoramentoNps',
+                    containerId: 'monitoramento-nps-card',
+                    queryKey: 'monitoramentoNpsQuery',
+                    defaultTitle: 'Monitoramento de NPS',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão do monitoramento de NPS',
+                    errorLabel: 'Monitoramento de NPS',
+                    tooltip: 'Acompanhamento contínuo da satisfação e lealdade do cliente ao longo da jornada.'
+                },
+                {
+                    key: 'followDetratores',
+                    containerId: 'follow-detratores-card',
+                    queryKey: 'followDetratoresQuery',
+                    defaultTitle: 'Follow de Detratores',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão do follow de detratores',
+                    errorLabel: 'Follow de Detratores',
+                    tooltip: 'Plano de ação para clientes detratores, com foco em reversão de percepção e recuperação de experiência.'
+                },
+                {
+                    key: 'followNeutros',
+                    containerId: 'follow-neutros-card',
+                    queryKey: 'followNeutrosQuery',
+                    defaultTitle: 'Follow de Neutros',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão do follow de neutros',
+                    errorLabel: 'Follow de Neutros',
+                    tooltip: 'Ações direcionadas para clientes neutros com objetivo de elevar engajamento e percepção de valor.'
+                },
+                {
+                    key: 'clubeGestao',
+                    containerId: 'clube-gestao-card',
+                    queryKey: 'clubeGestaoQuery',
+                    defaultTitle: 'Clube de Gestão',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão do clube de gestão',
+                    errorLabel: 'Clube de Gestão',
+                    tooltip: 'Iniciativa de relacionamento e geração de valor por meio de encontros e conteúdos de gestão.'
+                },
+                {
+                    key: 'entregaValor',
+                    containerId: 'entrega-valor-card',
+                    queryKey: 'entregaValorQuery',
+                    defaultTitle: 'Entrega de Valor - Digital',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão da entrega de valor digital',
+                    errorLabel: 'Entrega de Valor - Digital',
+                    tooltip: 'Evidenciação do valor entregue por canais digitais com foco em adoção e resultado percebido.'
+                },
+                {
+                    key: 'reversao',
+                    containerId: 'reversao-card',
+                    queryKey: 'reversaoQuery',
+                    defaultTitle: 'Reversão',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão da reversão',
+                    errorLabel: 'Reversão',
+                    tooltip: 'Movimento estruturado para reversão de risco e recuperação da saúde do cliente.'
+                },
+                {
+                    key: 'outrasAtividades',
+                    containerId: 'outras-atividades-card',
+                    queryKey: 'outrasAtividadesQuery',
+                    defaultTitle: 'Outras Atividades',
+                    defaultSubtitle: 'Conclusão no prazo',
+                    ariaLabel: 'Percentual de conclusão de outras atividades',
+                    errorLabel: 'Outras Atividades',
+                    tooltip: 'Ações complementares que suportam a operação de sucesso do cliente fora dos ritos principais.'
+                }
+            ];
+
+            const executionCardContainers = executionCardConfigs.reduce((acc, config) => {
+                acc[config.key] = document.getElementById(config.containerId);
+                return acc;
+            }, {});
             const validationToast = document.getElementById('validation-toast');
             const validationToastContent = document.getElementById('validation-toast-content');
             const validationToastText = document.getElementById('validation-toast-text');
@@ -817,19 +1024,21 @@
                 return card;
             };
 
-            const renderPassagemBastaoError = (message) => {
-                if (!passagemBastaoContainer) return;
-                passagemBastaoContainer.classList.remove('animate-pulse');
-                passagemBastaoContainer.innerHTML = `
+            const renderExecutionCardError = (config, message) => {
+                const container = executionCardContainers[config.key];
+                if (!container) return;
+                container.classList.remove('animate-pulse');
+                container.innerHTML = `
                     <div class="h-full rounded-lg border border-destructive/30 bg-destructive/5 text-destructive p-4 flex flex-col justify-center items-start gap-1">
-                        <p class="text-sm font-semibold">Falha no KPI de Passagem de Bastao</p>
+                        <p class="text-sm font-semibold">Falha no KPI de ${config.errorLabel}</p>
                         <p class="text-xs">${message}</p>
                     </div>
                 `;
             };
 
-            const renderPassagemBastaoCard = ({ titulo, subtitulo, realizado, previsto }) => {
-                if (!passagemBastaoContainer) return;
+            const renderExecutionCard = (config, { titulo, subtitulo, realizado, previsto }) => {
+                const container = executionCardContainers[config.key];
+                if (!container) return;
 
                 const realizadoNum = Number(realizado) || 0;
                 const previstoNum = Number(previsto) || 0;
@@ -840,27 +1049,27 @@
                 if (percentual < 50) progressColor = '#ef4444';
                 else if (percentual < 90) progressColor = '#f59e0b';
 
-                passagemBastaoContainer.classList.remove('animate-pulse');
-                passagemBastaoContainer.innerHTML = `
+                container.classList.remove('animate-pulse');
+                container.innerHTML = `
                     <div class="h-full flex flex-col justify-between gap-4">
                         <div class="flex justify-between items-start gap-4">
                             <div class="min-w-0">
                                 <p class="text-xs uppercase tracking-[0.14em] text-muted-foreground">KPI de Execução</p>
-                                <h3 class="text-lg font-semibold text-foreground break-words mt-1">${titulo || 'Passagem de Bastão'}</h3>
-                                <p class="text-sm text-muted-foreground mt-1 break-words">${subtitulo || 'Conclusão no prazo'}</p>
+                                <h3 class="text-base font-semibold text-foreground break-words mt-1">${titulo || config.defaultTitle}</h3>
+                                <p class="text-xs text-muted-foreground mt-1 break-words">${subtitulo || config.defaultSubtitle}</p>
                             </div>
-                            <button type="button" data-tippy-content="Momento que marca a transição oficial para a próxima etapa da jornada do cliente. Ponto obrigatório para todos os clientes acompanhados." class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                            <button type="button" data-tippy-content="${config.tooltip}" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
                                 <i data-lucide="info" class="w-4 h-4"></i>
                             </button>
                         </div>
 
                         <div class="flex items-end justify-between gap-3">
-                            <div class="text-3xl font-extrabold leading-none tracking-tight text-foreground">${realizadoNum}<span class="text-xl font-semibold text-muted-foreground">/${previstoNum}</span></div>
-                            <p class="text-sm font-semibold text-foreground">${Math.round(percentual)}%</p>
+                            <div class="text-2xl font-extrabold leading-none tracking-tight text-foreground">${realizadoNum}<span class="text-lg font-semibold text-muted-foreground">/${previstoNum}</span></div>
+                            <p class="text-xs font-semibold text-foreground">${Math.round(percentual)}%</p>
                         </div>
 
-                        <div class="passagem-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentual)}" aria-label="Percentual de conclusão da passagem de bastão">
-                            <div class="passagem-progress-fill" style="width:${percentualLimitado}%; background-color:${progressColor};"></div>
+                        <div class="execution-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(percentual)}" aria-label="${config.ariaLabel}">
+                            <div class="execution-progress-fill" style="width:${percentualLimitado}%; background-color:${progressColor};"></div>
                         </div>
                     </div>
                 `;
@@ -878,16 +1087,17 @@
                 lucide.createIcons();
             };
 
-            const loadPassagemBastaoData = async () => {
-                if (!passagemBastaoContainer) return;
+            const loadExecutionCardData = async (config) => {
+                const container = executionCardContainers[config.key];
+                if (!container) return;
 
                 try {
-                    if (!componentData.passagemBastaoQuery) {
-                        renderPassagemBastaoError('Configure a variável passagemBastaoQuery para carregar este card.');
+                    if (!componentData[config.queryKey]) {
+                        renderExecutionCardError(config, `Configure a variável ${config.queryKey} para carregar este card.`);
                         return;
                     }
 
-                    const result = await queryMitra({ query: componentData.passagemBastaoQuery });
+                    const result = await queryMitra({ query: componentData[config.queryKey] });
                     if (!result || !result.data || result.data.length === 0) {
                         throw new Error('A query não retornou dados.');
                     }
@@ -905,15 +1115,15 @@
                     }
 
                     const row = result.data[0];
-                    renderPassagemBastaoCard({
+                    renderExecutionCard(config, {
                         titulo: row[map.TITULO],
                         subtitulo: row[map.SUBTITULO],
                         realizado: row[map.REALIZADO],
                         previsto: row[map.PREVISTO]
                     });
                 } catch (error) {
-                    console.error('Falha ao carregar KPI de Passagem de Bastão:', error);
-                    renderPassagemBastaoError('Não foi possível carregar os dados deste indicador.');
+                    console.error(`Falha ao carregar KPI ${config.errorLabel}:`, error);
+                    renderExecutionCardError(config, 'Não foi possível carregar os dados deste indicador.');
                 }
             };
 
@@ -1047,7 +1257,11 @@
             };
 
             const refreshAllData = async () => {
-                await Promise.all([loadKpiData(), loadPassagemBastaoData(), loadTableData()]);
+                await Promise.all([
+                    loadKpiData(),
+                    loadTableData(),
+                    ...executionCardConfigs.map(loadExecutionCardData)
+                ]);
             };
 
             const setupEventListeners = () => {
