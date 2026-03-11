@@ -480,6 +480,64 @@
                 transform: translateY(-50%) !important;
             }
         }
+
+        /* ===================== TABLE FILTERS ===================== */
+        .filter-select,
+        .filter-input {
+            width: 100%;
+            height: 1.75rem;
+            padding: 0 0.5rem;
+            border-radius: 0.375rem;
+            border: 1px solid hsl(var(--border));
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            font-size: 0.75rem;
+            font-family: 'Work Sans', sans-serif;
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .filter-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.4rem center;
+            padding-right: 1.4rem;
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            outline: none;
+            border-color: hsl(var(--primary) / 0.5);
+            box-shadow: 0 0 0 2px hsl(var(--primary) / 0.1);
+        }
+
+        .dark .filter-select,
+        .dark .filter-input {
+            background-color: hsl(var(--secondary));
+            border-color: hsl(var(--border));
+        }
+
+        .dark .filter-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        }
+
+        .filter-row th {
+            padding-top: 0;
+            padding-bottom: 0.625rem;
+        }
+
+        .filter-th-active .filter-select,
+        .filter-th-active .filter-input {
+            border-color: hsl(var(--primary) / 0.6);
+            background-color: hsl(var(--primary) / 0.06);
+            color: hsl(var(--primary));
+        }
+
+        .dark .filter-th-active .filter-select,
+        .dark .filter-th-active .filter-input {
+            background-color: hsl(var(--primary) / 0.1);
+        }
     </style>
 </head>
 
@@ -775,6 +833,14 @@
                             <input id="search-input" type="text" placeholder="Buscar atividades..."
                                 class="search-input flex h-9 w-full rounded-lg border border-input dark:border-border/60 bg-background dark:bg-transparent px-3 py-2 pl-9 text-sm placeholder:text-muted-foreground">
                         </div>
+                        <button id="clear-filters-btn"
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none h-9 px-3 border border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 active:scale-95 gap-1.5"
+                            style="font-weight:500; display:none;"
+                            title="Limpar todos os filtros de coluna">
+                            <i data-lucide="filter-x" class="w-4 h-4"></i>
+                            <span class="hidden md:inline">Limpar filtros</span>
+                            <span id="filter-count-badge" class="inline-flex items-center justify-center min-w-[1rem] h-4 px-1 rounded-full bg-primary text-primary-foreground text-[0.6rem] font-bold"></span>
+                        </button>
                         <button id="add-playbook-btn"
                             class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-secondary-foreground active:scale-95"
                             style="font-weight:500; background-color: #b6edb6;">
@@ -827,6 +893,17 @@
                                     style="font-weight:600">Anotações</th>
                                 <th class="text-center text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
                                     style="font-weight:600">Ações</th>
+                            </tr>
+                            <tr class="filter-row">
+                                <th class="px-5 hide-on-mobile"><select id="filter-playbook" class="filter-select"><option value="">Todos</option></select></th>
+                                <th class="px-5"><select id="filter-responsavel" class="filter-select"><option value="">Todos</option></select></th>
+                                <th class="px-5 hide-on-mobile"><select id="filter-parceiro" class="filter-select"><option value="">Todos</option></select></th>
+                                <th class="px-5"><input id="filter-atividade" type="text" placeholder="Filtrar..." class="filter-input"></th>
+                                <th class="px-5 min-w-[200px]"><select id="filter-status" class="filter-select"><option value="">Todos</option></select></th>
+                                <th class="px-5"><select id="filter-categoria" class="filter-select"><option value="">Todos</option></select></th>
+                                <th class="hide-on-mobile"></th>
+                                <th class="hide-on-mobile"></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="activities-tbody" class="divide-y divide-border">
@@ -985,6 +1062,8 @@
             let searchDebounceTimeout;
             let validationToastTimeout;
             let validationToastHideTimeout;
+            let rawTableData = null;
+            const activeFilters = { PLAYBOOK: '', RESPONSAVEL: '', PARCEIRO: '', ATIVIDADE: '', STATUS_LABEL: '', CATEGORIA: '' };
 
             const showValidationMessage = (message) => {
                 if (!validationToast || !validationToastContent || !validationToastText) return;
@@ -1294,6 +1373,146 @@
                 }
             };
 
+            const truncateText = (text, maxLength = 5) => {
+                if (!text) return '-';
+                const str = String(text).trim();
+                return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+            };
+
+            const normalizeStatus = (value) => String(value || '')
+                .trim()
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+
+            const updateClearFiltersBtn = () => {
+                const btn = document.getElementById('clear-filters-btn');
+                if (!btn) return;
+                const count = Object.values(activeFilters).filter(v => v !== '').length;
+                btn.style.display = count > 0 ? 'inline-flex' : 'none';
+                const badge = document.getElementById('filter-count-badge');
+                if (badge) badge.textContent = count > 0 ? String(count) : '';
+            };
+
+            const renderRows = (data) => {
+                if (!data || data.length === 0) {
+                    const hasActiveFilter = Object.values(activeFilters).some(v => v !== '');
+                    tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>${hasActiveFilter ? 'Nenhum resultado para os filtros aplicados.' : 'Nenhuma atividade encontrada.'}</span></div></td></tr>`;
+                    lucide.createIcons();
+                    return;
+                }
+
+                const { colMap } = rawTableData;
+                const fragment = document.createDocumentFragment();
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'table-row-hover';
+                    const statusColor = row[colMap.STATUS_COLOR] || 'gray';
+                    const statusLabelRaw = row[colMap.STATUS_LABEL] || '';
+                    const notesText = String(row[colMap.ANOTACOES] || '').trim();
+                    const notesLength = notesText.length;
+                    const statusLabelNormalized = normalizeStatus(statusLabelRaw);
+                    const isCompletedStatus =
+                        statusLabelNormalized === 'concluida' ||
+                        statusLabelNormalized === 'concluida com atraso' ||
+                        statusLabelNormalized === 'concluida com atrasada' ||
+                        statusLabelNormalized === 'concluida com atrasado';
+                    const isLateCompletedStatus =
+                        statusLabelNormalized === 'concluida com atraso' ||
+                        statusLabelNormalized === 'concluida com atrasada' ||
+                        statusLabelNormalized === 'concluida com atrasado';
+                    const completeIconColorStyle = !isCompletedStatus
+                        ? ''
+                        : (isLateCompletedStatus ? 'color: #b45309;' : 'color: #047857;');
+
+                    tr.innerHTML = `
+                        <td class="px-5 py-3.5 align-top text-muted-foreground" style="font-weight:500">${row[colMap.PLAYBOOK] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.RESPONSAVEL] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.PARCEIRO] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top font-medium text-foreground" style="font-weight:500">${row[colMap.ATIVIDADE] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top min-w-[200px]"><span class="badge badge-${statusColor}">${statusLabelRaw || '-'}</span></td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.CATEGORIA] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CRIACAO] || '-'}</td>
+                        <td class="px-3 py-3.5 align-top text-muted-foreground hide-on-mobile" title="${row[colMap.ANOTACOES] || '-'}">${truncateText(row[colMap.ANOTACOES], 50)}</td>
+                        <td class="px-5 py-3.5 align-top text-center">
+                            <div class="flex justify-center items-center gap-1">
+                                <button data-action="edit" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Visualizar/Editar'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="eye" class="w-4 h-4 pointer-events-none"></i></button>
+                                <button data-action="complete" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" data-notes-length="${notesLength}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Concluir Atividade'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="check" class="w-4 h-4 pointer-events-none" style="${completeIconColorStyle}"></i></button>
+                            </div>
+                        </td>
+                    `;
+                    fragment.appendChild(tr);
+                });
+
+                tableBody.innerHTML = '';
+                tableBody.appendChild(fragment);
+                lucide.createIcons();
+            };
+
+            const populateFilterDropdowns = () => {
+                if (!rawTableData) return;
+                const { data, colMap } = rawTableData;
+
+                const getUnique = (colKey) => {
+                    const values = data
+                        .map(row => String(row[colMap[colKey]] || '').trim())
+                        .filter(v => v && v !== '-');
+                    return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+                };
+
+                const populateSelect = (id, values, currentVal) => {
+                    const sel = document.getElementById(id);
+                    if (!sel) return;
+                    sel.innerHTML = '<option value="">Todos</option>';
+                    values.forEach(v => {
+                        const opt = document.createElement('option');
+                        opt.value = v;
+                        opt.textContent = v;
+                        if (v === currentVal) opt.selected = true;
+                        sel.appendChild(opt);
+                    });
+                };
+
+                populateSelect('filter-playbook', getUnique('PLAYBOOK'), activeFilters.PLAYBOOK);
+                populateSelect('filter-responsavel', getUnique('RESPONSAVEL'), activeFilters.RESPONSAVEL);
+                populateSelect('filter-parceiro', getUnique('PARCEIRO'), activeFilters.PARCEIRO);
+                populateSelect('filter-status', getUnique('STATUS_LABEL'), activeFilters.STATUS_LABEL);
+                populateSelect('filter-categoria', getUnique('CATEGORIA'), activeFilters.CATEGORIA);
+
+                const ativInput = document.getElementById('filter-atividade');
+                if (ativInput) ativInput.value = activeFilters.ATIVIDADE;
+            };
+
+            const applyFilters = () => {
+                if (!rawTableData) return;
+
+                const { data, colMap } = rawTableData;
+                const filtered = data.filter(row => {
+                    if (activeFilters.PLAYBOOK && String(row[colMap.PLAYBOOK] || '') !== activeFilters.PLAYBOOK) return false;
+                    if (activeFilters.RESPONSAVEL && String(row[colMap.RESPONSAVEL] || '') !== activeFilters.RESPONSAVEL) return false;
+                    if (activeFilters.PARCEIRO && String(row[colMap.PARCEIRO] || '') !== activeFilters.PARCEIRO) return false;
+                    if (activeFilters.ATIVIDADE && !String(row[colMap.ATIVIDADE] || '').toLowerCase().includes(activeFilters.ATIVIDADE.toLowerCase())) return false;
+                    if (activeFilters.STATUS_LABEL && String(row[colMap.STATUS_LABEL] || '') !== activeFilters.STATUS_LABEL) return false;
+                    if (activeFilters.CATEGORIA && String(row[colMap.CATEGORIA] || '') !== activeFilters.CATEGORIA) return false;
+                    return true;
+                });
+
+                renderRows(filtered);
+                updateClearFiltersBtn();
+            };
+
+            const clearAllFilters = () => {
+                Object.keys(activeFilters).forEach(k => activeFilters[k] = '');
+                ['filter-playbook', 'filter-responsavel', 'filter-parceiro', 'filter-status', 'filter-categoria'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.value = ''; el.closest('th')?.classList.remove('filter-th-active'); }
+                });
+                const ativInput = document.getElementById('filter-atividade');
+                if (ativInput) { ativInput.value = ''; ativInput.closest('th')?.classList.remove('filter-th-active'); }
+                updateClearFiltersBtn();
+                renderRows(rawTableData?.data || []);
+            };
+
             const loadTableData = async () => {
                 tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-muted-foreground"><div class="flex justify-center items-center gap-2"><i data-lucide="loader-2" class="animate-spin w-5 h-5"></i>Carregando atividades...</div></td></tr>`;
                 lucide.createIcons();
@@ -1301,6 +1520,7 @@
                 try {
                     const result = await queryMitra({ query: componentData.tableQuery });
                     if (!result || !result.data || result.data.length === 0) {
+                        rawTableData = null;
                         tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>Nenhuma atividade encontrada.</span></div></td></tr>`;
                         lucide.createIcons();
                         return;
@@ -1320,62 +1540,9 @@
                         ANOTACOES: headers.indexOf('ANOTACOES')
                     };
 
-                    const truncateText = (text, maxLength = 5) => {
-                        if (!text) return '-';
-                        const str = String(text).trim();
-                        return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
-                    };
-
-                    const normalizeStatus = (value) => String(value || '')
-                        .trim()
-                        .toLowerCase()
-                        .normalize('NFD')
-                        .replace(/[\u0300-\u036f]/g, '');
-
-                    const fragment = document.createDocumentFragment();
-                    result.data.forEach(row => {
-                        const tr = document.createElement('tr');
-                        tr.className = 'table-row-hover';
-                        const statusColor = row[colMap.STATUS_COLOR] || 'gray';
-                        const statusLabelRaw = row[colMap.STATUS_LABEL] || '';
-                        const notesText = String(row[colMap.ANOTACOES] || '').trim();
-                        const notesLength = notesText.length;
-                        const statusLabelNormalized = normalizeStatus(statusLabelRaw);
-                        const isCompletedStatus =
-                            statusLabelNormalized === 'concluida' ||
-                            statusLabelNormalized === 'concluida com atraso' ||
-                            statusLabelNormalized === 'concluida com atrasada' ||
-                            statusLabelNormalized === 'concluida com atrasado';
-                        const isLateCompletedStatus =
-                            statusLabelNormalized === 'concluida com atraso' ||
-                            statusLabelNormalized === 'concluida com atrasada' ||
-                            statusLabelNormalized === 'concluida com atrasado';
-                        const completeIconColorStyle = !isCompletedStatus
-                            ? ''
-                            : (isLateCompletedStatus ? 'color: #b45309;' : 'color: #047857;');
-
-                        tr.innerHTML = `
-                            <td class="px-5 py-3.5 align-top text-muted-foreground" style="font-weight:500">${row[colMap.PLAYBOOK] || '-'}</td>
-                            <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.RESPONSAVEL] || '-'}</td>
-                            <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.PARCEIRO] || '-'}</td>
-                            <td class="px-5 py-3.5 align-top font-medium text-foreground" style="font-weight:500">${row[colMap.ATIVIDADE] || '-'}</td>
-                            <td class="px-5 py-3.5 align-top min-w-[200px]"><span class="badge badge-${statusColor}">${statusLabelRaw || '-'}</span></td>
-                            <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.CATEGORIA] || '-'}</td>
-                            <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CRIACAO] || '-'}</td>
-                            <td class="px-3 py-3.5 align-top text-muted-foreground hide-on-mobile" title="${row[colMap.ANOTACOES] || '-'}">${truncateText(row[colMap.ANOTACOES], 50)}</td>
-                            <td class="px-5 py-3.5 align-top text-center">
-                                <div class="flex justify-center items-center gap-1">
-                                    <button data-action="edit" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Visualizar/Editar'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="eye" class="w-4 h-4 pointer-events-none"></i></button>
-                                    <button data-action="complete" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" data-notes-length="${notesLength}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Concluir Atividade'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="check" class="w-4 h-4 pointer-events-none" style="${completeIconColorStyle}"></i></button>
-                                </div>
-                            </td>
-                        `;
-                        fragment.appendChild(tr);
-                    });
-
-                    tableBody.innerHTML = '';
-                    tableBody.appendChild(fragment);
-                    lucide.createIcons();
+                    rawTableData = { data: result.data, colMap, headers };
+                    populateFilterDropdowns();
+                    applyFilters();
                 } catch (error) {
                     console.error("Falha ao carregar dados da tabela:", error);
                     tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-destructive">Erro ao carregar atividades. Verifique o console.</td></tr>`;
@@ -1391,7 +1558,32 @@
                 ]);
             };
 
+            const setupFilterListeners = () => {
+                const filterMap = [
+                    { id: 'filter-playbook', key: 'PLAYBOOK', event: 'change' },
+                    { id: 'filter-responsavel', key: 'RESPONSAVEL', event: 'change' },
+                    { id: 'filter-parceiro', key: 'PARCEIRO', event: 'change' },
+                    { id: 'filter-atividade', key: 'ATIVIDADE', event: 'input' },
+                    { id: 'filter-status', key: 'STATUS_LABEL', event: 'change' },
+                    { id: 'filter-categoria', key: 'CATEGORIA', event: 'change' },
+                ];
+
+                filterMap.forEach(({ id, key, event }) => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.addEventListener(event, (e) => {
+                        activeFilters[key] = e.target.value;
+                        el.closest('th')?.classList.toggle('filter-th-active', !!e.target.value);
+                        applyFilters();
+                    });
+                });
+
+                const clearBtn = document.getElementById('clear-filters-btn');
+                if (clearBtn) clearBtn.addEventListener('click', clearAllFilters);
+            };
+
             const setupEventListeners = () => {
+                setupFilterListeners();
                 searchInput.addEventListener('input', (e) => {
                     clearTimeout(searchDebounceTimeout);
                     searchDebounceTimeout = setTimeout(async () => {
