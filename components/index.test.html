@@ -15,6 +15,7 @@
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
             --background: 0 0% 99%;
@@ -202,6 +203,48 @@
 
         .dark .kpi-card {
             background-color: hsl(var(--secondary));
+        }
+
+        /* KPI card variants (light) */
+        .kpi-card-total {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            border-color: #d1d5db;
+        }
+
+        .kpi-card-hoje {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border-color: #fcd34d;
+        }
+
+        .kpi-card-atrasadas {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border-color: #fecaca;
+        }
+
+        .kpi-card-vencer {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-color: #bfdbfe;
+        }
+
+        /* KPI card variants (dark) */
+        .dark .kpi-card-total {
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.22), rgba(71, 85, 105, 0.35));
+            border-color: rgba(148, 163, 184, 0.45);
+        }
+
+        .dark .kpi-card-hoje {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.2), rgba(217, 119, 6, 0.32));
+            border-color: rgba(250, 204, 21, 0.55);
+        }
+
+        .dark .kpi-card-atrasadas {
+            background: linear-gradient(135deg, rgba(248, 113, 113, 0.2), rgba(220, 38, 38, 0.32));
+            border-color: rgba(248, 113, 113, 0.55);
+        }
+
+        .dark .kpi-card-vencer {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(37, 99, 235, 0.32));
+            border-color: rgba(147, 197, 253, 0.55);
         }
 
         .kpi-icon-container {
@@ -732,15 +775,15 @@
                             <input id="search-input" type="text" placeholder="Buscar atividades..."
                                 class="search-input flex h-9 w-full rounded-lg border border-input dark:border-border/60 bg-background dark:bg-transparent px-3 py-2 pl-9 text-sm placeholder:text-muted-foreground">
                         </div>
+                        <button id="add-playbook-btn"
+                            class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-secondary-foreground active:scale-95"
+                            style="font-weight:500; background-color: #b6edb6;">
+                            <i data-lucide="book-plus" class="w-4 h-4 mr-1.5"></i> Playbook
+                        </button>
                         <button id="add-activity-btn"
                             class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 shadow-sm"
                             style="font-weight:500">
                             <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Atividade
-                        </button>
-                        <button id="add-playbook-btn"
-                            class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:bg-muted dark:hover:bg-muted/80 active:scale-95"
-                            style="font-weight:500">
-                            <i data-lucide="book-plus" class="w-4 h-4 mr-1.5"></i> Playbook
                         </button>
                         <button id="export-btn"
                             class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
@@ -766,14 +809,14 @@
                     <table class="table-header-sticky w-full text-sm">
                         <thead>
                             <tr>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                    style="font-weight:600">Atividade</th>
+                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                    style="font-weight:600">Playbook</th>
                                 <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
                                     style="font-weight:600">Responsável</th>
                                 <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
                                     style="font-weight:600">Parceiro</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                    style="font-weight:600">Playbook</th>
+                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                    style="font-weight:600">Atividade</th>
                                 <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider min-w-[200px]"
                                     style="font-weight:600">Status</th>
                                 <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
@@ -1087,7 +1130,7 @@
                 const iconColor = iconColorMap[id] || 'currentColor';
 
                 const card = document.createElement('div');
-                card.className = `kpi-card${onClick ? ' cursor-pointer' : ''}`;
+                card.className = `kpi-card kpi-card-${id}${onClick ? ' cursor-pointer' : ''}`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <p class="kpi-label">${label}</p>
@@ -1312,10 +1355,10 @@
                             : (isLateCompletedStatus ? 'color: #b45309;' : 'color: #047857;');
 
                         tr.innerHTML = `
-                            <td class="px-5 py-3.5 align-top font-medium text-foreground" style="font-weight:500">${row[colMap.ATIVIDADE] || '-'}</td>
+                            <td class="px-5 py-3.5 align-top text-muted-foreground" style="font-weight:500">${row[colMap.PLAYBOOK] || '-'}</td>
                             <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.RESPONSAVEL] || '-'}</td>
                             <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.PARCEIRO] || '-'}</td>
-                            <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.PLAYBOOK] || '-'}</td>
+                            <td class="px-5 py-3.5 align-top font-medium text-foreground" style="font-weight:500">${row[colMap.ATIVIDADE] || '-'}</td>
                             <td class="px-5 py-3.5 align-top min-w-[200px]"><span class="badge badge-${statusColor}">${statusLabelRaw || '-'}</span></td>
                             <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.CATEGORIA] || '-'}</td>
                             <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CRIACAO] || '-'}</td>
@@ -1386,8 +1429,42 @@
                     }
                 });
 
-                exportBtn.addEventListener('click', () => {
-                    console.log("Funcionalidade 'Exportar XLSX' a ser implementada.");
+                exportBtn.addEventListener('click', async () => {
+                    exportBtn.disabled = true;
+                    exportBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 mr-1.5 animate-spin"></i> Exportando...`;
+                    lucide.createIcons();
+
+                    try {
+                        const result = await queryMitra({ query: componentData.tableQuery });
+
+                        if (!result || !result.data || result.data.length === 0) {
+                            showValidationMessage("Não há dados para exportar.");
+                            return;
+                        }
+
+                        const headers = result.headers.map(header => header.name);
+                        const dataAsObjects = result.data.map(row => {
+                            const rowObject = {};
+                            headers.forEach((header, index) => {
+                                rowObject[header] = row[index];
+                            });
+                            return rowObject;
+                        });
+
+                        const worksheet = XLSX.utils.json_to_sheet(dataAsObjects);
+                        const workbook = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(workbook, worksheet, 'Atividades');
+
+                        XLSX.writeFile(workbook, 'atividades.xlsx');
+
+                    } catch (error) {
+                        console.error("Falha ao exportar dados para Excel:", error);
+                        showValidationMessage("Ocorreu um erro ao exportar os dados.");
+                    } finally {
+                        exportBtn.disabled = false;
+                        exportBtn.innerHTML = `<i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Exportar`;
+                        lucide.createIcons();
+                    }
                 });
 
                 tableBody.addEventListener('click', async (e) => {
