@@ -1,15 +1,55 @@
-SELECT
+SELECT 
     'ACOMPANHAMENTO EVOLUTIVO (AE)' AS TITULO,
     'CONCLUSÃO NO PRAZO:' AS SUBTITULO,
+    
+    -- REALIZADO: ID_TIPO_DE_ACOMPANHAMENTO = 1 + plano concluído
     (
-        SELECT COUNT(*)
-        FROM CAD_ATIVIDADES
-        WHERE ID_PLAYBOOKS = 4
-          AND DATA_CONCLUSAO IS NOT NULL
+        SELECT COUNT(DISTINCT t1.ID_PARCEIRO_CHAVE_LICENCA)
+        FROM CAD_11048 t1
+        INNER JOIN CAD_11062 t2 
+            ON t1.ID = t2.ID_HISTORICO_AE
+        INNER JOIN CAD_CALENDARIO cal 
+            ON cal.ID = DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO, '%Y%m%d')
+        LEFT JOIN CC_1325 t3 
+            ON t3.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+            AND t3.ID_CALENDARIO = (
+                SELECT MAX(s.ID_CALENDARIO)
+                FROM CC_1325 s
+                WHERE s.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+                AND LEFT(CAST(s.ID_CALENDARIO AS CHAR), 6) IN (
+                    DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO, '%Y%m'),
+                    DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO - INTERVAL 1 MONTH, '%Y%m')
+                )
+            )
+        WHERE t2.ID_TIPO_DE_ACOMPANHAMENTO = 1
+          AND t2.DESCRICAO_PLANO_DE_ACAO_CONCLUIDO = 'Sim'
+          AND t2.DT_CONCLUSAO_PLANO_DE_ACAO IS NOT NULL
+          AND (cal.ID IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
+          AND (t3.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
     ) AS REALIZADO,
+
+    -- PREVISTO: mesma lógica do REALIZADO, sem filtro de conclusão
     (
-        SELECT COUNT(*)
-        FROM CAD_ATIVIDADES
-        WHERE ID_PLAYBOOKS = 4
+        SELECT COUNT(DISTINCT t1.ID_PARCEIRO_CHAVE_LICENCA)
+        FROM CAD_11048 t1
+        INNER JOIN CAD_11062 t2 
+            ON t1.ID = t2.ID_HISTORICO_AE
+        INNER JOIN CAD_CALENDARIO cal 
+            ON cal.ID = DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO, '%Y%m%d')
+        LEFT JOIN CC_1325 t3 
+            ON t3.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+            AND t3.ID_CALENDARIO = (
+                SELECT MAX(s.ID_CALENDARIO)
+                FROM CC_1325 s
+                WHERE s.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+                AND LEFT(CAST(s.ID_CALENDARIO AS CHAR), 6) IN (
+                    DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO, '%Y%m'),
+                    DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO - INTERVAL 1 MONTH, '%Y%m')
+                )
+            )
+        WHERE t2.ID_TIPO_DE_ACOMPANHAMENTO = 1
+          AND (cal.ID IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
+          AND (t3.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
     ) AS PREVISTO
+
 FROM DUAL
