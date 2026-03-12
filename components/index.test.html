@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -555,16 +554,18 @@
                 <ul class="space-y-2">
                     <li>
                         <a id="link-gestao-vista" style="cursor: pointer;"
-                            class="flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white">
+                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white nav-link">
+                            <span
+                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full hidden"></span>
                             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                             <span class="text-sm font-medium">Gestão à Vista</span>
                         </a>
                     </li>
                     <li>
-                        <a
-                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-white bg-slate-700/50 transition-all">
+                        <a id="link-atividades" style="cursor: pointer;"
+                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-white bg-slate-700/50 transition-all nav-link active">
                             <span
-                                class="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full"></span>
+                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full"></span>
                             <i data-lucide="check-square" class="w-5 h-5"></i>
                             <span class="text-sm font-medium">Atividades</span>
                         </a>
@@ -584,11 +585,13 @@
         <button id="sidebar-toggle-btn"
             class="absolute left-0 top-1/2 z-[60] flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-slate-400/45 bg-[#334154] p-0 text-white shadow-md transition-all duration-300 hover:bg-[#3d4d62] lg:left-64"
             aria-label="Toggle Sidebar">
-            <i data-lucide="chevron-right" id="sidebar-toggle-icon" class="w-5 h-5 transition-transform duration-300"></i>
+            <i data-lucide="chevron-right" id="sidebar-toggle-icon"
+                class="w-5 h-5 transition-transform duration-300"></i>
         </button>
 
         <!-- Sidebar Overlay (Mobile Only) -->
-        <div id="sidebar-overlay" class="fixed inset-0 z-40 hidden bg-black/50 opacity-0 transition-opacity duration-300 lg:hidden"></div>
+        <div id="sidebar-overlay"
+            class="fixed inset-0 z-40 hidden bg-black/50 opacity-0 transition-opacity duration-300 lg:hidden"></div>
 
         <!-- Main Content -->
         <div id="main-container" class="flex-1 h-full overflow-y-auto p-4 lg:p-6 flex flex-col gap-6">
@@ -596,37 +599,11 @@
             <!-- Header -->
             <header class="flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center -space-x-2">
-                        <div
-                            class="w-8 h-8 rounded-full bg-primary/10 border-2 border-background flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="hsl(221,83%,53%)" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m9 18 6-6-6-6" />
-                            </svg>
-                        </div>
-                        <div
-                            class="w-8 h-8 rounded-full bg-primary/15 border-2 border-background flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="hsl(221,83%,53%)" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m9 18 6-6-6-6" />
-                            </svg>
-                        </div>
-                        <div
-                            class="w-8 h-8 rounded-full bg-primary/20 border-2 border-background flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="hsl(221,83%,53%)" stroke-width="2.5" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m9 18 6-6-6-6" />
-                            </svg>
-                        </div>
-                    </div>
                     <div>
-                        <h1 class="text-xl font-700 text-foreground leading-tight tracking-tight"
+                        <h1 id="page-title"
+                            class="text-xl font-900 text-foreground leading-tight tracking-tight transition-all duration-300"
                             style="font-weight:700">
                             Gestão de Atividades</h1>
-                        <p class="text-xs text-muted-foreground font-400" style="font-weight:400">Painel de controle</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -640,280 +617,595 @@
                 </div>
             </header>
 
-            <!-- KPI Section (Topo) -->
-            <section class="grid grid-cols-1 xl:grid-cols-4 gap-4">
-                <div id="donut-kpi-card" class="kpi-layout-card p-4 flex flex-col min-h-[260px] animate-pulse">
-                    <div class="flex items-start justify-between gap-3">
-                        <div>
-                            <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">Visão geral</p>
-                            <h2 class="text-base font-semibold text-foreground mt-1">Distribuição de Atividades</h2>
+            <!-- VIEW: GESTÃO À VISTA -->
+            <div id="view-gestao-vista"
+                class="hidden opacity-0 transition-opacity duration-300 flex flex-col flex-1 gap-5 lg:gap-6 w-full">
+
+                <!-- Bloco 1: KPIs Topo -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 xl:gap-4 items-stretch mb-2 lg:mb-3">
+                    <!-- MRR Total -->
+                    <div class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
+                        <p class="text-base text-muted-foreground tracking-wide">MRR Total</p>
+                        <span class="text-2xl font-bold text-foreground mt-1" id="kpi-gv-mrr">--</span>
+                    </div>
+                    <!-- Total de Clientes -->
+                    <div class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
+                        <p class="text-base text-muted-foreground tracking-wide">Total de Clientes</p>
+                        <span class="text-2xl font-bold text-foreground mt-1" id="kpi-gv-clientes">--</span>
+                    </div>
+                    <!-- Filtro Porte -->
+                    <div
+                        class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
+                        <p class="text-base text-muted-foreground tracking-wide">Porte</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-2xl font-bold text-foreground" id="kpi-gv-porte">--</span>
+                            <i data-lucide="chevron-down"
+                                class="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors"></i>
                         </div>
-                        <span class="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[0.68rem] font-medium text-muted-foreground">Template</span>
+                    </div>
+                </section>
+
+                <!-- Bloco 2: Donut Cards -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 xl:gap-4">
+                    <!-- Donut Card Template (NPS) -->
+                    <div class="kpi-layout-card h-full px-4 py-4 flex flex-col justify-between min-h-[300px]">
+                        <div class="flex items-start justify-between gap-3 mb-2">
+                            <div>
+                                <h3 class="text-base font-semibold text-foreground mt-1">NPS</h3>
+                            </div>
+                            <div class="flex items-center gap-2 text-muted-foreground">
+                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                            <div class="relative h-[11rem] w-[11rem]">
+                                <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
+                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
+                                        stroke="hsl(var(--muted))"></circle>
+                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
+                                        stroke-width="12" stroke="#facaca" stroke-dasharray="276.46"
+                                        stroke-dashoffset="154.81" class="transition-all duration-1000 ease-in-out">
+                                    </circle>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">44%</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">21</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 48</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="flex-1 flex flex-col items-center justify-center gap-4">
-                        <div class="h-[10rem] w-[10rem] rounded-full bg-muted"></div>
-                        <p class="h-4 w-40 rounded-full bg-muted"></p>
+                    <!-- Donut Card (MRR Churn) -->
+                    <div class="kpi-layout-card h-full px-4 py-4 flex flex-col justify-between min-h-[300px]">
+                        <div class="flex items-start justify-between gap-3 mb-2">
+                            <div>
+                                <h3 class="text-base font-semibold text-foreground mt-1">MRR Churn (%)</h3>
+                            </div>
+                            <div class="flex items-center gap-2 text-muted-foreground">
+                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                            <div class="relative h-[11rem] w-[11rem]">
+                                <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
+                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
+                                        stroke="hsl(var(--muted))"></circle>
+                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
+                                        stroke-width="12" stroke="#bde4e6" stroke-dasharray="276.46"
+                                        stroke-dashoffset="0" class="transition-all duration-1000 ease-in-out">
+                                    </circle>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">113%</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">0.67%</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 0.70%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Donut Card (AE) -->
+                    <div class="kpi-layout-card h-full px-4 py-4 flex flex-col justify-between min-h-[300px]">
+                        <div class="flex items-start justify-between gap-3 mb-2">
+                            <div>
+                                <h3 class="text-base font-semibold text-foreground mt-1">Acompanhamento Evolutivo</h3>
+                            </div>
+                            <div class="flex items-center gap-2 text-muted-foreground">
+                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                            <div class="relative h-[11rem] w-[11rem]">
+                                <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
+                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
+                                        stroke="hsl(var(--muted))"></circle>
+                                    <!-- 0% progress, base circle only -->
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">0%</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">4</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 3004</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Donut Card (Clube de Gestão) -->
+                    <div class="kpi-layout-card h-full px-4 py-4 flex flex-col justify-between min-h-[300px]">
+                        <div class="flex items-start justify-between gap-3 mb-2">
+                            <div>
+                                <h3 class="text-base font-semibold text-foreground mt-1">Clube de Gestão</h3>
+                            </div>
+                            <div class="flex items-center gap-2 text-muted-foreground">
+                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                            </div>
+                        </div>
+
+                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                            <div class="relative h-[11rem] w-[11rem]">
+                                <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
+                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
+                                        stroke="hsl(var(--muted))"></circle>
+                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
+                                        stroke-width="12" stroke="#facaca" stroke-dasharray="276.46"
+                                        stroke-dashoffset="138.23" class="transition-all duration-1000 ease-in-out">
+                                    </circle>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">50%</span>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">1</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 70</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bloco 3: Tabela Resumo (Classificações) -->
+                <div class="table-container shadow-sm border border-border">
+                    <div class="px-5 py-4 border-b border-border flex justify-end">
+                        <button
+                            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-semibold transition-all duration-200 h-8 px-3 bg-[#334154] text-white hover:bg-[#243142] dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 shadow">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1.5"></i> Ver detalhes
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="table-header-sticky w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Classificações <i data-lucide="arrow-up-down"
+                                            class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Enterprise <i data-lucide="arrow-up-down"
+                                            class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Premium <i data-lucide="arrow-up-down"
+                                            class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Advocacy <i data-lucide="arrow-up-down"
+                                            class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Growth <i data-lucide="arrow-up-down"
+                                            class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Digital <i data-lucide="arrow-up-down"
+                                            class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Não classificado <i data-lucide="arrow-up-down"
+                                            class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">
+                                        Total <i data-lucide="arrow-up-down" class="inline w-3 h-3 ml-1 opacity-50"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                                <tr class="hover:bg-muted/20 transition-colors">
+                                    <td class="px-5 py-4 font-semibold text-foreground">MRR Total</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 6648997,45</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 11238204,45</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 4478409,14</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 15233153,03</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 5564719,42</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 912159,40</td>
+                                    <td class="px-5 py-4 font-medium text-foreground">R$ 44087813,45</td>
+                                </tr>
+                                <tr class="hover:bg-muted/20 transition-colors">
+                                    <td class="px-5 py-4 font-semibold text-foreground">Total de Parceiros</td>
+                                    <td class="px-5 py-4 text-muted-foreground">246</td>
+                                    <td class="px-5 py-4 text-muted-foreground">416</td>
+                                    <td class="px-5 py-4 text-muted-foreground">328</td>
+                                    <td class="px-5 py-4 text-muted-foreground">1688</td>
+                                    <td class="px-5 py-4 text-muted-foreground">944</td>
+                                    <td class="px-5 py-4 text-muted-foreground">118</td>
+                                    <td class="px-5 py-4 font-medium text-foreground">3745</td>
+                                </tr>
+                                <tr class="hover:bg-muted/20 transition-colors">
+                                    <td class="px-5 py-4 font-semibold text-foreground">Tkt Médio</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 27028,44</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 27014,91</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 13653,69</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 9024,38</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 5894,83</td>
+                                    <td class="px-5 py-4 text-muted-foreground">R$ 7730,16</td>
+                                    <td class="px-5 py-4 font-medium text-foreground">R$ 11772,45</td>
+                                </tr>
+                                <tr class="hover:bg-muted/20 transition-colors">
+                                    <td class="px-5 py-4 font-semibold text-foreground">Média de Soluções</td>
+                                    <td class="px-5 py-4 text-muted-foreground">0</td>
+                                    <td class="px-5 py-4 text-muted-foreground">0</td>
+                                    <td class="px-5 py-4 text-muted-foreground">0</td>
+                                    <td class="px-5 py-4 text-muted-foreground">0</td>
+                                    <td class="px-5 py-4 text-muted-foreground">0</td>
+                                    <td class="px-5 py-4 text-muted-foreground">0.01</td>
+                                    <td class="px-5 py-4 font-medium text-foreground">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <div id="top-kpis-right-container" class="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-                    <div id="passagem-bastao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
+                <!-- Bloco 4: Painel de Ações e Performance -->
+                <div class="kpi-layout-card p-6 shadow-sm">
+                    <h3 class="text-center text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wide">
+                        Gestão de Metas - Apontamentos e Acompanhamento Performance</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                        <button
+                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span
+                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Apontamento
+                                e Gerenciamento de Metas</span>
+                        </button>
+                        <button
+                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span
+                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Performance
+                                CS</span>
+                        </button>
+                        <button
+                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span
+                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">GPD
+                                - Apuração de Resultado</span>
+                        </button>
+                        <button
+                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span
+                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Plano
+                                de ação</span>
+                        </button>
                     </div>
-                    <div id="checkin-experiencia-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="acompanhamento-inicial-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="acompanhamento-evolutivo-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="monitoramento-nps-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="follow-detratores-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="follow-neutros-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="clube-gestao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="entrega-valor-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="reversao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                    <div id="outras-atividades-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <div class="h-3 bg-muted rounded-full w-28"></div>
-                                <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
-                            </div>
-                            <div class="h-8 bg-muted rounded-lg w-20"></div>
-                        </div>
-                        <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                        <div class="h-3 bg-muted rounded-full w-full"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- KPI Cards -->
-            <div id="kpi-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Skeletons -->
-                <div class="skeleton-card animate-pulse">
-                    <div class="flex justify-between items-center">
-                        <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                        <div class="w-9 h-9 bg-muted rounded-lg"></div>
-                    </div>
-                    <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
-                </div>
-                <div class="skeleton-card animate-pulse">
-                    <div class="flex justify-between items-center">
-                        <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                        <div class="w-9 h-9 bg-muted rounded-lg"></div>
-                    </div>
-                    <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
-                </div>
-                <div class="skeleton-card animate-pulse">
-                    <div class="flex justify-between items-center">
-                        <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                        <div class="w-9 h-9 bg-muted rounded-lg"></div>
-                    </div>
-                    <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
-                </div>
-                <div class="skeleton-card animate-pulse">
-                    <div class="flex justify-between items-center">
-                        <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                        <div class="w-9 h-9 bg-muted rounded-lg"></div>
-                    </div>
-                    <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
                 </div>
             </div>
 
-            <!-- Tabela Container -->
-            <div class="table-container min-h-[750px] flex-1">
-                <!-- Table Action Bar -->
-                <div
-                    class="px-5 py-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista de
-                            Atividades</h2>
-                        <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie as
-                            atividades pendentes e concluídas.</p>
-                    </div>
-                    <div class="flex items-center gap-2 w-full md:w-auto">
-                        <div class="relative w-full md:w-64">
-                            <i data-lucide="search"
-                                class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
-                            <input id="search-input" type="text" placeholder="Buscar atividades..."
-                                class="search-input flex h-9 w-full rounded-lg border border-input dark:border-border/60 bg-background dark:bg-transparent px-3 py-2 pl-9 text-sm placeholder:text-muted-foreground">
+            <!-- VIEW: ATIVIDADES -->
+            <div id="view-atividades" class="flex flex-col gap-6 transition-opacity duration-300 opacity-100 flex-1">
+                <!-- KPI Section (Topo) -->
+                <section class="grid grid-cols-1 xl:grid-cols-4 gap-4">
+                    <div id="donut-kpi-card" class="kpi-layout-card p-4 flex flex-col min-h-[260px] animate-pulse">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">Visão geral</p>
+                                <h2 class="text-base font-semibold text-foreground mt-1">Distribuição de Atividades</h2>
+                            </div>
+                            <span
+                                class="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[0.68rem] font-medium text-muted-foreground">Template</span>
                         </div>
-                        <button id="clear-filters-btn"
-                            class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none h-9 px-3 border border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 active:scale-95 gap-1.5"
-                            style="font-weight:500; display:none;"
-                            title="Limpar todos os filtros de coluna">
-                            <i data-lucide="filter-x" class="w-4 h-4"></i>
-                            <span class="hidden md:inline">Limpar filtros</span>
-                            <span id="filter-count-badge" class="inline-flex items-center justify-center min-w-[1rem] h-4 px-1 rounded-full bg-primary text-primary-foreground text-[0.6rem] font-bold"></span>
-                        </button>
-                        <button id="add-playbook-btn"
-                            class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-secondary-foreground active:scale-95"
-                            style="font-weight:500; background-color: #b6edb6;">
-                            <i data-lucide="book-plus" class="w-4 h-4 mr-1.5"></i> Playbook
-                        </button>
-                        <button id="add-activity-btn"
-                            class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 shadow-sm"
-                            style="font-weight:500">
-                            <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Atividade
-                        </button>
-                        <button id="export-btn"
-                            class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
-                            style="font-weight:500">
-                            <i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Exportar
-                        </button>
+
+                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                            <div class="h-[10rem] w-[10rem] rounded-full bg-muted"></div>
+                            <p class="h-4 w-40 rounded-full bg-muted"></p>
+                        </div>
+                    </div>
+
+                    <div id="top-kpis-right-container"
+                        class="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+                        <div id="passagem-bastao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="checkin-experiencia-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="acompanhamento-inicial-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="acompanhamento-evolutivo-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="monitoramento-nps-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="follow-detratores-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="follow-neutros-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="clube-gestao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="entrega-valor-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="reversao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                        <div id="outras-atividades-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="h-3 bg-muted rounded-full w-28"></div>
+                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                </div>
+                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                            </div>
+                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                            <div class="h-3 bg-muted rounded-full w-full"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- KPI Cards -->
+                <div id="kpi-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Skeletons -->
+                    <div class="skeleton-card animate-pulse">
+                        <div class="flex justify-between items-center">
+                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        </div>
+                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
+                    </div>
+                    <div class="skeleton-card animate-pulse">
+                        <div class="flex justify-between items-center">
+                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        </div>
+                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
+                    </div>
+                    <div class="skeleton-card animate-pulse">
+                        <div class="flex justify-between items-center">
+                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        </div>
+                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
+                    </div>
+                    <div class="skeleton-card animate-pulse">
+                        <div class="flex justify-between items-center">
+                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        </div>
+                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
                     </div>
                 </div>
 
-                <div id="validation-toast"
-                    class="hidden fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] sm:w-auto sm:max-w-md" role="alert"
-                    aria-live="assertive">
-                    <div id="validation-toast-content"
-                        class="toast-popup toast-danger flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg">
-                        <span
-                            class="toast-danger-icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">!</span>
-                        <p id="validation-toast-text" class="text-sm font-medium"></p>
+                <!-- Tabela Container -->
+                <div class="table-container min-h-[750px] flex-1">
+                    <!-- Table Action Bar -->
+                    <div
+                        class="px-5 py-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista
+                                de
+                                Atividades</h2>
+                            <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie
+                                as
+                                atividades pendentes e concluídas.</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <div class="relative w-full md:w-64">
+                                <i data-lucide="search"
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                                <input id="search-input" type="text" placeholder="Buscar atividades..."
+                                    class="search-input flex h-9 w-full rounded-lg border border-input dark:border-border/60 bg-background dark:bg-transparent px-3 py-2 pl-9 text-sm placeholder:text-muted-foreground">
+                            </div>
+                            <button id="clear-filters-btn"
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none h-9 px-3 border border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 active:scale-95 gap-1.5"
+                                style="font-weight:500; display:none;" title="Limpar todos os filtros de coluna">
+                                <i data-lucide="filter-x" class="w-4 h-4"></i>
+                                <span class="hidden md:inline">Limpar filtros</span>
+                                <span id="filter-count-badge"
+                                    class="inline-flex items-center justify-center min-w-[1rem] h-4 px-1 rounded-full bg-primary text-primary-foreground text-[0.6rem] font-bold"></span>
+                            </button>
+                            <button id="add-playbook-btn"
+                                class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-secondary-foreground active:scale-95"
+                                style="font-weight:500; background-color: #b6edb6;">
+                                <i data-lucide="book-plus" class="w-4 h-4 mr-1.5"></i> Playbook
+                            </button>
+                            <button id="add-activity-btn"
+                                class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 shadow-sm"
+                                style="font-weight:500">
+                                <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Atividade
+                            </button>
+                            <button id="export-btn"
+                                class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
+                                style="font-weight:500">
+                                <i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Exportar
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Table -->
-                <div class="flex-1 overflow-auto">
-                    <table class="table-header-sticky w-full text-sm">
-                        <thead>
-                            <tr>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                    style="font-weight:600">Playbook</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                    style="font-weight:600">Responsável</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                    style="font-weight:600">Parceiro</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                    style="font-weight:600">Atividade</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider min-w-[200px]"
-                                    style="font-weight:600">Status</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                    style="font-weight:600">Categoria</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                    style="font-weight:600">Data Criação</th>
-                                <th class="text-left text-xs text-muted-foreground font-600 px-3 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                    style="font-weight:600">Anotações</th>
-                                <th class="text-center text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                    style="font-weight:600">Ações</th>
-                            </tr>
-                            <tr class="filter-row">
-                                <th class="px-5 hide-on-mobile"><select id="filter-playbook" class="filter-select"><option value="">Todos</option></select></th>
-                                <th class="px-5"><select id="filter-responsavel" class="filter-select"><option value="">Todos</option></select></th>
-                                <th class="px-5 hide-on-mobile"><select id="filter-parceiro" class="filter-select"><option value="">Todos</option></select></th>
-                                <th class="px-5"><input id="filter-atividade" type="text" placeholder="Filtrar..." class="filter-input"></th>
-                                <th class="px-5 min-w-[200px]"><select id="filter-status" class="filter-select"><option value="">Todos</option></select></th>
-                                <th class="px-5"><select id="filter-categoria" class="filter-select"><option value="">Todos</option></select></th>
-                                <th class="hide-on-mobile"></th>
-                                <th class="hide-on-mobile"></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="activities-tbody" class="divide-y divide-border">
-                            <!-- Loading State -->
-                            <tr>
-                                <td colspan="9" class="p-8 text-center text-muted-foreground">Carregando atividades...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div id="validation-toast"
+                        class="hidden fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] sm:w-auto sm:max-w-md"
+                        role="alert" aria-live="assertive">
+                        <div id="validation-toast-content"
+                            class="toast-popup toast-danger flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg">
+                            <span
+                                class="toast-danger-icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">!</span>
+                            <p id="validation-toast-text" class="text-sm font-medium"></p>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="flex-1 overflow-auto">
+                        <table class="table-header-sticky w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                        style="font-weight:600">Playbook</th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">Responsável</th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                        style="font-weight:600">Parceiro</th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">Atividade</th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider min-w-[200px]"
+                                        style="font-weight:600">Status</th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">Categoria</th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                        style="font-weight:600">Data Criação</th>
+                                    <th class="text-left text-xs text-muted-foreground font-600 px-3 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                        style="font-weight:600">Anotações</th>
+                                    <th class="text-center text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                        style="font-weight:600">Ações</th>
+                                </tr>
+                                <tr class="filter-row">
+                                    <th class="px-5 hide-on-mobile"><select id="filter-playbook" class="filter-select">
+                                            <option value="">Todos</option>
+                                        </select></th>
+                                    <th class="px-5"><select id="filter-responsavel" class="filter-select">
+                                            <option value="">Todos</option>
+                                        </select></th>
+                                    <th class="px-5 hide-on-mobile"><select id="filter-parceiro" class="filter-select">
+                                            <option value="">Todos</option>
+                                        </select></th>
+                                    <th class="px-5"><input id="filter-atividade" type="text" placeholder="Filtrar..."
+                                            class="filter-input"></th>
+                                    <th class="px-5 min-w-[200px]"><select id="filter-status" class="filter-select">
+                                            <option value="">Todos</option>
+                                        </select></th>
+                                    <th class="px-5"><select id="filter-categoria" class="filter-select">
+                                            <option value="">Todos</option>
+                                        </select></th>
+                                    <th class="hide-on-mobile"></th>
+                                    <th class="hide-on-mobile"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="activities-tbody" class="divide-y divide-border">
+                                <!-- Loading State -->
+                                <tr>
+                                    <td colspan="9" class="p-8 text-center text-muted-foreground">Carregando
+                                        atividades...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -929,6 +1221,50 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            const formatBRL = (value) => new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+
+            const parseCurrencyString = (str) => {
+                if (str === null || str === undefined) return NaN;
+                if (typeof str === 'number') return str;
+                return parseFloat(String(str).replace(/[R$\s.]/g, '').replace(',', '.'));
+            };
+
+            const formatNodeTextIfCurrency = (node) => {
+                if (!node) return;
+                const parsed = parseCurrencyString(node.textContent?.trim());
+                if (!Number.isNaN(parsed)) {
+                    node.textContent = formatBRL(parsed);
+                }
+            };
+
+            const formatStaticCurrencyData = () => {
+                formatNodeTextIfCurrency(document.getElementById('kpi-gv-mrr'));
+
+                const targetLabels = ['MRR Total', 'Tkt Médio'];
+                const tableRows = document.querySelectorAll('#view-gestao-vista table tbody tr');
+
+                tableRows.forEach((row) => {
+                    const firstCell = row.querySelector('td:first-child');
+                    if (!firstCell) return;
+
+                    const label = firstCell.textContent.trim();
+                    if (!targetLabels.includes(label)) return;
+
+                    row.querySelectorAll('td:not(:first-child)').forEach((cell) => {
+                        const rawText = cell.textContent.trim();
+                        if (!rawText || rawText === '-') return;
+
+                        const parsedValue = parseCurrencyString(rawText);
+                        if (!Number.isNaN(parsedValue)) {
+                            cell.textContent = formatBRL(parsedValue);
+                        }
+                    });
+                });
+            };
+
             const kpiContainer = document.getElementById('kpi-cards-container');
             const tableBody = document.getElementById('activities-tbody');
             const donutKpiContainer = document.getElementById('donut-kpi-card');
@@ -1261,7 +1597,6 @@
                         <div class="flex justify-between items-start gap-4">
                             <div class="min-w-0">
                                 <h3 class="text-base font-semibold text-foreground break-words mt-1">${titulo || config.defaultTitle}</h3>
-                                <p class="text-xs text-muted-foreground mt-1 break-words">${subtitulo || config.defaultSubtitle}</p>
                             </div>
                             <button type="button" data-tippy-content="${config.tooltip}" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
                                 <i data-lucide="info" class="w-4 h-4"></i>
@@ -1370,6 +1705,34 @@
                 } catch (error) {
                     console.error("Falha ao carregar dados dos KPIs:", error);
                     kpiContainer.innerHTML = `<div class="col-span-full p-4 bg-destructive/10 text-destructive rounded-lg">Erro ao carregar os indicadores.</div>`;
+                }
+            };
+
+            const loadMrrTotalData = async () => {
+                const mrrNode = document.getElementById('kpi-gv-mrr');
+                if (!mrrNode) return;
+
+                try {
+                    if (!componentData.vistaMrrTotalQuery) {
+                        formatNodeTextIfCurrency(mrrNode);
+                        return;
+                    }
+
+                    const result = await queryMitra({ query: componentData.vistaMrrTotalQuery });
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const rawValue = result.data[0][0];
+                    const parsedValue = parseCurrencyString(rawValue);
+
+                    if (Number.isNaN(parsedValue)) {
+                        throw new Error('Valor inválido retornado pela query.');
+                    }
+
+                    mrrNode.textContent = formatBRL(parsedValue);
+                } catch (error) {
+                    console.error('Falha ao carregar o MRR Total:', error);
                 }
             };
 
@@ -1552,6 +1915,7 @@
             const refreshAllData = async () => {
                 await Promise.all([
                     loadDonutData(),
+                    loadMrrTotalData(),
                     loadKpiData(),
                     loadTableData(),
                     ...executionCardConfigs.map(loadExecutionCardData)
@@ -1695,15 +2059,17 @@
                 });
 
                 if (linkGestaoVista) {
-                    linkGestaoVista.addEventListener('click', async () => {
-                        try {
-                            const actionId = 45; // ID de ação padrão para "Gestão à Vista"
-                            if (!isNaN(actionId)) {
-                                await actionMitra({ id: actionId });
-                            }
-                        } catch (e) {
-                            console.error("Erro ao executar ação para 'Gestão à Vista':", e);
-                        }
+                    linkGestaoVista.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        navigateToView('gestao-vista', 'Gestão à Vista');
+                    });
+                }
+
+                const linkAtividades = document.getElementById('link-atividades');
+                if (linkAtividades) {
+                    linkAtividades.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigateToView('atividades', 'Gestão de Atividades');
                     });
                 }
 
@@ -1724,6 +2090,7 @@
             const initializeComponent = async () => {
                 lucide.createIcons();
                 setupEventListeners();
+                formatStaticCurrencyData();
                 await refreshAllData();
             };
 
@@ -1839,6 +2206,87 @@
             window.addEventListener('resize', updateSidebarLayoutForViewport);
             sidebarToggleBtn.addEventListener('click', toggleSidebar);
             sidebarOverlay.addEventListener('click', toggleSidebar);
+            // ================================================================
+
+            // ===================== NAVIGATION LOGIC (SPA) =====================
+            const viewsConfig = {
+                'gestao-vista': {
+                    element: document.getElementById('view-gestao-vista'),
+                    link: document.getElementById('link-gestao-vista')
+                },
+                'atividades': {
+                    element: document.getElementById('view-atividades'),
+                    link: document.getElementById('link-atividades')
+                }
+            };
+
+            const pageTitle = document.getElementById('page-title');
+
+            const navigateToView = (viewId, title) => {
+                // Mudar títulos com fade-out / fade-in
+                if (pageTitle) {
+                    pageTitle.style.opacity = '0';
+
+                    setTimeout(() => {
+                        pageTitle.textContent = title;
+                        pageTitle.style.opacity = '1';
+                    }, 150);
+                }
+
+                // Atualizar sidebar links
+                Object.keys(viewsConfig).forEach(key => {
+                    const { link, element } = viewsConfig[key];
+
+                    if (key === viewId) {
+                        // Ativar Link
+                        if (link) {
+                            link.classList.remove('text-slate-300', 'hover:bg-slate-700/50', 'hover:text-white');
+                            link.classList.add('text-white', 'bg-slate-700/50', 'active');
+                            const indicator = link.querySelector('.nav-indicator');
+                            if (indicator) indicator.classList.remove('hidden');
+                        }
+
+                        // Mostrar View
+                        if (element) {
+                            element.classList.remove('hidden');
+                            // Delay pequeno para animação de opacidade funcionar após o display block
+                            setTimeout(() => {
+                                element.classList.remove('opacity-0');
+                                element.classList.add('opacity-100');
+                                // Force relayout of chart if rendering now
+                                if (key === 'atividades') {
+                                    const progressRing = document.getElementById('donut-progress-ring');
+                                    if (progressRing && window.getComputedStyle(progressRing).strokeDashoffset) {
+                                        // Trigger recalc
+                                    }
+                                }
+                            }, 10);
+                        }
+                    } else {
+                        // Desativar Link
+                        if (link) {
+                            link.classList.add('text-slate-300', 'hover:bg-slate-700/50', 'hover:text-white');
+                            link.classList.remove('text-white', 'bg-slate-700/50', 'active');
+                            const indicator = link.querySelector('.nav-indicator');
+                            if (indicator) indicator.classList.add('hidden');
+                        }
+
+                        // Esconder View
+                        if (element) {
+                            element.classList.remove('opacity-100');
+                            element.classList.add('opacity-0');
+                            setTimeout(() => {
+                                element.classList.add('hidden');
+                            }, 300); // tempo do transition duration
+                        }
+                    }
+                });
+
+                // Se tiver mobile, fechar sidebar ao clicar em um item
+                if (!isDesktopViewport() && !sidebar.classList.contains('-translate-x-full')) {
+                    toggleSidebar();
+                }
+            };
             // ================================================================
 
             waitForMitraAndInit();

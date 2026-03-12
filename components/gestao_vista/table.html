@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela Analítica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0 1rem;
+            background: transparent;
+        }
+        .component-container {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            color: #5D6585;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 100%;
+            padding: 1.2em;
+            overflow-x: auto;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1em;
+        }
+        .btn-detalhes {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4em;
+            background-color: #2e3c50;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 0.5em 1.2em;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-detalhes:hover { background-color: #1e2a38; }
+        table { width: 100%; border-collapse: collapse; }
+        thead tr { background-color: #f0f2f8; }
+        thead th {
+            padding: 0.75em 1em;
+            text-align: left;
+            font-weight: 500;
+            font-size: 15px;
+            color: #5D6585;
+            white-space: nowrap;
+            border-bottom: 1px solid #dde1ee;
+        }
+        thead th .th-inner { display: flex; align-items: center; gap: 0.35em; }
+        thead th .sort-icon { opacity: 0.45; font-size: 12px; user-select: none; }
+        tbody tr { border-bottom: 1px solid #eef0f7; transition: background 0.15s; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background-color: #f5f7fc; }
+        tbody td { padding: 0.75em 1em; font-size: 15px; color: #5D6585; white-space: nowrap; }
+        tbody td:first-child { font-weight: 500; color: #444c6e; }
+        .state-msg { text-align: center; padding: 2em; font-size: 15px; color: #adb3c8; }
+        .state-msg.error { color: #e06c6c; }
+    </style>
+</head>
+<body>
+<div class="component-container">
+
+    <div class="toolbar">
+        <a class="btn-detalhes" href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjEwNw==" target="_blank">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Ver detalhes
+        </a>
+    </div>
+
+    <div id="tableWrapper">
+        <p class="state-msg" id="stateMsg">Carregando dados...</p>
+        <table id="dataTable" style="display:none;">
+            <thead>
+                <tr>
+                    <th><div class="th-inner">Classificações <span class="sort-icon">⇅</span></div></th>
+                    <th><div class="th-inner">Enterprise <span class="sort-icon">⇅</span></div></th>
+                    <th><div class="th-inner">Premium <span class="sort-icon">⇅</span></div></th>
+                    <th><div class="th-inner">Advocacy <span class="sort-icon">⇅</span></div></th>
+                    <th><div class="th-inner">Growth <span class="sort-icon">⇅</span></div></th>
+                    <th><div class="th-inner">Digital <span class="sort-icon">⇅</span></div></th>
+                    <th><div class="th-inner">Não classificado <span class="sort-icon">⇅</span></div></th>
+                    <th><div class="th-inner">Total <span class="sort-icon">⇅</span></div></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+function mapRows(res) {
+    if (!res || !res.headers || !res.data) return [];
+    var headers = res.headers.map(function(h) { return h.name || h.NAME || h; });
+    return res.data.map(function(row) {
+        var obj = {};
+        headers.forEach(function(h, i) { obj[h] = row[i]; });
+        return obj;
+    });
+}
+
+var sql = "";
+sql += "WITH SNAPSHOT AS (";
+sql += " SELECT MAX(C2.ID_CALENDARIO) AS ID_CALENDARIO";
+sql += " FROM CC_1325 C2";
+sql += " WHERE (C2.ID_CALENDARIO IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))";
+sql += " AND (C2.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))";
+sql += "), BASE_CONSOLIDADA AS (";
+sql += " SELECT C.ID_PARCEIRO AS ID, PAR.ID_SEGMENTACAO_ATUAL AS SEGMENTO,";
+sql += " SUM(COALESCE(H.MRR_SK_ATIVO_HIST, 0)) AS MRR_TOTAL,";
+sql += " COALESCE(SOL.QTD_SOLUCOES_HIST, 0) AS QTD_SOLUCOES";
+sql += " FROM CC_1325 C";
+sql += " INNER JOIN SNAPSHOT S ON S.ID_CALENDARIO = C.ID_CALENDARIO";
+sql += " INNER JOIN CAD_1006 PAR ON PAR.ID = C.ID_PARCEIRO";
+sql += " LEFT JOIN CC_MRR_SK_ATIVO_HIST H ON H.ID_PARCEIRO = C.ID_PARCEIRO AND H.ID_CALENDARIO = C.ID_CALENDARIO";
+sql += " LEFT JOIN CC_1391 SOL ON SOL.ID_PARCEIRO = C.ID_PARCEIRO AND SOL.ID_CALENDARIO = C.ID_CALENDARIO";
+sql += " WHERE C.ID_STATUS_CLIENTE <> 6";
+sql += " AND (C.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))";
+sql += " GROUP BY C.ID_PARCEIRO, PAR.ID_SEGMENTACAO_ATUAL, SOL.QTD_SOLUCOES_HIST";
+sql += ")";
+sql += " SELECT 'MRR Total' AS COL0,";
+sql += " CONCAT('R$ ', FORMAT(SUM(CASE WHEN SEGMENTO='ENT' THEN MRR_TOTAL END),2,'pt_BR')) AS COL1,";
+sql += " CONCAT('R$ ', FORMAT(SUM(CASE WHEN SEGMENTO='PRE' THEN MRR_TOTAL END),2,'pt_BR')) AS COL2,";
+sql += " CONCAT('R$ ', FORMAT(SUM(CASE WHEN SEGMENTO='ADV' THEN MRR_TOTAL END),2,'pt_BR')) AS COL3,";
+sql += " CONCAT('R$ ', FORMAT(SUM(CASE WHEN SEGMENTO='GRO' THEN MRR_TOTAL END),2,'pt_BR')) AS COL4,";
+sql += " CONCAT('R$ ', FORMAT(SUM(CASE WHEN SEGMENTO='DIG' THEN MRR_TOTAL END),2,'pt_BR')) AS COL5,";
+sql += " CONCAT('R$ ', FORMAT(SUM(CASE WHEN SEGMENTO='NC' THEN MRR_TOTAL END),2,'pt_BR')) AS COL6,";
+sql += " CONCAT('R$ ', FORMAT(SUM(MRR_TOTAL),2,'pt_BR')) AS COL7";
+sql += " FROM BASE_CONSOLIDADA";
+sql += " UNION ALL";
+sql += " SELECT 'Total de Parceiros',";
+sql += " COUNT(CASE WHEN SEGMENTO='ENT' THEN ID END),";
+sql += " COUNT(CASE WHEN SEGMENTO='PRE' THEN ID END),";
+sql += " COUNT(CASE WHEN SEGMENTO='ADV' THEN ID END),";
+sql += " COUNT(CASE WHEN SEGMENTO='GRO' THEN ID END),";
+sql += " COUNT(CASE WHEN SEGMENTO='DIG' THEN ID END),";
+sql += " COUNT(CASE WHEN SEGMENTO='NC' THEN ID END),";
+sql += " COUNT(*)";
+sql += " FROM BASE_CONSOLIDADA";
+sql += " UNION ALL";
+sql += " SELECT 'Tkt Medio',";
+sql += " CONCAT('R$ ', FORMAT(AVG(CASE WHEN SEGMENTO='ENT' THEN MRR_TOTAL END),2,'pt_BR')),";
+sql += " CONCAT('R$ ', FORMAT(AVG(CASE WHEN SEGMENTO='PRE' THEN MRR_TOTAL END),2,'pt_BR')),";
+sql += " CONCAT('R$ ', FORMAT(AVG(CASE WHEN SEGMENTO='ADV' THEN MRR_TOTAL END),2,'pt_BR')),";
+sql += " CONCAT('R$ ', FORMAT(AVG(CASE WHEN SEGMENTO='GRO' THEN MRR_TOTAL END),2,'pt_BR')),";
+sql += " CONCAT('R$ ', FORMAT(AVG(CASE WHEN SEGMENTO='DIG' THEN MRR_TOTAL END),2,'pt_BR')),";
+sql += " CONCAT('R$ ', FORMAT(AVG(CASE WHEN SEGMENTO='NC' THEN MRR_TOTAL END),2,'pt_BR')),";
+sql += " CONCAT('R$ ', FORMAT(AVG(MRR_TOTAL),2,'pt_BR'))";
+sql += " FROM BASE_CONSOLIDADA";
+sql += " UNION ALL";
+sql += " SELECT 'Media de Solucoes',";
+sql += " ROUND(AVG(CASE WHEN SEGMENTO='ENT' THEN QTD_SOLUCOES END),2),";
+sql += " ROUND(AVG(CASE WHEN SEGMENTO='PRE' THEN QTD_SOLUCOES END),2),";
+sql += " ROUND(AVG(CASE WHEN SEGMENTO='ADV' THEN QTD_SOLUCOES END),2),";
+sql += " ROUND(AVG(CASE WHEN SEGMENTO='GRO' THEN QTD_SOLUCOES END),2),";
+sql += " ROUND(AVG(CASE WHEN SEGMENTO='DIG' THEN QTD_SOLUCOES END),2),";
+sql += " ROUND(AVG(CASE WHEN SEGMENTO='NC' THEN QTD_SOLUCOES END),2),";
+sql += " ROUND(AVG(QTD_SOLUCOES),2)";
+sql += " FROM BASE_CONSOLIDADA";
+
+var LABELS = {
+    'MRR Total':          'MRR Total',
+    'Total de Parceiros': 'Total de Parceiros',
+    'Tkt Medio':          'Tkt Médio',
+    'Media de Solucoes':  'Média de Soluções'
+};
+
+var COLS = ['COL0','COL1','COL2','COL3','COL4','COL5','COL6','COL7'];
+
+function renderTable(rows) {
+    var tbody    = document.getElementById('tableBody');
+    var stateMsg = document.getElementById('stateMsg');
+    var table    = document.getElementById('dataTable');
+
+    if (!rows || rows.length === 0) {
+        stateMsg.textContent = 'Nenhum dado encontrado.';
+        table.style.display  = 'none';
+        return;
+    }
+
+    stateMsg.style.display = 'none';
+    table.style.display    = 'table';
+
+    tbody.innerHTML = rows.map(function(row) {
+        var label = LABELS[row['COL0']] || row['COL0'] || '—';
+        var cells = COLS.slice(1).map(function(k) {
+            return '<td>' + (row[k] != null ? row[k] : '—') + '</td>';
+        }).join('');
+        return '<tr><td><strong>' + label + '</strong></td>' + cells + '</tr>';
+    }).join('');
+}
+
+queryMitra(sql).then(function(resp) {
+    renderTable(mapRows(resp));
+}).catch(function(err) {
+    console.error('Erro query:', err);
+    var s = document.getElementById('stateMsg');
+    s.textContent = 'Erro ao carregar dados. Verifique o console.';
+    s.className = 'state-msg error';
+});
+</script>
+</body>
+</html>
