@@ -345,6 +345,21 @@
             background-color: hsl(var(--secondary));
         }
 
+        .truncate-ch {
+            display: inline-block;
+            max-width: 10ch;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: top;
+        }
+
+        @media (min-width: 1536px) {
+            .truncate-ch {
+                max-width: 20ch;
+            }
+        }
+
         .table-header-sticky thead {
             position: sticky;
             top: 0;
@@ -1098,12 +1113,8 @@
                     <div
                         class="px-5 py-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
-                            <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista
-                                de
-                                Atividades</h2>
-                            <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie
-                                as
-                                atividades pendentes e concluídas.</p>
+                            <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista de Atividades</h2>
+                            <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie as atividades pendentes e concluídas.</p>
                         </div>
                         <div class="flex items-center gap-2 w-full md:w-auto">
                             <div class="relative w-full md:w-64">
@@ -1205,6 +1216,22 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="px-5 py-3 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-background/70">
+                        <p id="table-pagination-summary" class="text-xs text-muted-foreground">Mostrando 0-0 de 0 atividades</p>
+                        <div class="flex items-center gap-2">
+                            <button id="table-pagination-prev"
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
+                                type="button" disabled>
+                                Anterior
+                            </button>
+                            <button id="table-pagination-next"
+                                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
+                                type="button" disabled>
+                                Próxima
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1399,6 +1426,10 @@
             let validationToastTimeout;
             let validationToastHideTimeout;
             let rawTableData = null;
+            const PAGE_SIZE = 10;
+            let currentPage = 1;
+            let totalPages = 1;
+            let totalItems = 0;
             const activeFilters = { PLAYBOOK: '', RESPONSAVEL: '', PARCEIRO: '', ATIVIDADE: '', STATUS_LABEL: '', CATEGORIA: '' };
 
             const showValidationMessage = (message) => {
@@ -1736,12 +1767,6 @@
                 }
             };
 
-            const truncateText = (text, maxLength = 5) => {
-                if (!text) return '-';
-                const str = String(text).trim();
-                return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
-            };
-
             const normalizeStatus = (value) => String(value || '')
                 .trim()
                 .toLowerCase()
@@ -1757,11 +1782,62 @@
                 if (badge) badge.textContent = count > 0 ? String(count) : '';
             };
 
+            const getCellText = (value) => {
+                const text = String(value ?? '').trim();
+                return text || '-';
+            };
+
+            const buildTruncatedCell = (value) => {
+                const text = getCellText(value);
+                const hasContent = text !== '-';
+                const titleAttr = hasContent ? ` title="${text.replace(/"/g, '&quot;')}"` : '';
+                return `<span class="truncate-ch"${titleAttr}>${text}</span>`;
+            };
+
+            const formatPaginationSummary = () => {
+                if (totalItems === 0) return 'Nenhuma atividade encontrada';
+                const start = (currentPage - 1) * PAGE_SIZE + 1;
+                const end = Math.min(totalItems, currentPage * PAGE_SIZE);
+                return `Mostrando ${start}-${end} de ${totalItems} atividades`;
+            };
+
+            const getPaginatedData = (data) => {
+                if (!Array.isArray(data)) {
+                    totalItems = 0;
+                    totalPages = 1;
+                    return [];
+                }
+                totalItems = data.length;
+                totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+                const start = (currentPage - 1) * PAGE_SIZE;
+                return data.slice(start, start + PAGE_SIZE);
+            };
+
+            const updatePaginationControls = () => {
+                const summaryEl = document.getElementById('table-pagination-summary');
+                const prevBtn = document.getElementById('table-pagination-prev');
+                const nextBtn = document.getElementById('table-pagination-next');
+                if (summaryEl) summaryEl.textContent = formatPaginationSummary();
+                if (prevBtn) prevBtn.disabled = currentPage <= 1 || totalItems === 0;
+                if (nextBtn) nextBtn.disabled = currentPage >= totalPages || totalItems === 0;
+            };
+
+            const changePage = (direction) => {
+                if (!rawTableData) return;
+                const nextPage = currentPage + direction;
+                if (nextPage < 1 || nextPage > totalPages) return;
+                currentPage = nextPage;
+                applyFilters();
+            };
+
             const renderRows = (data) => {
                 if (!data || data.length === 0) {
                     const hasActiveFilter = Object.values(activeFilters).some(v => v !== '');
-                    tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>${hasActiveFilter ? 'Nenhum resultado para os filtros aplicados.' : 'Nenhuma atividade encontrada.'}</span></div></td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>${hasActiveFilter ? 'Nenhum resultado para os filtros aplicados.' : 'Nenhuma atividade encontrada.'}</span></div></td></tr>`;
                     lucide.createIcons();
+                    updatePaginationControls();
                     return;
                 }
 
@@ -1774,6 +1850,12 @@
                     const statusLabelRaw = row[colMap.STATUS_LABEL] || '';
                     const notesText = String(row[colMap.ANOTACOES] || '').trim();
                     const notesLength = notesText.length;
+                    const playbookContent = buildTruncatedCell(row[colMap.PLAYBOOK]);
+                    const responsavelContent = buildTruncatedCell(row[colMap.RESPONSAVEL]);
+                    const parceiroContent = buildTruncatedCell(row[colMap.PARCEIRO]);
+                    const atividadeContent = buildTruncatedCell(row[colMap.ATIVIDADE]);
+                    const categoriaContent = buildTruncatedCell(row[colMap.CATEGORIA]);
+                    const anotacoesContent = buildTruncatedCell(notesText);
                     const statusLabelNormalized = normalizeStatus(statusLabelRaw);
                     const isCompletedStatus =
                         statusLabelNormalized === 'concluida' ||
@@ -1789,14 +1871,14 @@
                         : (isLateCompletedStatus ? 'color: #b45309;' : 'color: #047857;');
 
                     tr.innerHTML = `
-                        <td class="px-5 py-3.5 align-top text-muted-foreground" style="font-weight:500">${row[colMap.PLAYBOOK] || '-'}</td>
-                        <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.RESPONSAVEL] || '-'}</td>
-                        <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.PARCEIRO] || '-'}</td>
-                        <td class="px-5 py-3.5 align-top font-medium text-foreground" style="font-weight:500">${row[colMap.ATIVIDADE] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground" style="font-weight:500">${playbookContent}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground">${responsavelContent}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${parceiroContent}</td>
+                        <td class="px-5 py-3.5 align-top font-medium text-foreground" style="font-weight:500">${atividadeContent}</td>
                         <td class="px-5 py-3.5 align-top min-w-[200px]"><span class="badge badge-${statusColor}">${statusLabelRaw || '-'}</span></td>
-                        <td class="px-5 py-3.5 align-top text-muted-foreground">${row[colMap.CATEGORIA] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground">${categoriaContent}</td>
                         <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CRIACAO] || '-'}</td>
-                        <td class="px-3 py-3.5 align-top text-muted-foreground hide-on-mobile" title="${row[colMap.ANOTACOES] || '-'}">${truncateText(row[colMap.ANOTACOES], 50)}</td>
+                        <td class="px-3 py-3.5 align-top text-muted-foreground hide-on-mobile">${anotacoesContent}</td>
                         <td class="px-5 py-3.5 align-top text-center">
                             <div class="flex justify-center items-center gap-1">
                                 <button data-action="edit" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Visualizar/Editar'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="eye" class="w-4 h-4 pointer-events-none"></i></button>
@@ -1810,6 +1892,7 @@
                 tableBody.innerHTML = '';
                 tableBody.appendChild(fragment);
                 lucide.createIcons();
+                updatePaginationControls();
             };
 
             const populateFilterDropdowns = () => {
@@ -1860,7 +1943,9 @@
                     return true;
                 });
 
-                renderRows(filtered);
+                currentPage = Math.min(currentPage, Math.max(1, Math.ceil(filtered.length / PAGE_SIZE) || 1));
+                const paginated = getPaginatedData(filtered);
+                renderRows(paginated);
                 updateClearFiltersBtn();
             };
 
@@ -1872,8 +1957,10 @@
                 });
                 const ativInput = document.getElementById('filter-atividade');
                 if (ativInput) { ativInput.value = ''; ativInput.closest('th')?.classList.remove('filter-th-active'); }
+                currentPage = 1;
                 updateClearFiltersBtn();
-                renderRows(rawTableData?.data || []);
+                const paginated = getPaginatedData(rawTableData?.data || []);
+                renderRows(paginated);
             };
 
             const loadTableData = async () => {
@@ -1905,6 +1992,7 @@
 
                     rawTableData = { data: result.data, colMap, headers };
                     populateFilterDropdowns();
+                    currentPage = 1;
                     applyFilters();
                 } catch (error) {
                     console.error("Falha ao carregar dados da tabela:", error);
@@ -1948,6 +2036,11 @@
 
             const setupEventListeners = () => {
                 setupFilterListeners();
+                const prevBtn = document.getElementById('table-pagination-prev');
+                const nextBtn = document.getElementById('table-pagination-next');
+                if (prevBtn) prevBtn.addEventListener('click', () => changePage(-1));
+                if (nextBtn) nextBtn.addEventListener('click', () => changePage(1));
+
                 searchInput.addEventListener('input', (e) => {
                     clearTimeout(searchDebounceTimeout);
                     searchDebounceTimeout = setTimeout(async () => {
