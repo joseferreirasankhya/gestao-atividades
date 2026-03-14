@@ -569,18 +569,18 @@
                 <ul class="space-y-2">
                     <li>
                         <a id="link-gestao-vista" style="cursor: pointer;"
-                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white nav-link">
+                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-white bg-slate-700/50 transition-all nav-link active">
                             <span
-                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full hidden"></span>
+                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full"></span>
                             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                             <span class="text-sm font-medium">Gestão à Vista</span>
                         </a>
                     </li>
                     <li>
                         <a id="link-atividades" style="cursor: pointer;"
-                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-white bg-slate-700/50 transition-all nav-link active">
+                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white nav-link">
                             <span
-                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full"></span>
+                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full hidden"></span>
                             <i data-lucide="check-square" class="w-5 h-5"></i>
                             <span class="text-sm font-medium">Atividades</span>
                         </a>
@@ -618,7 +618,7 @@
                         <h1 id="page-title"
                             class="text-xl font-900 text-foreground leading-tight tracking-tight transition-all duration-300"
                             style="font-weight:700">
-                            Gestão de Atividades</h1>
+                            Gestão à Vista</h1>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -634,10 +634,11 @@
 
             <!-- VIEW: GESTÃO À VISTA -->
             <div id="view-gestao-vista"
-                class="hidden opacity-0 transition-opacity duration-300 flex flex-col flex-1 gap-5 lg:gap-6 w-full">
+                class="transition-opacity duration-300 flex flex-col flex-1 gap-5 lg:gap-6 w-full opacity-100">
 
                 <!-- Bloco 1: KPIs Topo -->
-                <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 xl:gap-4 items-stretch mb-2 lg:mb-3">
+                <section
+                    class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 xl:gap-4 items-stretch mb-2 lg:mb-3">
                     <!-- MRR Total -->
                     <div class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
                         <p class="text-base text-muted-foreground tracking-wide">MRR Total</p>
@@ -649,8 +650,7 @@
                         <span class="text-2xl font-bold text-foreground mt-1" id="kpi-gv-clientes">--</span>
                     </div>
                     <!-- Filtro Porte -->
-                    <div
-                        class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
+                    <div class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
                         <p class="text-base text-muted-foreground tracking-wide">Porte</p>
                         <div class="flex items-center justify-between mt-1">
                             <span class="text-2xl font-bold text-foreground" id="kpi-gv-porte">--</span>
@@ -671,7 +671,8 @@
                             <div class="flex items-center gap-2 text-muted-foreground">
                                 <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
                                 <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -690,7 +691,8 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">21</span></p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span
+                                        class="font-bold">21</span></p>
                                 <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 48</p>
                             </div>
                         </div>
@@ -705,7 +707,8 @@
                             <div class="flex items-center gap-2 text-muted-foreground">
                                 <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
                                 <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -724,7 +727,8 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">0.67%</span></p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span
+                                        class="font-bold">0.67%</span></p>
                                 <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 0.70%</p>
                             </div>
                         </div>
@@ -739,7 +743,8 @@
                             <div class="flex items-center gap-2 text-muted-foreground">
                                 <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
                                 <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -755,7 +760,8 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">4</span></p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span
+                                        class="font-bold">4</span></p>
                                 <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 3004</p>
                             </div>
                         </div>
@@ -770,7 +776,8 @@
                             <div class="flex items-center gap-2 text-muted-foreground">
                                 <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
                                 <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -789,7 +796,8 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">1</span></p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span
+                                        class="font-bold">1</span></p>
                                 <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 70</p>
                             </div>
                         </div>
@@ -929,7 +937,8 @@
             </div>
 
             <!-- VIEW: ATIVIDADES -->
-            <div id="view-atividades" class="flex flex-col gap-6 transition-opacity duration-300 opacity-100 flex-1">
+            <div id="view-atividades"
+                class="flex flex-col gap-6 transition-opacity duration-300 flex-1 hidden opacity-0">
                 <!-- KPI Section (Topo) -->
                 <section class="grid grid-cols-1 xl:grid-cols-4 gap-4">
                     <div id="donut-kpi-card" class="kpi-layout-card p-4 flex flex-col min-h-[260px] animate-pulse">
@@ -1113,8 +1122,10 @@
                     <div
                         class="px-5 py-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
-                            <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista de Atividades</h2>
-                            <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie as atividades pendentes e concluídas.</p>
+                            <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista
+                                de Atividades</h2>
+                            <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie
+                                as atividades pendentes e concluídas.</p>
                         </div>
                         <div class="flex items-center gap-2 w-full md:w-auto">
                             <div class="relative w-full md:w-64">
@@ -1218,8 +1229,10 @@
                         </table>
                     </div>
 
-                    <div class="px-5 py-3 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-background/70">
-                        <p id="table-pagination-summary" class="text-xs text-muted-foreground">Mostrando 0-0 de 0 atividades</p>
+                    <div
+                        class="px-5 py-3 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-background/70">
+                        <p id="table-pagination-summary" class="text-xs text-muted-foreground">Mostrando 0-0 de 0
+                            atividades</p>
                         <div class="flex items-center gap-2">
                             <button id="table-pagination-prev"
                                 class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
@@ -1252,6 +1265,8 @@
                 style: 'currency',
                 currency: 'BRL'
             }).format(value);
+
+            const formatQuantity = (value) => new Intl.NumberFormat('pt-BR').format(value);
 
             const parseCurrencyString = (str) => {
                 if (str === null || str === undefined) return NaN;
@@ -1739,6 +1754,40 @@
                 }
             };
 
+            const loadGestaoVistaKpisData = async () => {
+                const mrrNode = document.getElementById('kpi-gv-mrr');
+                const totalClientesNode = document.getElementById('kpi-gv-clientes');
+                const porteNode = document.getElementById('kpi-gv-porte');
+
+                if (!mrrNode || !totalClientesNode || !porteNode) return;
+
+                try {
+                    if (!componentData.gestaoVistaKpisQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaKpisQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const data = result.data[0];
+                    const kpiMap = {
+                        MRR_TOTAL: headers.indexOf('MRR_ATIVO_TOTAL'),
+                        TOTAL_CLIENTES: headers.indexOf('TOTAL_CLIENTES'),
+                        PORTE: headers.indexOf('PORTE')
+                    };
+
+                    mrrNode.textContent = formatBRL(parseCurrencyString(data[kpiMap.MRR_TOTAL]));
+                    totalClientesNode.textContent = formatQuantity(data[kpiMap.TOTAL_CLIENTES]);
+                    porteNode.textContent = data[kpiMap.PORTE];
+                } catch (error) {
+                    console.error('Falha ao carregar os KPIs de Gestão à Vista:', error);
+                }
+            };
+
             const loadMrrTotalData = async () => {
                 const mrrNode = document.getElementById('kpi-gv-mrr');
                 if (!mrrNode) return;
@@ -1835,7 +1884,7 @@
             const renderRows = (data) => {
                 if (!data || data.length === 0) {
                     const hasActiveFilter = Object.values(activeFilters).some(v => v !== '');
-                tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>${hasActiveFilter ? 'Nenhum resultado para os filtros aplicados.' : 'Nenhuma atividade encontrada.'}</span></div></td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>${hasActiveFilter ? 'Nenhum resultado para os filtros aplicados.' : 'Nenhuma atividade encontrada.'}</span></div></td></tr>`;
                     lucide.createIcons();
                     updatePaginationControls();
                     return;
@@ -2003,7 +2052,7 @@
             const refreshAllData = async () => {
                 await Promise.all([
                     loadDonutData(),
-                    loadMrrTotalData(),
+                    loadGestaoVistaKpisData(),
                     loadKpiData(),
                     loadTableData(),
                     ...executionCardConfigs.map(loadExecutionCardData)
