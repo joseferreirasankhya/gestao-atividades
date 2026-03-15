@@ -311,6 +311,14 @@
             background-color: hsl(var(--secondary));
         }
 
+        .action-panel-btn {
+            background-color: white;
+        }
+
+        .dark .action-panel-btn {
+            background-color: hsl(var(--secondary));
+        }
+
         .donut-progress-ring {
             transition: stroke-dashoffset 500ms ease-out;
         }
@@ -858,10 +866,13 @@
 
                 <!-- Bloco 3: Tabela Resumo (Classificações) -->
                 <div class="table-container shadow-sm border border-border">
-                    <div class="px-5 py-4 border-b border-border flex justify-end">
+                    <div class="px-6 py-4 border-b border-border flex justify-end">
                         <button
                             class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-semibold transition-all duration-200 h-8 px-3 bg-[#334154] text-white hover:bg-[#243142] dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 shadow">
-                            <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1.5"></i> Ver detalhes
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjEwNw=="
+                                target="_blank">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1.5"></i> Ver detalhes
+                            </a>
                         </button>
                     </div>
                     <div class="overflow-x-auto">
@@ -909,46 +920,110 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-border">
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">MRR Total</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 6648997,45</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 11238204,45</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 4478409,14</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 15233153,03</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 5564719,42</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 912159,40</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">R$ 44087813,45</td>
+                            <tbody id="gestao-vista-tabela-tbody" class="divide-y divide-border">
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-32"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-20"></div>
+                                    </td>
                                 </tr>
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">Total de Parceiros</td>
-                                    <td class="px-5 py-4 text-muted-foreground">246</td>
-                                    <td class="px-5 py-4 text-muted-foreground">416</td>
-                                    <td class="px-5 py-4 text-muted-foreground">328</td>
-                                    <td class="px-5 py-4 text-muted-foreground">1688</td>
-                                    <td class="px-5 py-4 text-muted-foreground">944</td>
-                                    <td class="px-5 py-4 text-muted-foreground">118</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">3745</td>
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-28"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-16"></div>
+                                    </td>
                                 </tr>
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">Tkt Médio</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 27028,44</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 27014,91</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 13653,69</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 9024,38</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 5894,83</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 7730,16</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">R$ 11772,45</td>
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-24"></div>
+                                    </td>
                                 </tr>
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">Média de Soluções</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0.01</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">0</td>
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-32"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-14"></div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -956,33 +1031,38 @@
                 </div>
 
                 <!-- Bloco 4: Painel de Ações e Performance -->
-                <div class="kpi-layout-card p-6 shadow-sm">
+                <div class="kpi-layout-card p-6 shadow-sm bg-slate-50">
                     <h3 class="text-center text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wide">
                         Gestão de Metas - Apontamentos e Acompanhamento Performance</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 rounded-xl border border-border/70 p-3 dark:bg-secondary/60">
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Apontamento
-                                e Gerenciamento de Metas</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwuQURfR1JDTUVOVA=="
+                                    target="_blank">Apontamento
+                                    e Gerenciamento de Metas</a></span>
                         </button>
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Performance
-                                CS</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjI2MC4x"
+                                    target="_blank">Performance
+                                    CS</a></span>
                         </button>
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">GPD
-                                - Apuração de Resultado</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYXB1cmFjYW8ucmVzdWx0YWRv"
+                                    target="_blank">GPD
+                                    - Apuração de Resultado</a></span>
                         </button>
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Plano
-                                de ação</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWdlZ2kuUGxhbm9BY2Fv"
+                                    target="_blank">Plano
+                                    de ação</a></span>
                         </button>
                     </div>
                 </div>
@@ -1814,6 +1894,7 @@
                 await Promise.all([
                     // Gestão à Vista
                     loadGestaoVistaKpisData(),
+                    loadGestaoVistaTabelaData(),
                     loadGestaoVistaNpsDonutData(),
                     loadGestaoVistaMrrChurnDonutData(),
                     loadGestaoVistaAcompEvolData(),
@@ -1862,6 +1943,131 @@
                     porteNode.textContent = data[kpiMap.PORTE];
                 } catch (error) {
                     console.error('Falha ao carregar os KPIs de Gestão à Vista:', error);
+                }
+            };
+
+            const gestaoVistaTableConfig = {
+                rowLabels: {
+                    'MRR Total': 'MRR Total',
+                    'Total de Parceiros': 'Total de Parceiros',
+                    'Tkt Medio': 'Tkt Médio',
+                    'Tkt Médio': 'Tkt Médio',
+                    'Media de Solucoes': 'Média de Soluções',
+                    'Média de Soluções': 'Média de Soluções'
+                },
+                currencyRows: new Set(['MRR Total', 'Tkt Medio', 'Tkt Médio']),
+                integerRows: new Set(['Total de Parceiros']),
+                decimalRows: new Set(['Media de Solucoes', 'Média de Soluções'])
+            };
+
+            const parseNumericValue = (value) => {
+                if (value === null || value === undefined || value === '') return NaN;
+                if (typeof value === 'number') return value;
+
+                const rawValue = String(value).trim().replace(/\s/g, '');
+
+                const hasComma = rawValue.includes(',');
+                const hasDot = rawValue.includes('.');
+                let cleanValue = rawValue;
+
+                if (hasComma && hasDot) {
+                    cleanValue = rawValue.replace(/\./g, '').replace(',', '.');
+                } else if (hasComma) {
+                    cleanValue = rawValue.replace(',', '.');
+                }
+
+                const parsedValue = Number(cleanValue);
+                return Number.isFinite(parsedValue) ? parsedValue : NaN;
+            };
+
+            const formatGestaoVistaTableValue = (rowLabel, value) => {
+                const numericValue = parseNumericValue(value);
+                if (!Number.isFinite(numericValue)) return '—';
+
+                if (gestaoVistaTableConfig.currencyRows.has(rowLabel)) {
+                    return formatBRL(numericValue);
+                }
+
+                if (gestaoVistaTableConfig.integerRows.has(rowLabel)) {
+                    return formatQuantity(Math.round(numericValue));
+                }
+
+                if (gestaoVistaTableConfig.decimalRows.has(rowLabel)) {
+                    return numericValue.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+
+                return numericValue.toLocaleString('pt-BR');
+            };
+
+            const loadGestaoVistaTabelaData = async () => {
+                const tableBody = document.getElementById('gestao-vista-tabela-tbody');
+                if (!tableBody) return;
+
+                try {
+                    if (!componentData.gestaoVistaTabelaQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaTabelaQuery });
+
+                    if (!result?.headers?.length || !result?.data?.length) {
+                        tableBody.innerHTML = '<tr><td colspan="8" class="px-5 py-8 text-center text-muted-foreground">Nenhum dado encontrado.</td></tr>';
+                        return;
+                    }
+
+                    const headers = result.headers.map((header) => (header?.name || header || '').toUpperCase());
+                    const colIndexes = {
+                        COL0: headers.indexOf('COL0'),
+                        COL1: headers.indexOf('COL1'),
+                        COL2: headers.indexOf('COL2'),
+                        COL3: headers.indexOf('COL3'),
+                        COL4: headers.indexOf('COL4'),
+                        COL5: headers.indexOf('COL5'),
+                        COL6: headers.indexOf('COL6'),
+                        COL7: headers.indexOf('COL7')
+                    };
+
+                    if (Object.values(colIndexes).some((index) => index === -1)) {
+                        throw new Error('A query deve retornar as colunas COL0 a COL7.');
+                    }
+
+                    const rowsHtml = result.data.map((row) => {
+                        const rawLabel = String(row[colIndexes.COL0] || '').trim();
+                        const normalizedLabel = gestaoVistaTableConfig.rowLabels[rawLabel] || rawLabel || '—';
+                        const colValues = [
+                            row[colIndexes.COL1],
+                            row[colIndexes.COL2],
+                            row[colIndexes.COL3],
+                            row[colIndexes.COL4],
+                            row[colIndexes.COL5],
+                            row[colIndexes.COL6],
+                            row[colIndexes.COL7]
+                        ];
+
+                        const cellsHtml = colValues.map((value, index) => {
+                            const isTotalColumn = index === colValues.length - 1;
+                            const cellClass = isTotalColumn
+                                ? 'px-5 py-4 font-medium text-foreground'
+                                : 'px-5 py-4 text-muted-foreground';
+
+                            return `<td class="${cellClass}">${formatGestaoVistaTableValue(rawLabel, value)}</td>`;
+                        }).join('');
+
+                        return `
+                            <tr class="hover:bg-muted/20 transition-colors">
+                                <td class="px-5 py-4 font-semibold text-foreground">${normalizedLabel}</td>
+                                ${cellsHtml}
+                            </tr>
+                        `;
+                    }).join('');
+
+                    tableBody.innerHTML = rowsHtml;
+                } catch (error) {
+                    console.error('Falha ao carregar a tabela de Gestão à Vista:', error);
+                    tableBody.innerHTML = '<tr><td colspan="8" class="px-5 py-8 text-center text-destructive">Erro ao carregar dados da tabela. Verifique o console.</td></tr>';
                 }
             };
 
