@@ -669,8 +669,18 @@
                                 <h3 class="text-base font-semibold text-foreground mt-1">NPS</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="O NPS, Net Promoter Score, é uma metodologia utilizada mundialmente para medir a lealdade dos clientes através de uma pergunta bem simples: Em uma escala de 0 a 10, o quanto você recomendaria a Sankhya para um amigo ou familiar? Onde de 0 até 6 detrator, 7 e 8 neutro e 9 a 10 promotor.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTQzMS4x"
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
+
                                 <i data-lucide="sliders-horizontal"
                                     class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
@@ -681,19 +691,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
-                                        stroke-width="12" stroke="#facaca" stroke-dasharray="276.46"
-                                        stroke-dashoffset="154.81" class="transition-all duration-1000 ease-in-out">
+                                    <circle id="nps-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#facaca"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
                                     </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">44%</span>
+                                    <span id="nps-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span
-                                        class="font-bold">21</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 48</p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span id="nps-realizado"
+                                        class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="nps-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -705,8 +718,17 @@
                                 <h3 class="text-base font-semibold text-foreground mt-1">MRR Churn (%)</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="MRR Churn é o valor da Receita Recorrente Mensal que a empresa deixa de receber no mês por perdas recorrentes reais e definitivas, como reduções definitivas, cancelamentos contratuais (inclusive após inadimplência, mesmo que unilaterais) e bonificações concedidas de forma definitiva.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
                                 <i data-lucide="sliders-horizontal"
                                     class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
@@ -717,19 +739,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
-                                        stroke-width="12" stroke="#bde4e6" stroke-dasharray="276.46"
-                                        stroke-dashoffset="0" class="transition-all duration-1000 ease-in-out">
+                                    <circle id="mrr-churn-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#bde4e6"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
                                     </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">113%</span>
+                                    <span id="mrr-churn-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span
-                                        class="font-bold">0.67%</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 0.70%</p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span id="mrr-churn-realizado"
+                                        class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="mrr-churn-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -738,11 +763,20 @@
                     <div class="kpi-layout-card h-full px-4 py-4 flex flex-col justify-between min-h-[300px]">
                         <div class="flex items-start justify-between gap-3 mb-2">
                             <div>
-                                <h3 class="text-base font-semibold text-foreground mt-1">Acompanhamento Evolutivo</h3>
+                                <h3 class="text-base font-semibold text-foreground mt-1">AE</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="Acompanhamento Evolutivo é a atividade focada em apoiar a evolução do cliente após a adoção, com atuação orientada por dados e foco na geração de valor. A abordagem varia conforme a segmentação: Premium e Enterprise com atuação mais consultiva e próxima, e Growth e Advocacy com acompanhamento orientado por dados e identificação de oportunidades de expansão.  O registro deve ser realizado na tela “CS - Acompanhamento Evolutivo (Novo)”, na aba Plano de Ação, clicando em + Gerar Plano de Ação e selecionando o tipo “Acompanhamento Evolutivo”.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTQzMS4x"
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
                                 <i data-lucide="sliders-horizontal"
                                     class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
@@ -753,16 +787,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <!-- 0% progress, base circle only -->
+                                    <circle id="ae-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#b6edb6"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
+                                    </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">0%</span>
+                                    <span id="ae-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span
-                                        class="font-bold">4</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 3004</p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span id="ae-realizado"
+                                        class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="ae-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -774,8 +814,17 @@
                                 <h3 class="text-base font-semibold text-foreground mt-1">Clube de Gestão</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="Clube de Gestão é um programa de relacionamento para clientes com bons resultados e maturidade no uso da solução, que podem se tornar cases e compartilhar boas práticas. O cliente pode ser convidado pelo CS na etapa de Evolução, passando por pré-cadastro e avaliação antes de participar do programa. Clientes com esse perfil devem ser cadastrados pelo CS na tela “Cadastros de Clientes (Clube de Gestão)”.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjI4OC4x"
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
                                 <i data-lucide="sliders-horizontal"
                                     class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
@@ -786,19 +835,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
-                                        stroke-width="12" stroke="#facaca" stroke-dasharray="276.46"
-                                        stroke-dashoffset="138.23" class="transition-all duration-1000 ease-in-out">
+                                    <circle id="clube-gestao-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#facaca"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
                                     </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">50%</span>
+                                    <span id="clube-gestao-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
                                 <p class="text-foreground text-sm font-medium">Realizado: <span
-                                        class="font-bold">1</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 70</p>
+                                        id="clube-gestao-realizado" class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="clube-gestao-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -1754,6 +1806,31 @@
                 }
             };
 
+            // =============================
+            // GERAL
+            // =============================
+
+            const refreshAllData = async () => {
+                await Promise.all([
+                    // Gestão à Vista
+                    loadGestaoVistaKpisData(),
+                    loadGestaoVistaNpsDonutData(),
+                    loadGestaoVistaMrrChurnDonutData(),
+                    loadGestaoVistaAcompEvolData(),
+                    loadGestaoVistaClubeGestaoDonutData(),
+
+                    // Atividades
+                    loadDonutData(),
+                    loadKpiData(),
+                    loadTableData(),
+                    ...executionCardConfigs.map(loadExecutionCardData)
+                ]);
+            };
+
+            // =============================
+            // GESTÃO À VISTA
+            // =============================
+
             const loadGestaoVistaKpisData = async () => {
                 const mrrNode = document.getElementById('kpi-gv-mrr');
                 const totalClientesNode = document.getElementById('kpi-gv-clientes');
@@ -1788,33 +1865,275 @@
                 }
             };
 
-            const loadMrrTotalData = async () => {
-                const mrrNode = document.getElementById('kpi-gv-mrr');
-                if (!mrrNode) return;
+            const getGestaoVistaDonutColor = (percentage) => {
+                if (percentage < 50) return '#facaca';
+                if (percentage < 90) return '#f8ecbb';
+                if (percentage <= 100) return '#b6edb6';
+                return '#bde4e6';
+            };
+
+            const parseDonutNumber = (value) => {
+                if (value === null || value === undefined || value === '') return NaN;
+                if (typeof value === 'number') return value;
+
+                const cleanValue = String(value)
+                    .replace(/\s/g, '')
+                    .replace(/%/g, '')
+                    .replace(/\./g, '')
+                    .replace(',', '.');
+
+                const parsed = Number(cleanValue);
+                return Number.isFinite(parsed) ? parsed : NaN;
+            };
+
+            const updateGestaoVistaDonut = ({
+                atingimentoNodeId,
+                realizadoNodeId,
+                metaNodeId,
+                ringNodeId,
+                realizado,
+                meta,
+                atingimento,
+                forceTwoDecimals = false
+            }) => {
+                const ringNode = document.getElementById(ringNodeId);
+                const atingimentoNode = document.getElementById(atingimentoNodeId);
+                const realizadoNode = document.getElementById(realizadoNodeId);
+                const metaNode = document.getElementById(metaNodeId);
+
+                if (!ringNode || !atingimentoNode || !realizadoNode || !metaNode) return;
+
+                const realizadoNum = parseDonutNumber(realizado);
+                const metaNum = parseDonutNumber(meta);
+                const atingimentoNum = parseDonutNumber(atingimento);
+
+                const percentualBruto = Number.isFinite(atingimentoNum)
+                    ? atingimentoNum
+                    : (Number.isFinite(realizadoNum) && Number.isFinite(metaNum) && metaNum > 0)
+                        ? (realizadoNum / metaNum) * 100
+                        : 0;
+
+                const percentual = Math.max(0, percentualBruto);
+                const percentualLimitado = Math.min(percentual, 100);
+                const circumference = 276.46;
+                const dashOffset = circumference - ((percentualLimitado / 100) * circumference);
+                const donutColor = getGestaoVistaDonutColor(percentual);
+
+                const formatDisplayValue = (value) => {
+                    if (!Number.isFinite(value)) return '--';
+                    if (forceTwoDecimals) {
+                        return value.toLocaleString('pt-BR', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                    return value.toLocaleString('pt-BR', {
+                        minimumFractionDigits: Number.isInteger(value) ? 0 : 1,
+                        maximumFractionDigits: 1
+                    });
+                };
+
+                atingimentoNode.textContent = `${Math.round(percentual)}%`;
+                realizadoNode.textContent = formatDisplayValue(realizadoNum);
+                metaNode.textContent = formatDisplayValue(metaNum);
+
+                ringNode.style.stroke = donutColor;
+                ringNode.style.strokeDasharray = String(circumference);
+                ringNode.style.strokeDashoffset = String(dashOffset);
+            };
+
+            const loadGestaoVistaNpsDonutData = async () => {
+                const atingimento = document.getElementById('nps-atingimento');
+                const realizado = document.getElementById('nps-realizado');
+                const meta = document.getElementById('nps-meta');
+                const ring = document.getElementById('nps-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
 
                 try {
-                    if (!componentData.vistaMrrTotalQuery) {
-                        formatNodeTextIfCurrency(mrrNode);
-                        return;
+                    if (!componentData.gestaoVistaNpsDonutQuery) {
+                        throw new Error('A query não foi configurada.');
                     }
 
-                    const result = await queryMitra({ query: componentData.vistaMrrTotalQuery });
+                    const result = await queryMitra({ query: componentData.gestaoVistaNpsDonutQuery });
+
                     if (!result?.data?.length || !result.data[0]?.length) {
                         throw new Error('A query não retornou dados.');
                     }
 
-                    const rawValue = result.data[0][0];
-                    const parsedValue = parseCurrencyString(rawValue);
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
 
-                    if (Number.isNaN(parsedValue)) {
-                        throw new Error('Valor inválido retornado pela query.');
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const npsAtingimento = getCol('NPS_ATINGIMENTO');
+                    const npsRealizado = getCol('NPS_REALIZADO');
+                    const npsMeta = getCol('NPS_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'nps-atingimento',
+                        realizadoNodeId: 'nps-realizado',
+                        metaNodeId: 'nps-meta',
+                        ringNodeId: 'nps-donut-ring',
+                        atingimento: npsAtingimento,
+                        realizado: npsRealizado,
+                        meta: npsMeta
+                    });
+                } catch (error) {
+                    console.error('Falha ao carregar os dados do NPS:', error);
+                }
+            }
+
+            const loadGestaoVistaMrrChurnDonutData = async () => {
+                const atingimento = document.getElementById('mrr-churn-atingimento');
+                const realizado = document.getElementById('mrr-churn-realizado');
+                const meta = document.getElementById('mrr-churn-meta');
+                const ring = document.getElementById('mrr-churn-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
+
+                try {
+                    if (!componentData.gestaoVistaMrrChurnDonutQuery) {
+                        throw new Error('A query não foi configurada.');
                     }
 
-                    mrrNode.textContent = formatBRL(parsedValue);
+                    const result = await queryMitra({ query: componentData.gestaoVistaMrrChurnDonutQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
+
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const mrrChurnAtingimento = getCol('MRR_CHURN_ATINGIMENTO');
+                    const mrrChurnRealizado = getCol('MRR_CHURN_REALIZADO');
+                    const mrrChurnMeta = getCol('MRR_CHURN_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'mrr-churn-atingimento',
+                        realizadoNodeId: 'mrr-churn-realizado',
+                        metaNodeId: 'mrr-churn-meta',
+                        ringNodeId: 'mrr-churn-donut-ring',
+                        atingimento: mrrChurnAtingimento,
+                        realizado: mrrChurnRealizado,
+                        meta: mrrChurnMeta,
+                        forceTwoDecimals: true
+                    });
                 } catch (error) {
-                    console.error('Falha ao carregar o MRR Total:', error);
+                    console.error('Falha ao carregar os dados do MRR CHURN:', error);
                 }
-            };
+            }
+
+            const loadGestaoVistaAcompEvolData = async () => {
+                const atingimento = document.getElementById('ae-atingimento');
+                const realizado = document.getElementById('ae-realizado');
+                const meta = document.getElementById('ae-meta');
+                const ring = document.getElementById('ae-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
+
+                try {
+                    if (!componentData.gestaoVistaAcompEvolDonutQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaAcompEvolDonutQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
+
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const aeAtingimento = getCol('AE_ATINGIMENTO');
+                    const aeRealizado = getCol('AE_REALIZADO');
+                    const aeMeta = getCol('AE_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'ae-atingimento',
+                        realizadoNodeId: 'ae-realizado',
+                        metaNodeId: 'ae-meta',
+                        ringNodeId: 'ae-donut-ring',
+                        atingimento: aeAtingimento,
+                        realizado: aeRealizado,
+                        meta: aeMeta
+                    });
+                } catch (error) {
+                    console.error('Falha ao carregar os dados do Acompanhamento Evolutivo:', error);
+                }
+            }
+
+            const loadGestaoVistaClubeGestaoDonutData = async () => {
+                const atingimento = document.getElementById('clube-gestao-atingimento');
+                const realizado = document.getElementById('clube-gestao-realizado');
+                const meta = document.getElementById('clube-gestao-meta');
+                const ring = document.getElementById('clube-gestao-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
+
+                try {
+                    if (!componentData.gestaoVistaClubeGestaoDonutQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaClubeGestaoDonutQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
+
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const clubeGestaoAtingimento = getCol('CLUBE_GESTAO_ATINGIMENTO');
+                    const clubeGestaoRealizado = getCol('CLUBE_GESTAO_REALIZADO');
+                    const clubeGestaoMeta = getCol('CLUBE_GESTAO_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'clube-gestao-atingimento',
+                        realizadoNodeId: 'clube-gestao-realizado',
+                        metaNodeId: 'clube-gestao-meta',
+                        ringNodeId: 'clube-gestao-donut-ring',
+                        atingimento: clubeGestaoAtingimento,
+                        realizado: clubeGestaoRealizado,
+                        meta: clubeGestaoMeta
+                    });
+                } catch (error) {
+                    console.error('Falha ao carregar os dados do CLUBE GESTÃO:', error);
+                }
+            }
 
             const normalizeStatus = (value) => String(value || '')
                 .trim()
@@ -2049,16 +2368,6 @@
                 }
             };
 
-            const refreshAllData = async () => {
-                await Promise.all([
-                    loadDonutData(),
-                    loadGestaoVistaKpisData(),
-                    loadKpiData(),
-                    loadTableData(),
-                    ...executionCardConfigs.map(loadExecutionCardData)
-                ]);
-            };
-
             const setupFilterListeners = () => {
                 const filterMap = [
                     { id: 'filter-playbook', key: 'PLAYBOOK', event: 'change' },
@@ -2229,8 +2538,21 @@
                 }
             };
 
+            const initializeTippy = () => {
+                if (typeof tippy === 'function') {
+                    tippy('[data-tippy-content]', {
+                        appendTo: () => document.body,
+                        theme: 'light-border',
+                        allowHTML: false,
+                        placement: 'bottom-end',
+                        maxWidth: 340
+                    });
+                }
+            };
+
             const initializeComponent = async () => {
                 lucide.createIcons();
+                initializeTippy();
                 setupEventListeners();
                 formatStaticCurrencyData();
                 await refreshAllData();
