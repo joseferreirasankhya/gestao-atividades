@@ -311,6 +311,14 @@
             background-color: hsl(var(--secondary));
         }
 
+        .action-panel-btn {
+            background-color: white;
+        }
+
+        .dark .action-panel-btn {
+            background-color: hsl(var(--secondary));
+        }
+
         .donut-progress-ring {
             transition: stroke-dashoffset 500ms ease-out;
         }
@@ -569,18 +577,18 @@
                 <ul class="space-y-2">
                     <li>
                         <a id="link-gestao-vista" style="cursor: pointer;"
-                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white nav-link">
+                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-white bg-slate-700/50 transition-all nav-link active">
                             <span
-                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full hidden"></span>
+                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full"></span>
                             <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                             <span class="text-sm font-medium">Gestão à Vista</span>
                         </a>
                     </li>
                     <li>
                         <a id="link-atividades" style="cursor: pointer;"
-                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-white bg-slate-700/50 transition-all nav-link active">
+                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white nav-link">
                             <span
-                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full"></span>
+                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full hidden"></span>
                             <i data-lucide="check-square" class="w-5 h-5"></i>
                             <span class="text-sm font-medium">Atividades</span>
                         </a>
@@ -618,7 +626,7 @@
                         <h1 id="page-title"
                             class="text-xl font-900 text-foreground leading-tight tracking-tight transition-all duration-300"
                             style="font-weight:700">
-                            Gestão de Atividades</h1>
+                            Gestão à Vista</h1>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -634,10 +642,11 @@
 
             <!-- VIEW: GESTÃO À VISTA -->
             <div id="view-gestao-vista"
-                class="hidden opacity-0 transition-opacity duration-300 flex flex-col flex-1 gap-5 lg:gap-6 w-full">
+                class="transition-opacity duration-300 flex flex-col flex-1 gap-5 lg:gap-6 w-full opacity-100">
 
                 <!-- Bloco 1: KPIs Topo -->
-                <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 xl:gap-4 items-stretch mb-2 lg:mb-3">
+                <section
+                    class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 xl:gap-4 items-stretch mb-2 lg:mb-3">
                     <!-- MRR Total -->
                     <div class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
                         <p class="text-base text-muted-foreground tracking-wide">MRR Total</p>
@@ -649,8 +658,7 @@
                         <span class="text-2xl font-bold text-foreground mt-1" id="kpi-gv-clientes">--</span>
                     </div>
                     <!-- Filtro Porte -->
-                    <div
-                        class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
+                    <div class="kpi-layout-card h-full flex flex-col justify-center px-6 py-5 min-h-[112px]">
                         <p class="text-base text-muted-foreground tracking-wide">Porte</p>
                         <div class="flex items-center justify-between mt-1">
                             <span class="text-2xl font-bold text-foreground" id="kpi-gv-porte">--</span>
@@ -669,9 +677,20 @@
                                 <h3 class="text-base font-semibold text-foreground mt-1">NPS</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="O NPS, Net Promoter Score, é uma metodologia utilizada mundialmente para medir a lealdade dos clientes através de uma pergunta bem simples: Em uma escala de 0 a 10, o quanto você recomendaria a Sankhya para um amigo ou familiar? Onde de 0 até 6 detrator, 7 e 8 neutro e 9 a 10 promotor.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTQzMS4x"
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
+
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -680,18 +699,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
-                                        stroke-width="12" stroke="#facaca" stroke-dasharray="276.46"
-                                        stroke-dashoffset="154.81" class="transition-all duration-1000 ease-in-out">
+                                    <circle id="nps-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#facaca"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
                                     </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">44%</span>
+                                    <span id="nps-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">21</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 48</p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span id="nps-realizado"
+                                        class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="nps-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -703,9 +726,19 @@
                                 <h3 class="text-base font-semibold text-foreground mt-1">MRR Churn (%)</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="MRR Churn é o valor da Receita Recorrente Mensal que a empresa deixa de receber no mês por perdas recorrentes reais e definitivas, como reduções definitivas, cancelamentos contratuais (inclusive após inadimplência, mesmo que unilaterais) e bonificações concedidas de forma definitiva.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -714,18 +747,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
-                                        stroke-width="12" stroke="#bde4e6" stroke-dasharray="276.46"
-                                        stroke-dashoffset="0" class="transition-all duration-1000 ease-in-out">
+                                    <circle id="mrr-churn-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#bde4e6"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
                                     </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">113%</span>
+                                    <span id="mrr-churn-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">0.67%</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 0.70%</p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span id="mrr-churn-realizado"
+                                        class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="mrr-churn-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -734,12 +771,22 @@
                     <div class="kpi-layout-card h-full px-4 py-4 flex flex-col justify-between min-h-[300px]">
                         <div class="flex items-start justify-between gap-3 mb-2">
                             <div>
-                                <h3 class="text-base font-semibold text-foreground mt-1">Acompanhamento Evolutivo</h3>
+                                <h3 class="text-base font-semibold text-foreground mt-1">AE</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="Acompanhamento Evolutivo é a atividade focada em apoiar a evolução do cliente após a adoção, com atuação orientada por dados e foco na geração de valor. A abordagem varia conforme a segmentação: Premium e Enterprise com atuação mais consultiva e próxima, e Growth e Advocacy com acompanhamento orientado por dados e identificação de oportunidades de expansão.  O registro deve ser realizado na tela “CS - Acompanhamento Evolutivo (Novo)”, na aba Plano de Ação, clicando em + Gerar Plano de Ação e selecionando o tipo “Acompanhamento Evolutivo”.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTQzMS4x"
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -748,15 +795,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <!-- 0% progress, base circle only -->
+                                    <circle id="ae-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#b6edb6"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
+                                    </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">0%</span>
+                                    <span id="ae-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">4</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 3004</p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span id="ae-realizado"
+                                        class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="ae-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -768,9 +822,19 @@
                                 <h3 class="text-base font-semibold text-foreground mt-1">Clube de Gestão</h3>
                             </div>
                             <div class="flex items-center gap-2 text-muted-foreground">
-                                <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
-                                <i data-lucide="layout-grid" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
-                                <i data-lucide="sliders-horizontal" class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                <span
+                                    data-tippy-content="Clube de Gestão é um programa de relacionamento para clientes com bons resultados e maturidade no uso da solução, que podem se tornar cases e compartilhar boas práticas. O cliente pode ser convidado pelo CS na etapa de Evolução, passando por pré-cadastro e avaliação antes de participar do programa. Clientes com esse perfil devem ser cadastrados pelo CS na tela “Cadastros de Clientes (Clube de Gestão)”.">
+                                    <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
+                                </span>
+                                <span style="cursor: pointer;">
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjI4OC4x"
+                                        target="_blank">
+                                        <i data-lucide="layout-grid"
+                                            class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
+                                    </a>
+                                </span>
+                                <i data-lucide="sliders-horizontal"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
                             </div>
                         </div>
 
@@ -779,18 +843,22 @@
                                 <svg viewBox="0 0 100 100" class="h-full w-full -rotate-90">
                                     <circle cx="50" cy="50" r="44" fill="transparent" stroke-width="12"
                                         stroke="hsl(var(--muted))"></circle>
-                                    <circle cx="50" cy="50" r="44" fill="transparent" stroke-linecap="round"
-                                        stroke-width="12" stroke="#facaca" stroke-dasharray="276.46"
-                                        stroke-dashoffset="138.23" class="transition-all duration-1000 ease-in-out">
+                                    <circle id="clube-gestao-donut-ring" cx="50" cy="50" r="44" fill="transparent"
+                                        stroke-linecap="round" stroke-width="12" stroke="#facaca"
+                                        stroke-dasharray="276.46" stroke-dashoffset="276.46"
+                                        class="donut-progress-ring transition-all duration-1000 ease-in-out">
                                     </circle>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <span class="text-4xl font-extrabold text-foreground tracking-tight">50%</span>
+                                    <span id="clube-gestao-atingimento"
+                                        class="text-4xl font-extrabold text-foreground tracking-tight">--</span>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="text-foreground text-sm font-medium">Realizado: <span class="font-bold">1</span></p>
-                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: 70</p>
+                                <p class="text-foreground text-sm font-medium">Realizado: <span
+                                        id="clube-gestao-realizado" class="font-bold">--</span></p>
+                                <p class="text-muted-foreground text-xs uppercase tracking-wider mt-0.5">Meta: <span
+                                        id="clube-gestao-meta">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -798,10 +866,13 @@
 
                 <!-- Bloco 3: Tabela Resumo (Classificações) -->
                 <div class="table-container shadow-sm border border-border">
-                    <div class="px-5 py-4 border-b border-border flex justify-end">
+                    <div class="px-6 py-4 border-b border-border flex justify-end">
                         <button
                             class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-semibold transition-all duration-200 h-8 px-3 bg-[#334154] text-white hover:bg-[#243142] dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 shadow">
-                            <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1.5"></i> Ver detalhes
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjEwNw=="
+                                target="_blank">
+                                <i data-lucide="external-link" class="w-3.5 h-3.5 mr-1.5"></i> Ver detalhes
+                            </a>
                         </button>
                     </div>
                     <div class="overflow-x-auto">
@@ -849,46 +920,110 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-border">
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">MRR Total</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 6648997,45</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 11238204,45</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 4478409,14</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 15233153,03</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 5564719,42</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 912159,40</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">R$ 44087813,45</td>
+                            <tbody id="gestao-vista-tabela-tbody" class="divide-y divide-border">
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-32"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-20"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-20"></div>
+                                    </td>
                                 </tr>
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">Total de Parceiros</td>
-                                    <td class="px-5 py-4 text-muted-foreground">246</td>
-                                    <td class="px-5 py-4 text-muted-foreground">416</td>
-                                    <td class="px-5 py-4 text-muted-foreground">328</td>
-                                    <td class="px-5 py-4 text-muted-foreground">1688</td>
-                                    <td class="px-5 py-4 text-muted-foreground">944</td>
-                                    <td class="px-5 py-4 text-muted-foreground">118</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">3745</td>
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-28"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-16"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-16"></div>
+                                    </td>
                                 </tr>
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">Tkt Médio</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 27028,44</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 27014,91</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 13653,69</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 9024,38</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 5894,83</td>
-                                    <td class="px-5 py-4 text-muted-foreground">R$ 7730,16</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">R$ 11772,45</td>
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-24"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-24"></div>
+                                    </td>
                                 </tr>
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-5 py-4 font-semibold text-foreground">Média de Soluções</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0</td>
-                                    <td class="px-5 py-4 text-muted-foreground">0.01</td>
-                                    <td class="px-5 py-4 font-medium text-foreground">0</td>
+                                <tr class="animate-pulse">
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted w-32"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/70 w-14"></div>
+                                    </td>
+                                    <td class="px-5 py-4">
+                                        <div class="h-4 rounded bg-muted/80 w-14"></div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -896,353 +1031,363 @@
                 </div>
 
                 <!-- Bloco 4: Painel de Ações e Performance -->
-                <div class="kpi-layout-card p-6 shadow-sm">
+                <div class="kpi-layout-card p-6 shadow-sm bg-slate-50">
                     <h3 class="text-center text-sm font-semibold text-muted-foreground mb-4 uppercase tracking-wide">
                         Gestão de Metas - Apontamentos e Acompanhamento Performance</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 rounded-xl border border-border/70 p-3 dark:bg-secondary/60">
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Apontamento
-                                e Gerenciamento de Metas</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwuQURfR1JDTUVOVA=="
+                                    target="_blank">Apontamento
+                                    e Gerenciamento de Metas</a></span>
                         </button>
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Performance
-                                CS</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjI2MC4x"
+                                    target="_blank">Performance
+                                    CS</a></span>
                         </button>
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">GPD
-                                - Apuração de Resultado</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYXB1cmFjYW8ucmVzdWx0YWRv"
+                                    target="_blank">GPD
+                                    - Apuração de Resultado</a></span>
                         </button>
                         <button
-                            class="bg-background border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
-                            <span
-                                class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">Plano
-                                de ação</span>
+                            class="action-panel-btn border border-border rounded-lg py-3 px-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all w-full flex items-center justify-center text-center group">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWdlZ2kuUGxhbm9BY2Fv"
+                                    target="_blank">Plano
+                                    de ação</a></span>
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- VIEW: ATIVIDADES -->
-            <div id="view-atividades" class="flex flex-col gap-8 transition-opacity duration-300 opacity-100 flex-1">
-                <div class="flex flex-col gap-4">
-                    <div class="flex items-center justify-between border-b border-border/50 pb-3">
-                        <div class="flex items-center gap-2">
-                            <div class="p-1.5 rounded-md bg-primary/10 text-primary">
-                                <i data-lucide="book-open" class="w-4 h-4"></i>
-                            </div>
-                            <h2 class="text-lg font-bold text-foreground tracking-tight">Gestão de Playbooks</h2>
-                        </div>
-                        <span class="hidden sm:inline text-xs font-medium text-muted-foreground uppercase tracking-wider">Acompanhamento e Ritos</span>
+            <div id="view-atividades"
+                class="flex flex-col gap-10 transition-opacity duration-300 flex-1 hidden opacity-0">
+                <!-- Seção 1: Gestão de Playbooks -->
+                <section class="flex flex-col gap-5">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-border">
+                        <h2 class="text-xl font-bold text-foreground tracking-tight">Gestão de Playbooks</h2>
+                        <p class="text-sm text-muted-foreground">Visão consolidada da distribuição e conclusão dos ritos
+                            e playbooks.</p>
                     </div>
 
                     <!-- KPI Section (Topo) -->
-                    <section class="grid grid-cols-1 xl:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 xl:grid-cols-4 gap-4">
                         <div id="donut-kpi-card" class="kpi-layout-card p-4 flex flex-col min-h-[260px] animate-pulse">
-                        <div class="flex items-start justify-between gap-3">
-                            <div>
-                                <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">Visão geral</p>
-                                <h2 class="text-base font-semibold text-foreground mt-1">Distribuição de Atividades</h2>
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">Visão geral</p>
+                                    <h2 class="text-base font-semibold text-foreground mt-1">Distribuição de Playbooks
+                                    </h2>
+                                </div>
+                                <span
+                                    class="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[0.68rem] font-medium text-muted-foreground">Template</span>
                             </div>
-                            <span
-                                class="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[0.68rem] font-medium text-muted-foreground">Template</span>
-                        </div>
 
-                        <div class="flex-1 flex flex-col items-center justify-center gap-4">
-                            <div class="h-[10rem] w-[10rem] rounded-full bg-muted"></div>
-                            <p class="h-4 w-40 rounded-full bg-muted"></p>
+                            <div class="flex-1 flex flex-col items-center justify-center gap-4">
+                                <div class="h-[10rem] w-[10rem] rounded-full bg-muted"></div>
+                                <p class="h-4 w-40 rounded-full bg-muted"></p>
+                            </div>
                         </div>
-                    </div>
 
                         <div id="top-kpis-right-container"
                             class="xl:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
-                        <div id="passagem-bastao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="passagem-bastao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="checkin-experiencia-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="checkin-experiencia-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="acompanhamento-inicial-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="acompanhamento-inicial-card"
+                                class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="acompanhamento-evolutivo-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="acompanhamento-evolutivo-card"
+                                class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="monitoramento-nps-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="monitoramento-nps-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="follow-detratores-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="follow-detratores-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="follow-neutros-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="follow-neutros-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="clube-gestao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="clube-gestao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="entrega-valor-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="entrega-valor-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="reversao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="reversao-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
-                        </div>
-                        <div id="outras-atividades-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
-                            <div class="flex justify-between items-start mb-4">
-                                <div>
-                                    <div class="h-3 bg-muted rounded-full w-28"></div>
-                                    <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                            <div id="outras-atividades-card" class="kpi-layout-card min-h-[190px] p-4 animate-pulse">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div class="h-3 bg-muted rounded-full w-28"></div>
+                                        <div class="h-6 bg-muted rounded-lg w-44 mt-2"></div>
+                                    </div>
+                                    <div class="h-8 bg-muted rounded-lg w-20"></div>
                                 </div>
-                                <div class="h-8 bg-muted rounded-lg w-20"></div>
+                                <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
+                                <div class="h-3 bg-muted rounded-full w-full"></div>
                             </div>
-                            <div class="h-3 bg-muted rounded-full w-3/5 mb-4"></div>
-                            <div class="h-3 bg-muted rounded-full w-full"></div>
                         </div>
-                        </div>
-                    </section>
-                </div>
+                </section>
 
-                <div class="flex flex-col gap-4 flex-1">
-                    <div class="flex items-center justify-between border-b border-border/50 pb-3">
-                        <div class="flex items-center gap-2">
-                            <div class="p-1.5 rounded-md bg-primary/10 text-primary">
-                                <i data-lucide="check-circle" class="w-4 h-4"></i>
-                            </div>
-                            <h2 class="text-lg font-bold text-foreground tracking-tight">Apontamento de Atividades</h2>
-                        </div>
-                        <span class="hidden sm:inline text-xs font-medium text-muted-foreground uppercase tracking-wider">Fila e Execução</span>
+                <!-- Seção 2: Apontamento de Atividades -->
+                <section class="flex flex-col gap-5 flex-1">
+                    <div class="flex flex-col gap-1 pb-3 border-b border-border">
+                        <h2 class="text-xl font-bold text-foreground tracking-tight">Apontamento de Atividades</h2>
+                        <p class="text-sm text-muted-foreground">Gerencie sua fila de atividades, acompanhe prazos e
+                            atualize status.</p>
                     </div>
 
                     <!-- KPI Cards -->
                     <div id="kpi-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Skeletons -->
-                    <div class="skeleton-card animate-pulse">
-                        <div class="flex justify-between items-center">
-                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        <!-- Skeletons -->
+                        <div class="skeleton-card animate-pulse">
+                            <div class="flex justify-between items-center">
+                                <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                                <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                            </div>
+                            <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
                         </div>
-                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
-                    </div>
-                    <div class="skeleton-card animate-pulse">
-                        <div class="flex justify-between items-center">
-                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        <div class="skeleton-card animate-pulse">
+                            <div class="flex justify-between items-center">
+                                <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                                <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                            </div>
+                            <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
                         </div>
-                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
-                    </div>
-                    <div class="skeleton-card animate-pulse">
-                        <div class="flex justify-between items-center">
-                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        <div class="skeleton-card animate-pulse">
+                            <div class="flex justify-between items-center">
+                                <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                                <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                            </div>
+                            <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
                         </div>
-                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
-                    </div>
-                    <div class="skeleton-card animate-pulse">
-                        <div class="flex justify-between items-center">
-                            <div class="h-3 bg-muted rounded-full w-1/3"></div>
-                            <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                        <div class="skeleton-card animate-pulse">
+                            <div class="flex justify-between items-center">
+                                <div class="h-3 bg-muted rounded-full w-1/3"></div>
+                                <div class="w-9 h-9 bg-muted rounded-lg"></div>
+                            </div>
+                            <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
                         </div>
-                        <div class="h-9 bg-muted rounded-lg w-2/5 mt-4"></div>
-                    </div>
                     </div>
 
                     <!-- Tabela Container -->
                     <div class="table-container min-h-[750px] flex-1">
-                    <!-- Table Action Bar -->
-                    <div
-                        class="px-5 py-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                        <div>
-                            <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">Lista de Atividades</h2>
-                            <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e gerencie as atividades pendentes e concluídas.</p>
-                        </div>
-                        <div class="flex items-center gap-2 w-full md:w-auto">
-                            <div class="relative w-full md:w-64">
-                                <i data-lucide="search"
-                                    class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
-                                <input id="search-input" type="text" placeholder="Buscar atividades..."
-                                    class="search-input flex h-9 w-full rounded-lg border border-input dark:border-border/60 bg-background dark:bg-transparent px-3 py-2 pl-9 text-sm placeholder:text-muted-foreground">
+                        <!-- Table Action Bar -->
+                        <div
+                            class="px-5 py-4 border-b border-border flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h2 class="text-base font-600 text-foreground leading-tight" style="font-weight:600">
+                                    Lista
+                                    de Atividades</h2>
+                                <p class="text-sm text-muted-foreground mt-0.5" style="font-weight:400">Visualize e
+                                    gerencie
+                                    as atividades pendentes e concluídas.</p>
                             </div>
-                            <button id="clear-filters-btn"
-                                class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none h-9 px-3 border border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 active:scale-95 gap-1.5"
-                                style="font-weight:500; display:none;" title="Limpar todos os filtros de coluna">
-                                <i data-lucide="filter-x" class="w-4 h-4"></i>
-                                <span class="hidden md:inline">Limpar filtros</span>
-                                <span id="filter-count-badge"
-                                    class="inline-flex items-center justify-center min-w-[1rem] h-4 px-1 rounded-full bg-primary text-primary-foreground text-[0.6rem] font-bold"></span>
-                            </button>
-                            <button id="add-playbook-btn"
-                                class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-secondary-foreground active:scale-95"
-                                style="font-weight:500; background-color: #b6edb6;">
-                                <i data-lucide="book-plus" class="w-4 h-4 mr-1.5"></i> Playbook
-                            </button>
-                            <button id="add-activity-btn"
-                                class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 shadow-sm"
-                                style="font-weight:500">
-                                <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Atividade
-                            </button>
-                            <button id="export-btn"
-                                class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
-                                style="font-weight:500">
-                                <i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Exportar
-                            </button>
+                            <div class="flex items-center gap-2 w-full md:w-auto">
+                                <div class="relative w-full md:w-64">
+                                    <i data-lucide="search"
+                                        class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></i>
+                                    <input id="search-input" type="text" placeholder="Buscar atividades..."
+                                        class="search-input flex h-9 w-full rounded-lg border border-input dark:border-border/60 bg-background dark:bg-transparent px-3 py-2 pl-9 text-sm placeholder:text-muted-foreground">
+                                </div>
+                                <button id="clear-filters-btn"
+                                    class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none h-9 px-3 border border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 active:scale-95 gap-1.5"
+                                    style="font-weight:500; display:none;" title="Limpar todos os filtros de coluna">
+                                    <i data-lucide="filter-x" class="w-4 h-4"></i>
+                                    <span class="hidden md:inline">Limpar filtros</span>
+                                    <span id="filter-count-badge"
+                                        class="inline-flex items-center justify-center min-w-[1rem] h-4 px-1 rounded-full bg-primary text-primary-foreground text-[0.6rem] font-bold"></span>
+                                </button>
+                                <button id="add-playbook-btn"
+                                    class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-secondary-foreground active:scale-95"
+                                    style="font-weight:500; background-color: #b6edb6;">
+                                    <i data-lucide="book-plus" class="w-4 h-4 mr-1.5"></i> Playbook
+                                </button>
+                                <button id="add-activity-btn"
+                                    class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 active:scale-95 shadow-sm"
+                                    style="font-weight:500">
+                                    <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Atividade
+                                </button>
+                                <button id="export-btn"
+                                    class="hidden md:inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
+                                    style="font-weight:500">
+                                    <i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Exportar
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div id="validation-toast"
-                        class="hidden fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] sm:w-auto sm:max-w-md"
-                        role="alert" aria-live="assertive">
-                        <div id="validation-toast-content"
-                            class="toast-popup toast-danger flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg">
-                            <span
-                                class="toast-danger-icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">!</span>
-                            <p id="validation-toast-text" class="text-sm font-medium"></p>
+                        <div id="validation-toast"
+                            class="hidden fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] sm:w-auto sm:max-w-md"
+                            role="alert" aria-live="assertive">
+                            <div id="validation-toast-content"
+                                class="toast-popup toast-danger flex items-start gap-3 rounded-lg border px-4 py-3 shadow-lg">
+                                <span
+                                    class="toast-danger-icon mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs font-bold">!</span>
+                                <p id="validation-toast-text" class="text-sm font-medium"></p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Table -->
-                    <div class="flex-1 overflow-auto">
-                        <table class="table-header-sticky w-full text-sm">
-                            <thead>
-                                <tr>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                        style="font-weight:600">Playbook</th>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                        style="font-weight:600">Responsável</th>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                        style="font-weight:600">Parceiro</th>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                        style="font-weight:600">Atividade</th>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider min-w-[200px]"
-                                        style="font-weight:600">Status</th>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                        style="font-weight:600">Categoria</th>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                        style="font-weight:600">Data Criação</th>
-                                    <th class="text-left text-xs text-muted-foreground font-600 px-3 py-3.5 uppercase tracking-wider hide-on-mobile"
-                                        style="font-weight:600">Anotações</th>
-                                    <th class="text-center text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
-                                        style="font-weight:600">Ações</th>
-                                </tr>
-                                <tr class="filter-row">
-                                    <th class="px-5 hide-on-mobile"><select id="filter-playbook" class="filter-select">
-                                            <option value="">Todos</option>
-                                        </select></th>
-                                    <th class="px-5"><select id="filter-responsavel" class="filter-select">
-                                            <option value="">Todos</option>
-                                        </select></th>
-                                    <th class="px-5 hide-on-mobile"><select id="filter-parceiro" class="filter-select">
-                                            <option value="">Todos</option>
-                                        </select></th>
-                                    <th class="px-5"><input id="filter-atividade" type="text" placeholder="Filtrar..."
-                                            class="filter-input"></th>
-                                    <th class="px-5 min-w-[200px]"><select id="filter-status" class="filter-select">
-                                            <option value="">Todos</option>
-                                        </select></th>
-                                    <th class="px-5"><select id="filter-categoria" class="filter-select">
-                                            <option value="">Todos</option>
-                                        </select></th>
-                                    <th class="hide-on-mobile"></th>
-                                    <th class="hide-on-mobile"></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody id="activities-tbody" class="divide-y divide-border">
-                                <!-- Loading State -->
-                                <tr>
-                                    <td colspan="9" class="p-8 text-center text-muted-foreground">Carregando
-                                        atividades...
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        <!-- Table -->
+                        <div class="flex-1 overflow-auto">
+                            <table class="table-header-sticky w-full text-sm">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                            style="font-weight:600">Playbook</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                            style="font-weight:600">Responsável</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                            style="font-weight:600">Parceiro</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                            style="font-weight:600">Atividade</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider min-w-[200px]"
+                                            style="font-weight:600">Status</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                            style="font-weight:600">Categoria</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                            style="font-weight:600">Data Criação</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-3 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                            style="font-weight:600">Anotações</th>
+                                        <th class="text-center text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
+                                            style="font-weight:600">Ações</th>
+                                    </tr>
+                                    <tr class="filter-row">
+                                        <th class="px-5 hide-on-mobile"><select id="filter-playbook"
+                                                class="filter-select">
+                                                <option value="">Todos</option>
+                                            </select></th>
+                                        <th class="px-5"><select id="filter-responsavel" class="filter-select">
+                                                <option value="">Todos</option>
+                                            </select></th>
+                                        <th class="px-5 hide-on-mobile"><select id="filter-parceiro"
+                                                class="filter-select">
+                                                <option value="">Todos</option>
+                                            </select></th>
+                                        <th class="px-5"><input id="filter-atividade" type="text"
+                                                placeholder="Filtrar..." class="filter-input"></th>
+                                        <th class="px-5 min-w-[200px]"><select id="filter-status" class="filter-select">
+                                                <option value="">Todos</option>
+                                            </select></th>
+                                        <th class="px-5"><select id="filter-categoria" class="filter-select">
+                                                <option value="">Todos</option>
+                                            </select></th>
+                                        <th class="hide-on-mobile"></th>
+                                        <th class="hide-on-mobile"></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activities-tbody" class="divide-y divide-border">
+                                    <!-- Loading State -->
+                                    <tr>
+                                        <td colspan="9" class="p-8 text-center text-muted-foreground">Carregando
+                                            atividades...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                        <div class="px-5 py-3 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-background/70">
-                            <p id="table-pagination-summary" class="text-xs text-muted-foreground">Mostrando 0-0 de 0 atividades</p>
+                        <div
+                            class="px-5 py-3 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-background/70">
+                            <p id="table-pagination-summary" class="text-xs text-muted-foreground">Mostrando 0-0 de 0
+                                atividades</p>
                             <div class="flex items-center gap-2">
                                 <button id="table-pagination-prev"
                                     class="inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-8 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground active:scale-95"
@@ -1257,7 +1402,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     </div>
@@ -1276,6 +1421,8 @@
                 style: 'currency',
                 currency: 'BRL'
             }).format(value);
+
+            const formatQuantity = (value) => new Intl.NumberFormat('pt-BR').format(value);
 
             const parseCurrencyString = (str) => {
                 if (str === null || str === undefined) return NaN;
@@ -1509,7 +1656,7 @@
 
                 const cleanPercentage = Math.max(0, Math.min(100, parseFloat(percentage) || 0));
                 const cleanColor = color || getKpiProgressColor(cleanPercentage);
-                const cleanLabel = label || 'Conclusão geral das atividades';
+                const cleanLabel = label || 'Conclusão geral dos playbooks';
                 const strokeWidth = 12;
                 const radius = 50 - (strokeWidth / 2);
                 const circumference = 2 * Math.PI * radius;
@@ -1525,7 +1672,7 @@
                         <div class="flex items-start justify-between gap-3">
                             <div>
                                 <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">Visão geral</p>
-                                <h2 class="text-base font-semibold text-foreground mt-1">Distribuição de Atividades</h2>
+                                <h2 class="text-base font-semibold text-foreground mt-1">Distribuição de Playbooks</h2>
                             </div>
                             <span class="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[0.68rem] font-medium text-muted-foreground">Consolidado</span>
                         </div>
@@ -1640,7 +1787,7 @@
 
                 const getExecutionProgressColor = (value) => {
                     if (value < 50) return '#f8c7bf';
-                    if (value < 80) return '#f8ecbb';
+                    if (value < 90) return '#f8ecbb';
                     return '#b6edb6';
                 };
 
@@ -1763,33 +1910,460 @@
                 }
             };
 
-            const loadMrrTotalData = async () => {
+            // =============================
+            // GERAL
+            // =============================
+
+            const refreshAllData = async () => {
+                await Promise.all([
+                    // Gestão à Vista
+                    loadGestaoVistaKpisData(),
+                    loadGestaoVistaTabelaData(),
+                    loadGestaoVistaNpsDonutData(),
+                    loadGestaoVistaMrrChurnDonutData(),
+                    loadGestaoVistaAcompEvolData(),
+                    loadGestaoVistaClubeGestaoDonutData(),
+
+                    // Atividades
+                    loadDonutData(),
+                    loadKpiData(),
+                    loadTableData(),
+                    ...executionCardConfigs.map(loadExecutionCardData)
+                ]);
+            };
+
+            // =============================
+            // GESTÃO À VISTA
+            // =============================
+
+            const loadGestaoVistaKpisData = async () => {
                 const mrrNode = document.getElementById('kpi-gv-mrr');
-                if (!mrrNode) return;
+                const totalClientesNode = document.getElementById('kpi-gv-clientes');
+                const porteNode = document.getElementById('kpi-gv-porte');
+
+                if (!mrrNode || !totalClientesNode || !porteNode) return;
 
                 try {
-                    if (!componentData.vistaMrrTotalQuery) {
-                        formatNodeTextIfCurrency(mrrNode);
-                        return;
+                    if (!componentData.gestaoVistaKpisQuery) {
+                        throw new Error('A query não foi configurada.');
                     }
 
-                    const result = await queryMitra({ query: componentData.vistaMrrTotalQuery });
+                    const result = await queryMitra({ query: componentData.gestaoVistaKpisQuery });
+
                     if (!result?.data?.length || !result.data[0]?.length) {
                         throw new Error('A query não retornou dados.');
                     }
 
-                    const rawValue = result.data[0][0];
-                    const parsedValue = parseCurrencyString(rawValue);
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const data = result.data[0];
+                    const kpiMap = {
+                        MRR_TOTAL: headers.indexOf('MRR_ATIVO_TOTAL'),
+                        TOTAL_CLIENTES: headers.indexOf('TOTAL_CLIENTES'),
+                        PORTE: headers.indexOf('PORTE')
+                    };
 
-                    if (Number.isNaN(parsedValue)) {
-                        throw new Error('Valor inválido retornado pela query.');
-                    }
-
-                    mrrNode.textContent = formatBRL(parsedValue);
+                    mrrNode.textContent = formatBRL(parseCurrencyString(data[kpiMap.MRR_TOTAL]));
+                    totalClientesNode.textContent = formatQuantity(data[kpiMap.TOTAL_CLIENTES]);
+                    porteNode.textContent = data[kpiMap.PORTE];
                 } catch (error) {
-                    console.error('Falha ao carregar o MRR Total:', error);
+                    console.error('Falha ao carregar os KPIs de Gestão à Vista:', error);
                 }
             };
+
+            const gestaoVistaTableConfig = {
+                rowLabels: {
+                    'MRR Total': 'MRR Total',
+                    'Total de Parceiros': 'Total de Parceiros',
+                    'Tkt Medio': 'Tkt Médio',
+                    'Tkt Médio': 'Tkt Médio',
+                    'Media de Solucoes': 'Média de Soluções',
+                    'Média de Soluções': 'Média de Soluções'
+                },
+                currencyRows: new Set(['MRR Total', 'Tkt Medio', 'Tkt Médio']),
+                integerRows: new Set(['Total de Parceiros']),
+                decimalRows: new Set(['Media de Solucoes', 'Média de Soluções'])
+            };
+
+            const parseNumericValue = (value) => {
+                if (value === null || value === undefined || value === '') return NaN;
+                if (typeof value === 'number') return value;
+
+                const rawValue = String(value).trim().replace(/\s/g, '');
+
+                const hasComma = rawValue.includes(',');
+                const hasDot = rawValue.includes('.');
+                let cleanValue = rawValue;
+
+                if (hasComma && hasDot) {
+                    cleanValue = rawValue.replace(/\./g, '').replace(',', '.');
+                } else if (hasComma) {
+                    cleanValue = rawValue.replace(',', '.');
+                }
+
+                const parsedValue = Number(cleanValue);
+                return Number.isFinite(parsedValue) ? parsedValue : NaN;
+            };
+
+            const formatGestaoVistaTableValue = (rowLabel, value) => {
+                const numericValue = parseNumericValue(value);
+                if (!Number.isFinite(numericValue)) return '—';
+
+                if (gestaoVistaTableConfig.currencyRows.has(rowLabel)) {
+                    return formatBRL(numericValue);
+                }
+
+                if (gestaoVistaTableConfig.integerRows.has(rowLabel)) {
+                    return formatQuantity(Math.round(numericValue));
+                }
+
+                if (gestaoVistaTableConfig.decimalRows.has(rowLabel)) {
+                    return numericValue.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+
+                return numericValue.toLocaleString('pt-BR');
+            };
+
+            const loadGestaoVistaTabelaData = async () => {
+                const tableBody = document.getElementById('gestao-vista-tabela-tbody');
+                if (!tableBody) return;
+
+                try {
+                    if (!componentData.gestaoVistaTabelaQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaTabelaQuery });
+
+                    if (!result?.headers?.length || !result?.data?.length) {
+                        tableBody.innerHTML = '<tr><td colspan="8" class="px-5 py-8 text-center text-muted-foreground">Nenhum dado encontrado.</td></tr>';
+                        return;
+                    }
+
+                    const headers = result.headers.map((header) => (header?.name || header || '').toUpperCase());
+                    const colIndexes = {
+                        COL0: headers.indexOf('COL0'),
+                        COL1: headers.indexOf('COL1'),
+                        COL2: headers.indexOf('COL2'),
+                        COL3: headers.indexOf('COL3'),
+                        COL4: headers.indexOf('COL4'),
+                        COL5: headers.indexOf('COL5'),
+                        COL6: headers.indexOf('COL6'),
+                        COL7: headers.indexOf('COL7')
+                    };
+
+                    if (Object.values(colIndexes).some((index) => index === -1)) {
+                        throw new Error('A query deve retornar as colunas COL0 a COL7.');
+                    }
+
+                    const rowsHtml = result.data.map((row) => {
+                        const rawLabel = String(row[colIndexes.COL0] || '').trim();
+                        const normalizedLabel = gestaoVistaTableConfig.rowLabels[rawLabel] || rawLabel || '—';
+                        const colValues = [
+                            row[colIndexes.COL1],
+                            row[colIndexes.COL2],
+                            row[colIndexes.COL3],
+                            row[colIndexes.COL4],
+                            row[colIndexes.COL5],
+                            row[colIndexes.COL6],
+                            row[colIndexes.COL7]
+                        ];
+
+                        const cellsHtml = colValues.map((value, index) => {
+                            const isTotalColumn = index === colValues.length - 1;
+                            const cellClass = isTotalColumn
+                                ? 'px-5 py-4 font-medium text-foreground'
+                                : 'px-5 py-4 text-muted-foreground';
+
+                            return `<td class="${cellClass}">${formatGestaoVistaTableValue(rawLabel, value)}</td>`;
+                        }).join('');
+
+                        return `
+                            <tr class="hover:bg-muted/20 transition-colors">
+                                <td class="px-5 py-4 font-semibold text-foreground">${normalizedLabel}</td>
+                                ${cellsHtml}
+                            </tr>
+                        `;
+                    }).join('');
+
+                    tableBody.innerHTML = rowsHtml;
+                } catch (error) {
+                    console.error('Falha ao carregar a tabela de Gestão à Vista:', error);
+                    tableBody.innerHTML = '<tr><td colspan="8" class="px-5 py-8 text-center text-destructive">Erro ao carregar dados da tabela. Verifique o console.</td></tr>';
+                }
+            };
+
+            const getGestaoVistaDonutColor = (percentage) => {
+                if (percentage < 50) return '#facaca';
+                if (percentage < 90) return '#f8ecbb';
+                if (percentage <= 100) return '#b6edb6';
+                return '#bde4e6';
+            };
+
+            const parseDonutNumber = (value) => {
+                if (value === null || value === undefined || value === '') return NaN;
+                if (typeof value === 'number') return value;
+
+                const cleanValue = String(value)
+                    .replace(/\s/g, '')
+                    .replace(/%/g, '')
+                    .replace(/\./g, '')
+                    .replace(',', '.');
+
+                const parsed = Number(cleanValue);
+                return Number.isFinite(parsed) ? parsed : NaN;
+            };
+
+            const updateGestaoVistaDonut = ({
+                atingimentoNodeId,
+                realizadoNodeId,
+                metaNodeId,
+                ringNodeId,
+                realizado,
+                meta,
+                atingimento,
+                forceTwoDecimals = false
+            }) => {
+                const ringNode = document.getElementById(ringNodeId);
+                const atingimentoNode = document.getElementById(atingimentoNodeId);
+                const realizadoNode = document.getElementById(realizadoNodeId);
+                const metaNode = document.getElementById(metaNodeId);
+
+                if (!ringNode || !atingimentoNode || !realizadoNode || !metaNode) return;
+
+                const realizadoNum = parseDonutNumber(realizado);
+                const metaNum = parseDonutNumber(meta);
+                const atingimentoNum = parseDonutNumber(atingimento);
+
+                const percentualBruto = Number.isFinite(atingimentoNum)
+                    ? atingimentoNum
+                    : (Number.isFinite(realizadoNum) && Number.isFinite(metaNum) && metaNum > 0)
+                        ? (realizadoNum / metaNum) * 100
+                        : 0;
+
+                const percentual = Math.max(0, percentualBruto);
+                const percentualLimitado = Math.min(percentual, 100);
+                const circumference = 276.46;
+                const dashOffset = circumference - ((percentualLimitado / 100) * circumference);
+                const donutColor = getGestaoVistaDonutColor(percentual);
+
+                const formatDisplayValue = (value) => {
+                    if (!Number.isFinite(value)) return '--';
+                    if (forceTwoDecimals) {
+                        return value.toLocaleString('pt-BR', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                    return value.toLocaleString('pt-BR', {
+                        minimumFractionDigits: Number.isInteger(value) ? 0 : 1,
+                        maximumFractionDigits: 1
+                    });
+                };
+
+                atingimentoNode.textContent = `${Math.round(percentual)}%`;
+                realizadoNode.textContent = formatDisplayValue(realizadoNum);
+                metaNode.textContent = formatDisplayValue(metaNum);
+
+                ringNode.style.stroke = donutColor;
+                ringNode.style.strokeDasharray = String(circumference);
+                ringNode.style.strokeDashoffset = String(dashOffset);
+            };
+
+            const loadGestaoVistaNpsDonutData = async () => {
+                const atingimento = document.getElementById('nps-atingimento');
+                const realizado = document.getElementById('nps-realizado');
+                const meta = document.getElementById('nps-meta');
+                const ring = document.getElementById('nps-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
+
+                try {
+                    if (!componentData.gestaoVistaNpsDonutQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaNpsDonutQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
+
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const npsAtingimento = getCol('NPS_ATINGIMENTO');
+                    const npsRealizado = getCol('NPS_REALIZADO');
+                    const npsMeta = getCol('NPS_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'nps-atingimento',
+                        realizadoNodeId: 'nps-realizado',
+                        metaNodeId: 'nps-meta',
+                        ringNodeId: 'nps-donut-ring',
+                        atingimento: npsAtingimento,
+                        realizado: npsRealizado,
+                        meta: npsMeta
+                    });
+                } catch (error) {
+                    console.error('Falha ao carregar os dados do NPS:', error);
+                }
+            }
+
+            const loadGestaoVistaMrrChurnDonutData = async () => {
+                const atingimento = document.getElementById('mrr-churn-atingimento');
+                const realizado = document.getElementById('mrr-churn-realizado');
+                const meta = document.getElementById('mrr-churn-meta');
+                const ring = document.getElementById('mrr-churn-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
+
+                try {
+                    if (!componentData.gestaoVistaMrrChurnDonutQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaMrrChurnDonutQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
+
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const mrrChurnAtingimento = getCol('MRR_CHURN_ATINGIMENTO');
+                    const mrrChurnRealizado = getCol('MRR_CHURN_REALIZADO');
+                    const mrrChurnMeta = getCol('MRR_CHURN_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'mrr-churn-atingimento',
+                        realizadoNodeId: 'mrr-churn-realizado',
+                        metaNodeId: 'mrr-churn-meta',
+                        ringNodeId: 'mrr-churn-donut-ring',
+                        atingimento: mrrChurnAtingimento,
+                        realizado: mrrChurnRealizado,
+                        meta: mrrChurnMeta,
+                        forceTwoDecimals: true
+                    });
+                } catch (error) {
+                    console.error('Falha ao carregar os dados do MRR CHURN:', error);
+                }
+            }
+
+            const loadGestaoVistaAcompEvolData = async () => {
+                const atingimento = document.getElementById('ae-atingimento');
+                const realizado = document.getElementById('ae-realizado');
+                const meta = document.getElementById('ae-meta');
+                const ring = document.getElementById('ae-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
+
+                try {
+                    if (!componentData.gestaoVistaAcompEvolDonutQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaAcompEvolDonutQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
+
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const aeAtingimento = getCol('AE_ATINGIMENTO');
+                    const aeRealizado = getCol('AE_REALIZADO');
+                    const aeMeta = getCol('AE_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'ae-atingimento',
+                        realizadoNodeId: 'ae-realizado',
+                        metaNodeId: 'ae-meta',
+                        ringNodeId: 'ae-donut-ring',
+                        atingimento: aeAtingimento,
+                        realizado: aeRealizado,
+                        meta: aeMeta
+                    });
+                } catch (error) {
+                    console.error('Falha ao carregar os dados do Acompanhamento Evolutivo:', error);
+                }
+            }
+
+            const loadGestaoVistaClubeGestaoDonutData = async () => {
+                const atingimento = document.getElementById('clube-gestao-atingimento');
+                const realizado = document.getElementById('clube-gestao-realizado');
+                const meta = document.getElementById('clube-gestao-meta');
+                const ring = document.getElementById('clube-gestao-donut-ring');
+
+                if (!atingimento || !realizado || !meta || !ring) return;
+
+                try {
+                    if (!componentData.gestaoVistaClubeGestaoDonutQuery) {
+                        throw new Error('A query não foi configurada.');
+                    }
+
+                    const result = await queryMitra({ query: componentData.gestaoVistaClubeGestaoDonutQuery });
+
+                    if (!result?.data?.length || !result.data[0]?.length) {
+                        throw new Error('A query não retornou dados.');
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const row = result.data[0];
+
+                    const getCol = (...names) => {
+                        for (const name of names) {
+                            const idx = headers.indexOf(name.toUpperCase());
+                            if (idx !== -1) return row[idx];
+                        }
+                        return undefined;
+                    };
+
+                    const clubeGestaoAtingimento = getCol('CLUBE_GESTAO_ATINGIMENTO');
+                    const clubeGestaoRealizado = getCol('CLUBE_GESTAO_REALIZADO');
+                    const clubeGestaoMeta = getCol('CLUBE_GESTAO_PREVISTO');
+
+                    updateGestaoVistaDonut({
+                        atingimentoNodeId: 'clube-gestao-atingimento',
+                        realizadoNodeId: 'clube-gestao-realizado',
+                        metaNodeId: 'clube-gestao-meta',
+                        ringNodeId: 'clube-gestao-donut-ring',
+                        atingimento: clubeGestaoAtingimento,
+                        realizado: clubeGestaoRealizado,
+                        meta: clubeGestaoMeta
+                    });
+                } catch (error) {
+                    console.error('Falha ao carregar os dados do CLUBE GESTÃO:', error);
+                }
+            }
 
             const normalizeStatus = (value) => String(value || '')
                 .trim()
@@ -1859,7 +2433,7 @@
             const renderRows = (data) => {
                 if (!data || data.length === 0) {
                     const hasActiveFilter = Object.values(activeFilters).some(v => v !== '');
-                tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>${hasActiveFilter ? 'Nenhum resultado para os filtros aplicados.' : 'Nenhuma atividade encontrada.'}</span></div></td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="9" class="p-12 text-center text-muted-foreground"><div class="flex flex-col items-center gap-2"><i data-lucide="inbox" class="w-8 h-8 opacity-40"></i><span>${hasActiveFilter ? 'Nenhum resultado para os filtros aplicados.' : 'Nenhuma atividade encontrada.'}</span></div></td></tr>`;
                     lucide.createIcons();
                     updatePaginationControls();
                     return;
@@ -2022,16 +2596,6 @@
                     console.error("Falha ao carregar dados da tabela:", error);
                     tableBody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-destructive">Erro ao carregar atividades. Verifique o console.</td></tr>`;
                 }
-            };
-
-            const refreshAllData = async () => {
-                await Promise.all([
-                    loadDonutData(),
-                    loadMrrTotalData(),
-                    loadKpiData(),
-                    loadTableData(),
-                    ...executionCardConfigs.map(loadExecutionCardData)
-                ]);
             };
 
             const setupFilterListeners = () => {
@@ -2204,8 +2768,21 @@
                 }
             };
 
+            const initializeTippy = () => {
+                if (typeof tippy === 'function') {
+                    tippy('[data-tippy-content]', {
+                        appendTo: () => document.body,
+                        theme: 'light-border',
+                        allowHTML: false,
+                        placement: 'bottom-end',
+                        maxWidth: 340
+                    });
+                }
+            };
+
             const initializeComponent = async () => {
                 lucide.createIcons();
+                initializeTippy();
                 setupEventListeners();
                 formatStaticCurrencyData();
                 await refreshAllData();
