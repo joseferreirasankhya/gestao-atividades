@@ -169,6 +169,17 @@
         .toast-danger-icon {
             border-color: hsl(var(--destructive-foreground) / 0.5);
         }
+        
+        .toast-success {
+            background-color: #059669; /* emerald-600 */
+            color: white;
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .toast-success-icon {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
 
         /* ===================== RESPONSIVE ===================== */
         @media (max-width: 1024px) {
@@ -560,6 +571,224 @@
         .dark .filter-th-active .filter-input {
             background-color: hsl(var(--primary) / 0.1);
         }
+
+        /* ===== Report Bug Button ===== */
+        .report-bug-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 2.25rem;
+            width: 2.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid hsl(var(--border));
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+        }
+        .report-bug-btn:hover {
+            background: hsl(var(--accent));
+            border-color: hsl(var(--primary));
+            color: hsl(var(--foreground));
+        }
+        .report-bug-btn:active {
+            transform: scale(0.95);
+        }
+        .report-bug-btn svg {
+            width: 1rem;
+            height: 1rem;
+            stroke-width: 2;
+        }
+
+        /* ===== Report Bug Modal Overlay ===== */
+        .report-bug-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .report-bug-modal-overlay.active {
+            display: flex;
+        }
+
+        /* ===== Report Bug Modal Container ===== */
+        @keyframes reportBugModalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .report-bug-modal {
+            background: hsl(var(--background));
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.75rem;
+            width: min(480px, calc(100vw - 2rem));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+            animation: reportBugModalIn 0.2s ease-out;
+        }
+        .dark .report-bug-modal {
+            background: hsl(var(--secondary));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== Modal Header ===== */
+        .report-bug-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 1.5rem 1rem;
+        }
+        .report-bug-modal-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            background: color-mix(in srgb, hsl(var(--destructive)) 12%, transparent);
+            color: hsl(var(--destructive));
+            flex-shrink: 0;
+        }
+        .report-bug-modal-icon svg {
+            width: 1.125rem;
+            height: 1.125rem;
+            stroke-width: 2;
+        }
+        .report-bug-modal-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            flex: 1;
+            margin: 0;
+        }
+        .report-bug-close-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.375rem;
+            border: 1px solid transparent;
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .report-bug-close-btn:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--foreground));
+        }
+        .report-bug-close-btn svg {
+            width: 1rem;
+            height: 1rem;
+            stroke-width: 2;
+        }
+
+        /* ===== Modal Divider ===== */
+        .report-bug-divider {
+            border: none;
+            border-top: 1px solid hsl(var(--border));
+            margin: 0;
+        }
+
+        /* ===== Modal Form ===== */
+        .report-bug-form {
+            padding: 1.25rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .report-bug-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+        }
+        .report-bug-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--foreground));
+        }
+        .report-bug-required {
+            color: hsl(var(--destructive));
+            margin-left: 0.125rem;
+        }
+        .report-bug-textarea {
+            resize: vertical;
+            min-height: 6rem;
+        }
+        .report-bug-form .search-input {
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .dark .report-bug-form .search-input {
+            background-color: hsl(var(--muted));
+            border-color: hsl(var(--border));
+        }
+
+        /* ===== Modal Action Buttons ===== */
+        .report-bug-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding-top: 0.25rem;
+        }
+        .report-bug-btn-cancel {
+            display: inline-flex;
+            align-items: center;
+            height: 2.25rem;
+            padding: 0 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid hsl(var(--border));
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .report-bug-btn-cancel:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--foreground));
+        }
+        .report-bug-btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            height: 2.25rem;
+            padding: 0 1.125rem;
+            border-radius: 0.5rem;
+            border: 1px solid transparent;
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: filter 0.15s, box-shadow 0.15s;
+        }
+        .report-bug-btn-submit:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .report-bug-btn-submit svg {
+            width: 0.875rem;
+            height: 0.875rem;
+            stroke-width: 2;
+        }
     </style>
 </head>
 
@@ -630,6 +859,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
+                    <button id="report-bug-btn" class="report-bug-btn" aria-label="Reportar bug" title="Reportar um bug">
+                        <i data-lucide="bug"></i>
+                    </button>
                     <button id="theme-toggle-btn" aria-label="Alternar tema" title="Alternar modo claro/escuro">
                         <i data-lucide="sun" id="theme-icon-light" class="theme-icon"></i>
                         <i data-lucide="moon" id="theme-icon-dark" class="theme-icon" style="display:none"></i>
@@ -1582,6 +1814,7 @@
                 acc[config.key] = document.getElementById(config.containerId);
                 return acc;
             }, {});
+            
             const validationToast = document.getElementById('validation-toast');
             const validationToastContent = document.getElementById('validation-toast-content');
             const validationToastText = document.getElementById('validation-toast-text');
@@ -1589,20 +1822,53 @@
             const linkLinksUteis = document.getElementById('link-links-uteis');
 
             let searchDebounceTimeout;
-            let validationToastTimeout;
-            let validationToastHideTimeout;
+            let toastTimeout;
+            let toastHideTimeout;
             let rawTableData = null;
             const PAGE_SIZE = 10;
             let currentPage = 1;
             let totalPages = 1;
             let totalItems = 0;
             const activeFilters = { PLAYBOOK: '', RESPONSAVEL: '', PARCEIRO: '', ATIVIDADE: '', STATUS_LABEL: '' };
+            
+            const hideToast = () => {
+                if (!validationToast || !validationToastContent) return;
+                clearTimeout(toastTimeout);
+                clearTimeout(toastHideTimeout);
 
-            const showValidationMessage = (message) => {
+                validationToastContent.classList.remove('show');
+
+                toastHideTimeout = setTimeout(() => {
+                    if (validationToastText) validationToastText.textContent = '';
+                    validationToast.classList.add('hidden');
+                }, 220);
+            };
+
+            const showToast = (message, type = 'danger') => {
                 if (!validationToast || !validationToastContent || !validationToastText) return;
 
-                clearTimeout(validationToastTimeout);
-                clearTimeout(validationToastHideTimeout);
+                clearTimeout(toastTimeout);
+                clearTimeout(toastHideTimeout);
+
+                validationToastContent.classList.remove('toast-danger', 'toast-success');
+                const iconSpan = validationToastContent.querySelector('span');
+                
+                if (type === 'success') {
+                    validationToastContent.classList.add('toast-success');
+                    if (iconSpan) {
+                         iconSpan.classList.remove('toast-danger-icon');
+                         iconSpan.classList.add('toast-success-icon');
+                         iconSpan.textContent = '✓';
+                    }
+                } else { // danger (default)
+                    validationToastContent.classList.add('toast-danger');
+                    if (iconSpan) {
+                        iconSpan.classList.remove('toast-success-icon');
+                        iconSpan.classList.add('toast-danger-icon');
+                        iconSpan.textContent = '!';
+                    }
+                }
+
                 validationToastText.textContent = message;
                 validationToast.classList.remove('hidden');
                 validationToastContent.classList.remove('show');
@@ -1611,23 +1877,19 @@
                     validationToastContent.classList.add('show');
                 });
 
-                validationToastTimeout = setTimeout(() => {
-                    clearValidationMessage();
+                toastTimeout = setTimeout(() => {
+                    hideToast();
                 }, 5000);
+            };
+            
+            const showValidationMessage = (message) => {
+                showToast(message, 'danger');
             };
 
             const clearValidationMessage = () => {
-                if (!validationToast || !validationToastContent || !validationToastText) return;
-                clearTimeout(validationToastTimeout);
-                clearTimeout(validationToastHideTimeout);
-
-                validationToastContent.classList.remove('show');
-
-                validationToastHideTimeout = setTimeout(() => {
-                    validationToastText.textContent = '';
-                    validationToast.classList.add('hidden');
-                }, 220);
+                hideToast();
             };
+
 
             const renderDonutError = (message) => {
                 if (!donutKpiContainer) return;
@@ -2665,7 +2927,7 @@
                     try {
                         const result = await queryMitra({ query: componentData.tableQuery });
 
-                        if (!result || !result.data || result.data.length === 0) {
+                        if (!result || !result.data || !result.data.length === 0) {
                             showValidationMessage("Não há dados para exportar.");
                             return;
                         }
@@ -2757,6 +3019,91 @@
                         }
                     });
                 }
+                
+                // ===== Report Bug Modal Logic =====
+                const reportBugOverlay = document.getElementById('report-bug-overlay');
+                const reportBugOpenBtn = document.getElementById('report-bug-btn');
+                const reportBugCloseBtn = document.getElementById('report-bug-close');
+                const reportBugCancelBtn = document.getElementById('report-bug-cancel');
+                const reportBugForm = document.querySelector('.report-bug-form');
+
+                function openReportBugModal() {
+                    if (reportBugOverlay) reportBugOverlay.classList.add('active');
+                }
+
+                function closeReportBugModal() {
+                    if (reportBugOverlay) reportBugOverlay.classList.remove('active');
+                }
+
+                if (reportBugOpenBtn) reportBugOpenBtn.addEventListener('click', openReportBugModal);
+                if (reportBugCloseBtn) reportBugCloseBtn.addEventListener('click', closeReportBugModal);
+                if (reportBugCancelBtn) reportBugCancelBtn.addEventListener('click', closeReportBugModal);
+                if (reportBugOverlay) {
+                    reportBugOverlay.addEventListener('click', (e) => {
+                        if (e.target === reportBugOverlay) closeReportBugModal();
+                    });
+                }
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && reportBugOverlay && reportBugOverlay.classList.contains('active')) {
+                        closeReportBugModal();
+                    }
+                });
+
+                if (reportBugForm) {
+                    reportBugForm.addEventListener('submit', async (event) => {
+                        event.preventDefault();
+
+                        const titleInput = document.getElementById('bug-title-input');
+                        const descriptionInput = document.getElementById('bug-description-input');
+                        const submitBtn = reportBugForm.querySelector('button[type="submit"]');
+
+                        const bugTitle = titleInput.value;
+                        const bugDescription = descriptionInput.value;
+                        const githubToken = window.componentData ? componentData.githubToken : null;
+
+                        if (!bugTitle.trim()) {
+                            showValidationMessage("O título do bug é obrigatório.");
+                            titleInput.focus();
+                            return;
+                        }
+
+                        if (!githubToken) {
+                            console.error("Token do GitHub não encontrado em componentData.githubToken");
+                            showValidationMessage("Erro de configuração: Token do GitHub não encontrado.");
+                            return;
+                        }
+
+                        const originalBtnContent = submitBtn.innerHTML;
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = `
+                            <i data-lucide="loader-2" class="animate-spin" style="width: 0.875rem; height: 0.875rem; margin-right: 0.375rem;"></i>
+                            Reportando...
+                        `;
+                        lucide.createIcons();
+
+                        try {
+                            await setVariableMitra({ name: ':VAR_GSC_TITULO_BUG', content: bugTitle });
+                            await setVariableMitra({ name: ':VAR_GSC_DESCR_BUG', content: bugDescription });
+                            await setVariableMitra({ name: ':VAR_GSC_GITHUB_TOKEN', content: githubToken });
+
+                            await actionMitra({ id: 47 });
+                            
+                            closeReportBugModal();
+                            reportBugForm.reset();
+
+                            showToast("Bug reportado com sucesso!", "success");
+
+                        } catch (error) {
+                            console.error("Falha ao reportar o bug:", error);
+                            showValidationMessage("Ocorreu um erro ao reportar o bug. Tente novamente mais tarde.");
+                        } finally {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnContent;
+                            lucide.createIcons();
+                        }
+                    });
+                }
+
             };
 
             const initializeTippy = () => {
@@ -2976,7 +3323,41 @@
 
             waitForMitraAndInit();
         });
+
     </script>
+
+    <!-- Modal: Reportar Bug -->
+    <div id="report-bug-overlay" class="report-bug-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="report-bug-title">
+        <div class="report-bug-modal">
+            <div class="report-bug-modal-header">
+                <div class="report-bug-modal-icon">
+                    <i data-lucide="bug"></i>
+                </div>
+                <h2 id="report-bug-title" class="report-bug-modal-title">Reportar Bug</h2>
+                <button id="report-bug-close" class="report-bug-close-btn" aria-label="Fechar">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <hr class="report-bug-divider" />
+            <form class="report-bug-form">
+                <div class="report-bug-form-group">
+                    <label for="bug-title-input" class="report-bug-label">Título <span class="report-bug-required" aria-hidden="true">*</span></label>
+                    <input id="bug-title-input" type="text" class="search-input" placeholder="Ex: Botão não responde ao clique" required />
+                </div>
+                <div class="report-bug-form-group">
+                    <label for="bug-description-input" class="report-bug-label">Descrição</label>
+                    <textarea id="bug-description-input" class="search-input report-bug-textarea" rows="4" placeholder="Descreva o comportamento esperado e o que aconteceu..."></textarea>
+                </div>
+                <div class="report-bug-actions">
+                    <button type="button" id="report-bug-cancel" class="report-bug-btn-cancel">Cancelar</button>
+                    <button type="submit" class="report-bug-btn-submit">
+                        <i data-lucide="send"></i>
+                        Reportar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
