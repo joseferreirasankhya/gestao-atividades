@@ -1,0 +1,426 @@
+-- =====================================================================
+-- CAMADA 1: CTEs compartilhadas (lidas uma única vez)
+-- =====================================================================
+
+WITH METAS_BASE AS (
+    -- Leitura ÚNICA de CC_1512 + CAD_10931 (antes: 8 scans)
+    SELECT
+        cal.ID_CALENDARIO,
+        cal.ID_UNIDADE,
+        cal.METAS_CS__META_UNIDADE AS VALOR_META,
+        cad.ID_METAS_CS
+    FROM CC_1512 cal
+    INNER JOIN CAD_10931 cad
+        ON cad.ID = cal.ID_METAS_CS__GERENCIAMENTO_DE_METAS
+    WHERE cad.ID_METAS_CS IN (1, 2, 3, 8)
+    AND (cal.ID_CALENDARIO IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
+    AND (cal.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
+),
+
+METAS_ULTIMO_MES AS (
+    -- MAX calendário por tipo de meta (antes: 4 CTEs separadas)
+    SELECT ID_METAS_CS, MAX(ID_CALENDARIO) AS ID_CALENDARIO_FINAL
+    FROM METAS_BASE
+    GROUP BY ID_METAS_CS
+),
+
+PARCEIROS_USUARIO AS (
+    -- Materializa permissões do usuário (antes: 6 EXISTS)
+    SELECT DISTINCT ID_PARCEIRO
+    FROM CC_1609
+    WHERE ID_USUARIOS = :ID_USUARIOS
+),
+
+-- =====================================================================
+-- CAMADA 2: NPS (Realizado + Previsto + Atingimento)
+-- =====================================================================
+
+NPS_META_REAL AS (
+    SELECT AVG(mb.VALOR_META) AS VALOR_META
+    FROM METAS_BASE mb
+    INNER JOIN METAS_ULTIMO_MES um
+        ON um.ID_CALENDARIO_FINAL = mb.ID_CALENDARIO
+        AND um.ID_METAS_CS = 2
+    WHERE mb.ID_METAS_CS = 2
+),
+
+NPS_REGRA_FIXA AS (
+    SELECT
+        CASE
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2026' THEN
+                CASE
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '01' AND '03' THEN 40
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '04' AND '06' THEN 42
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '07' AND '09' THEN 44
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '10' AND '12' THEN 48
+                END
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2025' THEN
+                CASE
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '01' AND '03' THEN 42
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '04' AND '06' THEN 42
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '07' AND '09' THEN 40
+                    WHEN SUBSTRING(um.ID_CALENDARIO_FINAL, 5, 2) BETWEEN '10' AND '12' THEN 44
+                END
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2024' THEN 30
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2023' THEN 25
+        END AS VALOR_META
+    FROM METAS_ULTIMO_MES um
+    WHERE um.ID_METAS_CS = 2
+),
+
+NPS_PREVISTO_CALC AS (
+    SELECT
+        CASE
+            WHEN 'Todos' IN (:ID_UNIDADE) THEN rf.VALOR_META
+            ELSE mr.VALOR_META
+        END AS NPS_RESULTADO
+    FROM NPS_REGRA_FIXA rf
+    CROSS JOIN NPS_META_REAL mr
+),
+
+NPS_REALIZADO_CALC AS (
+    SELECT
+        ROUND(
+            (
+                SUM(CASE WHEN R.ID_ESCALA_NPS IN (9, 10) THEN 1 ELSE 0 END)
+                - SUM(CASE WHEN R.ID_ESCALA_NPS <= 6 THEN 1 ELSE 0 END)
+            ) / NULLIF(COUNT(*), 0) * 100.0,
+            0
+        ) AS NPS
+    FROM CC_1424 R
+    INNER JOIN CAD_8732 C
+        ON C.ID = R.ID_CONTATO_PESQUISA_NPS
+    WHERE (
+        R.ID_CALENDARIO IN (:ID_CALENDARIO)
+        OR 'Todos' IN (:ID_CALENDARIO)
+    )
+    AND C.ID_PESQUISA_NPS_INVALIDA = 'N'
+),
+
+NPS_FINAL AS (
+    SELECT
+        nr.NPS AS NPS_REALIZADO,
+        np.NPS_RESULTADO AS NPS_PREVISTO,
+        ROUND(
+            nr.NPS / NULLIF(np.NPS_RESULTADO, 0) * 100.0,
+            0
+        ) AS NPS_ATINGIMENTO
+    FROM NPS_REALIZADO_CALC nr
+    CROSS JOIN NPS_PREVISTO_CALC np
+),
+
+-- =====================================================================
+-- CAMADA 3: MRR CHURN — Realizado (CC_1671, CC_1333)
+-- =====================================================================
+
+MRR_REALIZADO_BASE AS (
+    SELECT
+        SUM(A.PERDAS) AS PERDAS,
+        SUM(A.BASE_MRR) AS BASE_MRR,
+        (SUM(A.PERDAS) / NULLIF(SUM(A.BASE_MRR), 0)) * 100 AS MRR_CHURN
+    FROM (
+        SELECT
+            SUM(PER.VLR_PERDA_MRR_CHURN) AS PERDAS,
+            0 AS BASE_MRR,
+            PER.ID_CALENDARIO
+        FROM CC_1671 PER
+        WHERE PER.ID_TIPO_DE_PERDA = 'DEFINITIVO '
+        AND (PER.ID_CALENDARIO IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
+        AND (PER.ID_PARCEIRO IN (:ID_PARCEIRO) OR 'Todos' IN (:ID_PARCEIRO))
+        AND (
+            PER.ID_PARCEIRO IN (SELECT ID_PARCEIRO FROM PARCEIROS_USUARIO)
+            OR 'Todos' IN (:ID_USUARIOS)
+        )
+        GROUP BY PER.ID_CALENDARIO
+
+        UNION ALL
+
+        SELECT
+            0 AS PERDAS,
+            SUM(MRR.MRR_HISTORICO) AS BASE_MRR,
+            MRR.ID_CALENDARIO
+        FROM CC_1333 MRR
+        WHERE (
+                CASE
+                    WHEN MOD(MRR.ID_CALENDARIO, 10000) = 101
+                        THEN (MRR.ID_CALENDARIO - 10000) + 1100
+                    ELSE MRR.ID_CALENDARIO - 100
+                END IN (:ID_CALENDARIO)
+                OR 'Todos' IN (:ID_CALENDARIO)
+            )
+        AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR 'Todos' IN (:ID_PARCEIRO))
+        AND (
+            MRR.ID_PARCEIRO IN (SELECT ID_PARCEIRO FROM PARCEIROS_USUARIO)
+            OR 'Todos' IN (:ID_USUARIOS)
+        )
+        GROUP BY MRR.ID_CALENDARIO
+    ) A
+),
+
+MRR_REALIZADO_FINAL AS (
+    SELECT
+        CONCAT(
+            SUBSTR(
+                CAST(ROUND(CAST(AVG(MRR_CHURN) AS DECIMAL(10,2)), 2) + 100 AS CHAR(10)),
+                3
+            ),
+            '&#37;'
+        ) AS MRR_CHURN
+    FROM MRR_REALIZADO_BASE
+),
+
+-- =====================================================================
+-- CAMADA 4: MRR CHURN — Previsto (reutiliza METAS_BASE)
+-- =====================================================================
+
+MRR_PREVISTO_META_UNIDADE AS (
+    SELECT AVG(mb.VALOR_META) AS VALOR_META
+    FROM METAS_BASE mb
+    INNER JOIN METAS_ULTIMO_MES um
+        ON um.ID_CALENDARIO_FINAL = mb.ID_CALENDARIO
+        AND um.ID_METAS_CS = 3
+    WHERE mb.ID_METAS_CS = 3
+),
+
+MRR_PREVISTO_REGRA_FIXA AS (
+    SELECT
+        CASE
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2026' THEN 0.7
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2025' THEN 0.8
+            ELSE 1
+        END AS VALOR_META
+    FROM METAS_ULTIMO_MES um
+    WHERE um.ID_METAS_CS = 3
+),
+
+MRR_PREVISTO_RESULTADO AS (
+    SELECT
+        CASE
+            WHEN 'Todos' IN (:ID_UNIDADE) THEN rf.VALOR_META
+            ELSE mu.VALOR_META
+        END AS VALOR_FINAL
+    FROM MRR_PREVISTO_REGRA_FIXA rf
+    CROSS JOIN MRR_PREVISTO_META_UNIDADE mu
+),
+
+MRR_PREVISTO_FINAL AS (
+    SELECT
+        CONCAT(
+            SUBSTR(
+                CAST(ROUND(CAST(VALOR_FINAL AS DECIMAL(10,2)), 2) + 100 AS CHAR(10)),
+                3
+            ),
+            '%'
+        ) AS MRR_CHURN_RESULTADO
+    FROM MRR_PREVISTO_RESULTADO
+),
+
+-- =====================================================================
+-- CAMADA 5: MRR CHURN — Atingimento (reutiliza METAS_BASE)
+-- =====================================================================
+
+MRR_ATING_META_REAL AS (
+    SELECT AVG(mb.VALOR_META) AS VALOR_META
+    FROM METAS_BASE mb
+    INNER JOIN METAS_ULTIMO_MES um
+        ON um.ID_CALENDARIO_FINAL = mb.ID_CALENDARIO
+        AND um.ID_METAS_CS = 3
+    WHERE mb.ID_METAS_CS = 3
+),
+
+MRR_ATING_REGRA_FIXA AS (
+    SELECT
+        CASE
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2026' THEN 0.7
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2025' THEN 0.8
+            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2024' THEN 1
+        END AS VALOR_META
+    FROM METAS_ULTIMO_MES um
+    WHERE um.ID_METAS_CS = 3
+),
+
+MRR_ATING_PREVISTO AS (
+    SELECT
+        CASE
+            WHEN 'Todos' IN (:ID_UNIDADE) THEN rf.VALOR_META
+            ELSE COALESCE(mr.VALOR_META, rf.VALOR_META)
+        END AS PREVISTO
+    FROM MRR_ATING_REGRA_FIXA rf
+    CROSS JOIN MRR_ATING_META_REAL mr
+),
+
+MRR_ATING_REALIZADO AS (
+    SELECT
+        (SUM(A.PERDAS) / NULLIF(SUM(A.BASE_MRR), 0)) * 100 AS REALIZADO
+    FROM (
+        SELECT
+            SUM(PER.PERDAS_MRR) * -1 AS PERDAS,
+            0 AS BASE_MRR
+        FROM CC_1104 PER
+        WHERE PER.ID_TIPO_DE_PERDA = 'DEFINITIVO '
+        AND (PER.ID_CALENDARIO IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos')
+        AND (PER.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
+        AND ID_CATEGORIA_MRR IN (15, 14, 2, 1)
+        AND PER.ID_PARCEIRO IN (SELECT ID_PARCEIRO FROM PARCEIROS_USUARIO)
+
+        UNION ALL
+
+        SELECT
+            SUM(CAN.VALOR_DE_CANCELAMENTO) AS PERDAS,
+            0 AS BASE_MRR
+        FROM CC_1173 CAN
+        WHERE CAN.ID_CANCELAMENTO_POR_LIMPEZA_DE_BASE <> 'S'
+        AND (CONCAT(LEFT(CAN.ID_CALENDARIO, 6), '01') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos')
+        AND (CAN.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
+        AND CAN.ID_PARCEIRO IN (SELECT ID_PARCEIRO FROM PARCEIROS_USUARIO)
+
+        UNION ALL
+
+        SELECT
+            0 AS PERDAS,
+            SUM(MRR.MRR_HISTORICO) AS BASE_MRR
+        FROM CC_1333 MRR
+        WHERE (
+                DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d') IN (:ID_CALENDARIO)
+                OR CONCAT(:ID_CALENDARIO) = 'Todos'
+            )
+        AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
+        AND MRR.ID_PARCEIRO IN (SELECT ID_PARCEIRO FROM PARCEIROS_USUARIO)
+    ) A
+),
+
+MRR_ATING_RESULTADO AS (
+    SELECT (((p.PREVISTO - r.REALIZADO) / NULLIF(p.PREVISTO, 0)) + 1) * 100 AS ATINGIMENTO
+    FROM MRR_ATING_PREVISTO p
+    CROSS JOIN MRR_ATING_REALIZADO r
+),
+
+MRR_ATING_FINAL AS (
+    SELECT CONCAT(ROUND(ATINGIMENTO, 2), '%') AS ATINGIMENTO_MRR_CHURN
+    FROM MRR_ATING_RESULTADO
+),
+
+MRR_CHURN_FINAL AS (
+    SELECT
+        rf.MRR_CHURN AS MRR_CHURN_REALIZADO,
+        pf.MRR_CHURN_RESULTADO AS MRR_CHURN_PREVISTO,
+        af.ATINGIMENTO_MRR_CHURN AS MRR_CHURN_ATINGIMENTO
+    FROM MRR_REALIZADO_FINAL rf
+    CROSS JOIN MRR_PREVISTO_FINAL pf
+    CROSS JOIN MRR_ATING_FINAL af
+),
+
+-- =====================================================================
+-- CAMADA 6: ACOMPANHAMENTO EVOLUTIVO (reutiliza METAS_BASE)
+-- =====================================================================
+
+AE_REALIZADO AS (
+    SELECT COUNT(DISTINCT t1.ID_PARCEIRO_CHAVE_LICENCA) AS QTD_ACOMPANHAMENTO_EVOLUTIVO
+    FROM CAD_11048 t1
+    INNER JOIN CAD_11062 t2
+        ON t1.ID = t2.ID_HISTORICO_AE
+    INNER JOIN CAD_CALENDARIO cal
+        ON cal.ID = DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO, '%Y%m%d')
+    LEFT JOIN CC_1325 t3
+        ON t3.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+    AND t3.ID_CALENDARIO = (
+        SELECT MAX(s.ID_CALENDARIO)
+        FROM CC_1325 s
+        WHERE s.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+            AND LEFT(CAST(s.ID_CALENDARIO AS CHAR), 6) IN (
+                DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO, '%Y%m'),
+                DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO - INTERVAL 1 MONTH, '%Y%m')
+            )
+    )
+    WHERE t2.ID_TIPO_DE_ACOMPANHAMENTO = 2
+    AND t2.DESCRICAO_PLANO_DE_ACAO_CONCLUIDO = 'Sim'
+    AND t2.DT_CONCLUSAO_PLANO_DE_ACAO IS NOT NULL
+    AND (cal.ID IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
+    AND (t3.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
+),
+
+AE_PREVISTO AS (
+    SELECT SUM(VALOR_META) AS META_AE
+    FROM METAS_BASE
+    WHERE ID_METAS_CS = 1
+),
+
+AE_FINAL AS (
+    SELECT
+        r.QTD_ACOMPANHAMENTO_EVOLUTIVO AS AE_REALIZADO,
+        p.META_AE AS AE_PREVISTO,
+        ROUND(
+            r.QTD_ACOMPANHAMENTO_EVOLUTIVO / NULLIF(p.META_AE, 0) * 100,
+            0
+        ) AS AE_ATINGIMENTO
+    FROM AE_REALIZADO r
+    CROSS JOIN AE_PREVISTO p
+),
+
+-- =====================================================================
+-- CAMADA 7: CLUBE DE GESTÃO (reutiliza METAS_BASE)
+-- =====================================================================
+
+CG_REALIZADO AS (
+    SELECT COUNT(*) AS REALIZADO
+    FROM CC_1643 C
+    INNER JOIN CAD_CALENDARIO cal
+        ON cal.ID = DATE_FORMAT(C.CG_DT_APROVACAO_, '%Y%m%d')
+    INNER JOIN CAD_1007 u
+        ON u.ID = C.ID_UNIDADE
+    WHERE C.CG_DT_APROVACAO_ IS NOT NULL
+    AND (cal.ID IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
+    AND (u.ID IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
+    AND (u.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR 'Todos' IN (:ID_CS_MATRIZ))
+),
+
+CG_PREVISTO AS (
+    SELECT SUM(VALOR_META) AS META_AE
+    FROM METAS_BASE
+    WHERE ID_METAS_CS = 8
+),
+
+CG_ATINGIMENTO AS (
+    SELECT ROUND(
+        (
+            SELECT COUNT(DISTINCT ID_PARCEIRO)
+            FROM CC_1642
+        )
+        /
+        NULLIF((SELECT SUM(VALOR_META) FROM METAS_BASE WHERE ID_METAS_CS = 8), 0)
+        * 100,
+        0
+    ) AS PERCENTUAL
+),
+
+CG_FINAL AS (
+    SELECT
+        r.REALIZADO AS CLUBE_GESTAO_REALIZADO,
+        p.META_AE AS CLUBE_GESTAO_PREVISTO,
+        a.PERCENTUAL AS CLUBE_GESTAO_ATINGIMENTO
+    FROM CG_REALIZADO r
+    CROSS JOIN CG_PREVISTO p
+    CROSS JOIN CG_ATINGIMENTO a
+)
+
+-- =====================================================================
+-- SELECT FINAL
+-- =====================================================================
+
+SELECT
+    NPS.NPS_ATINGIMENTO AS NPS_ATINGIMENTO,
+    NPS.NPS_REALIZADO AS NPS_REALIZADO,
+    NPS.NPS_PREVISTO AS NPS_PREVISTO,
+    MRR.MRR_CHURN_ATINGIMENTO AS MRR_CHURN_ATINGIMENTO,
+    MRR.MRR_CHURN_REALIZADO AS MRR_CHURN_REALIZADO,
+    MRR.MRR_CHURN_PREVISTO AS MRR_CHURN_PREVISTO,
+    AE.AE_ATINGIMENTO AS AE_ATINGIMENTO,
+    AE.AE_REALIZADO AS AE_REALIZADO,
+    AE.AE_PREVISTO AS AE_PREVISTO,
+    CG.CLUBE_GESTAO_ATINGIMENTO AS CLUBE_GESTAO_ATINGIMENTO,
+    CG.CLUBE_GESTAO_REALIZADO AS CLUBE_GESTAO_REALIZADO,
+    CG.CLUBE_GESTAO_PREVISTO AS CLUBE_GESTAO_PREVISTO
+FROM NPS_FINAL NPS
+CROSS JOIN MRR_CHURN_FINAL MRR
+CROSS JOIN AE_FINAL AE
+CROSS JOIN CG_FINAL CG
