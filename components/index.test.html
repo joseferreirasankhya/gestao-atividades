@@ -3050,15 +3050,39 @@
                         event.preventDefault();
 
                         const titleInput = document.getElementById('bug-title-input');
+                        const impactSelect = document.getElementById('bug-impact-select');
+                        const typeSelect = document.getElementById('bug-type-select');
+                        const screenSelect = document.getElementById('bug-screen-select');
                         const descriptionInput = document.getElementById('bug-description-input');
                         const submitBtn = reportBugForm.querySelector('button[type="submit"]');
 
                         const bugTitle = titleInput.value;
+                        const bugImpact = impactSelect.value;
+                        const bugType = typeSelect.value;
+                        const bugScreen = screenSelect.value;
                         const bugDescription = descriptionInput.value;
 
                         if (!bugTitle.trim()) {
                             showValidationMessage("O título do bug é obrigatório.");
                             titleInput.focus();
+                            return;
+                        }
+
+                        if (!bugImpact) {
+                            showValidationMessage("O nível de impacto é obrigatório.");
+                            impactSelect.focus();
+                            return;
+                        }
+
+                        if (!bugType) {
+                            showValidationMessage("O tipo de chamado é obrigatório.");
+                            typeSelect.focus();
+                            return;
+                        }
+
+                        if (!bugScreen) {
+                            showValidationMessage("A tela é obrigatória.");
+                            screenSelect.focus();
                             return;
                         }
 
@@ -3072,6 +3096,9 @@
 
                         try {
                             await setVariableMitra({ name: ':VAR_GSC_TITULO_BUG', content: bugTitle });
+                            await setVariableMitra({ name: ':VAR_GSC_IMPACTO_BUG', content: bugImpact });
+                            await setVariableMitra({ name: ':VAR_GSC_TIPO_CHAMADO', content: bugType });
+                            await setVariableMitra({ name: ':VAR_GSC_TELA_BUG', content: bugScreen });
                             await setVariableMitra({ name: ':VAR_GSC_DESCR_BUG', content: bugDescription });
 
                             await actionMitra({ id: 47 });
@@ -3331,6 +3358,34 @@
                 <div class="report-bug-form-group">
                     <label for="bug-title-input" class="report-bug-label">Título <span class="report-bug-required" aria-hidden="true">*</span></label>
                     <input id="bug-title-input" type="text" class="search-input" placeholder="Ex: Botão não responde ao clique" required />
+                </div>
+                <div class="report-bug-form-group">
+                    <label for="bug-impact-select" class="report-bug-label">Nível de Impacto <span class="report-bug-required" aria-hidden="true">*</span></label>
+                    <select id="bug-impact-select" class="filter-select" style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
+                        <option value="">Selecione...</option>
+                        <option value="Baixo">Baixo</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Alto">Alto</option>
+                        <option value="Altíssimo">Altíssimo</option>
+                    </select>
+                </div>
+                <div class="report-bug-form-group">
+                    <label for="bug-type-select" class="report-bug-label">Tipo de Chamado <span class="report-bug-required" aria-hidden="true">*</span></label>
+                    <select id="bug-type-select" class="filter-select" style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
+                        <option value="">Selecione...</option>
+                        <option value="Melhoria">Melhoria</option>
+                        <option value="Erro">Erro</option>
+                        <option value="Dúvida">Dúvida</option>
+                    </select>
+                </div>
+                <div class="report-bug-form-group">
+                    <label for="bug-screen-select" class="report-bug-label">Tela <span class="report-bug-required" aria-hidden="true">*</span></label>
+                    <select id="bug-screen-select" class="filter-select" style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
+                        <option value="">Selecione...</option>
+                        <option value="Gestão à Vista">Gestão à Vista</option>
+                        <option value="Atividades">Atividades</option>
+                        <option value="Links Úteis">Links Úteis</option>
+                    </select>
                 </div>
                 <div class="report-bug-form-group">
                     <label for="bug-description-input" class="report-bug-label">Descrição</label>
