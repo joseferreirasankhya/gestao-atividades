@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mitra | CardGroup (HTML)</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
+
+  <style>
+  :root{
+    --border:#D0D5DD;
+    --muted-foreground:#667085;
+    --title:#111827;
+    --card-radius:12px;
+  }
+
+  *{ box-sizing:border-box }
+
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    color:var(--title);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* Em contextos flex/grid, permita encolher */
+  .cg-outer, .cg-container, .cg-card, .cg-text-wrap { min-width:0; }
+
+  .cg-outer{ width:100%; display:flex }
+  .cg-container{ width:100%; display:flex; gap:16px }
+
+  /* Card sem padding (quem tem padding é Header/Footer, como no shadcn) */
+.cg-card{
+  border:1px solid var(--border);
+  border-radius:var(--card-radius);
+  background:#fff;
+  display:flex;
+  flex-direction:column;
+  cursor:default;
+  box-shadow:none;
+
+  /* ✅ permitir que o card fique MENOR que o conteúdo e controlar overflow */
+  min-height: 0;
+  overflow: hidden; /* troque para overflow-y:auto se preferir scroll interno */
+}
+
+  .cg-card.no-border{ border:none }
+  .cg-card[aria-disabled="false"]{ cursor:pointer }
+
+  /* === CardHeader (p-6 + classes do seu React) === */
+  .cg-header{
+    padding:24px;                      /* p-6 */
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:flex-start;             /* items-start */
+    gap:8px;                           /* gap-2 */
+    width:100%;
+    flex-wrap:wrap;
+  }
+  .cg-header.center{
+    padding:24px;                       /* p-6 */
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:8px;
+  }
+
+  /* Ícone + textos (gap-4) */
+  .cg-row{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;                          /* gap-4 */
+    min-width:0;
+    width:100%;
+  }
+/* Garanta que esta classe esteja como no original */
+.cg-row.center{
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  width:100%;
+}
+
+
+  /* DynamicLucideIcon: padding 8, raio 8, ícone 32 — sem width/height fixos */
+  .cg-icon-wrap{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    padding:8px;                       /* igual ao React */
+  }
+  .cg-icon-wrap svg{ width:24px; height:24px; stroke-width:2; display:block }  /* size=32 + evita “crescer” linha */
+
+  /* Textos do header */
+  .cg-text-wrap{ flex:1 1 auto; min-width:0; width:100% }
+  .cg-description{
+    color:var(--muted-foreground);
+    font-size:14px;                    /* text-sm */
+    line-height:20px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .cg-title{
+    font-weight:700;
+    line-height:1.2;
+    margin:0;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
+  }
+
+/* Footer com mesma “margem interna” do header */
+.cg-footer{
+  padding: 0 24px 24px;    /* alinhado ao header (24px), com respiro embaixo */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;              /* espaço entre as linhas do footer */
+  width: 100%;
+}
+
+.cg-footer.center{
+  text-align: center;
+  align-items: center;
+}
+
+.cg-footer-primary{
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.cg-footer-secondary{
+  font-size: 14px;
+  color: var(--muted-foreground);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+  /* Layouts */
+  .cg-horizontal{ flex-direction: row; }  /* sem overflow forçado: quem decide é o inline */
+  .cg-vertical{ flex-direction:column; width:100% }
+.cg-grid{
+  display: grid;
+  width: 100%;
+  align-items: stretch;     /* itens esticam na linha */
+  /* grid-auto-rows fica auto (padrão) */
+}
+
+
+#cg-main{
+  position:relative;
+  width:100%;
+
+}
+
+#loader-overlay{
+  position:fixed; inset:0; z-index:10;
+  background:#F4F4F5;
+  border-radius: var(--card-radius);
+}
+#loader-overlay.hidden{
+  display:none;
+  pointer-events:none; /* belt & suspenders: garante que não capture cliques */
+}
+
+
+
+
+
+  /* Mensagens */
+  .cg-msg{ padding:16px; text-align:center; color:var(--muted-foreground) }
+  .cg-error{ color:#ef4444 }
+
+/* ✅ REGRA ADICIONADA: Centraliza o texto quando o layout for vertical */
+.cg-row.center .cg-text-wrap {
+  text-align: center; /* <-- A CORREÇÃO É AQUI */
+}
+  @media (max-width:767px){
+    .cg-description{ font-size:12.8px }
+    .cg-footer-primary{ font-size:12.8px }
+    .cg-footer-secondary{ font-size:12px }
+  }
+
+    .cg-container.vertical-layout .cg-row.center {
+  align-items: center; /* Força a centralização horizontal */
+}
+
+
+  </style>
+</head>
+<body>
+<div id="cg-main" >
+  <div id="loader-overlay"></div>  <div id="card-group-root"></div>
+</div>
+
+
+
+  <script>
+    /* ========= utils/infra ========= */
+    function waitIndefinitely(promise){
+      return new Promise((resolve,reject)=>{
+        const attempt=async()=>{
+          try{ resolve(await promise) }
+          catch(err){
+            const msg=String(err?.message||err||"").toLowerCase();
+            if(msg.includes("timeout")||msg.includes("aguardar resposta da interação")) setTimeout(attempt,800);
+            else reject(err);
+          }
+        }; attempt();
+      });
+    }
+    function pascalToKebab(name){
+      if(!name||typeof name!=="string") return "";
+      return name
+        .replace(/([a-z0-9])([A-Z])/g,"$1-$2")
+        .replace(/([A-Z])([A-Z][a-z])/g,"$1-$2")
+        .toLowerCase();
+    }
+function autoFitTitle(el, maxPx, minPx){
+  if(!el || !el.parentElement) return;
+
+  const parent = el.parentElement;
+  const cw = parent.clientWidth || 0;
+  if(!cw) return;
+
+  // começa medindo com o máximo
+  el.style.fontSize = maxPx + "px";
+  const sw = el.scrollWidth;
+
+  let size = maxPx;
+  if (sw > cw) {
+    size = Math.max(minPx, Math.floor(maxPx * (cw / sw)));
+  }
+
+  // evita microajustes que causam loop (só muda se diferença for relevante)
+  const prev = parseFloat(getComputedStyle(el).fontSize) || maxPx;
+  if (Math.abs(size - prev) > 0.5) {
+    el.style.fontSize = size + "px";
+  }
+}
+
+    function parseTamanhoModal(raw){
+      if(typeof raw==="string" && /^\d+:\d+$/.test(raw)){
+        const [w,h]=raw.split(":").map(Number);
+        return {width:w, height:h};
+      }
+      return {width:100, height:100};
+    }
+    function safeModalMitra(opts,tamanhoModal,closeOnReload){
+      const {width,height}=parseTamanhoModal(tamanhoModal);
+      modalMitra({ id:opts.id, width:opts.width??width, height:opts.height??height, reload:opts.reload??!!closeOnReload, floating:opts.floating??false });
+    }
+
+const layout = {
+  scheduled: false,
+  trailing: null,
+  run() {
+    if (layout.scheduled) return;
+    layout.scheduled = true;
+    requestAnimationFrame(() => {
+      layout.scheduled = false;
+      document.querySelectorAll(".cg-title")
+        .forEach(el => autoFitTitle(el, (isMobile()?20:24), 12));
+      updateAllCardLayouts();
+    });
+  },
+  poke() {
+    layout.run();
+    clearTimeout(layout.trailing);
+    layout.trailing = setTimeout(layout.run, 120);
+  }
+};
+
+
+
+    // 🔹 Novo state para armazenar dados crus
+    const state={ isLoading:true, error:null, headers:[], rows:[] };
+
+    // 🔹 Mapa de headers insensível a maiúsculas/minúsculas
+    let headerMap = {};
+    function getIndex(name){
+      if(!name) return undefined;
+      const key = String(name);
+      return headerMap[key] ?? headerMap[key.toLowerCase()];
+    }
+
+    const isMobile=()=> (typeof window!=="undefined" ? window.innerWidth<768 : false);
+    function getConfig(){ return (typeof componentData!=="undefined") ? componentData : null; }
+
+    async function handleCardClick(interactionValue, contentId, config){
+      if(!interactionValue) return;
+      try{
+        const [type,idStr]=String(interactionValue).trim().split(":");
+        const id=Number(idStr); if(!Number.isFinite(id)) return;
+        const rowVar=config?.setRowIdVariable;
+        if(rowVar){ try{ await setVariableMitra({ name:rowVar, content:contentId }) }catch{} }
+
+        switch((type||"").toLowerCase()){
+          case "form":
+            await waitIndefinitely(formMitra({ id, contentId }));
+            if(typeof updateComponentsMitra==="function") await updateComponentsMitra({ all:true });
+            await refreshData(true); return;
+case "modal":
+  safeModalMitra({ id }, config?.tamanhoModal, config?.closeModalOnReload);
+  // ❌ Não force refresh aqui. Deixe os dados como estão
+  // para que o card permaneça clicável nas próximas vezes.
+  return;
+
+          case "dbaction":
+            await dbactionMitra({ id });
+            if(typeof updateComponentsMitra==="function") await updateComponentsMitra({ all:true });
+            await refreshData(true); return;
+          case "action":
+            await actionMitra({ id });
+            if(typeof updateComponentsMitra==="function") await updateComponentsMitra({ all:true });
+            await refreshData(true); return;
+        }
+      }catch(err){ console.error("Erro ao processar a ação do card:",err) }
+    }
+
+// Não precisamos mais de estado global
+function updateAllCardLayouts() {
+  const container = document.querySelector('.cg-container');
+  if (!container) return;
+
+  // 🔹 garante que nenhuma dessas classes fique aplicada por engano
+  container.classList.remove('vertical-layout', 'all-compact');
+  document.querySelectorAll('.cg-card.is-compact').forEach(c => c.classList.remove('is-compact'));
+
+  // 🔹 sem medir, sem alternar layout — função vira NO-OP daqui pra frente
+}
+
+
+
+let loaderTimer = null;
+let __prevHtmlOverflow = null;
+let __prevBodyOverflow = null;
+
+function showLoader(){
+  const overlay = document.getElementById("loader-overlay");
+  const main    = document.getElementById("cg-main");
+  if(!overlay || !main) return;
+
+  clearTimeout(loaderTimer);
+
+/* ✅ LÓGICA DE ALTURA REMOVIDA. Agora a altura será 100% via CSS. */
+  main.style.overflow = "hidden"; // Manter isso é bom para evitar barras de rolagem inesperadas
+
+  // (opcional) bloquear scroll da página inteira durante o load
+  __prevHtmlOverflow = document.documentElement.style.overflow;
+  __prevBodyOverflow = document.body.style.overflow;
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
+
+  overlay.classList.remove("hidden");   // cinza sólido, instantâneo
+}
+
+function hideLoader(){
+  const overlay = document.getElementById("loader-overlay");
+  const main    = document.getElementById("cg-main");
+  if(!overlay || !main) return;
+
+  // tempo mínimo visível (ajuste se quiser; 0 para sumir na hora)
+  loaderTimer = setTimeout(()=>{
+    overlay.classList.add("hidden"); // some seco
+
+    // 🔓 restaurar layout
+
+    main.style.overflow = "";
+
+    // (opcional) restaurar scroll da página
+    document.documentElement.style.overflow = __prevHtmlOverflow ?? "";
+    document.body.style.overflow          = __prevBodyOverflow ?? "";
+    __prevHtmlOverflow = __prevBodyOverflow = null;
+  }, 200);
+  // garante um ajuste após o overlay sumir
+  layout.run();
+}
+
+
+
+
+
+
+
+    
+async function refreshData(silent=false){
+  const config=getConfig();
+  const root=document.getElementById("card-group-root");
+  console.log("Mitra HTML/CardGroup: refreshData()",{silent,config});
+
+  // 👉 mostra overlay só se NÃO for silent
+  if(!silent) showLoader();
+
+  if(!config){
+    state.error="Configuração do componente (componentData) não foi fornecida.";
+    state.isLoading=false;
+    render();
+    hideLoader();   // 👉 garante esconder overlay
+    return;
+  }
+  if(!silent) state.isLoading=true; 
+  state.error=null;
+
+
+      try{
+        if(!config.query) throw new Error("A variável 'query' não foi configurada em componentData.");
+        const jdbcRaw=config.jdbcId;
+        const jdbcParsed=Number(typeof jdbcRaw==="string"?jdbcRaw.trim():jdbcRaw);
+        const JDBC_ID=Number.isFinite(jdbcParsed)&&jdbcParsed>0?jdbcParsed:1;
+
+        const q=await queryMitra({ query:config.query, jdbcId:JDBC_ID });
+        const headers=Array.isArray(q?.headers)? q.headers.map(h=>h?.name):[];
+        const rows=Array.isArray(q?.data)? q.data : [];
+
+        // 🔹 refaz o mapa insensível
+        headerMap = {};
+        headers.forEach((h,i)=>{
+          if(!h) return;
+          const n = String(h);
+          headerMap[n] = i;
+          headerMap[n.toLowerCase()] = i;
+        });
+
+        // 🔹 guarda dados crus
+        state.headers = headers;
+        state.rows = rows;
+      }catch(err){
+        console.error("Mitra HTML/CardGroup: erro ao buscar dados:",err);
+        state.error=err?.message||String(err);
+} finally {
+  state.isLoading=false;
+  render();
+  hideLoader(); // agora some com fade curto (120ms)
+}
+
+    }
+
+
+
+    function render(){
+      const root=document.getElementById("card-group-root");
+      root.innerHTML="";
+      const config=getConfig();
+
+      if(state.isLoading){
+        const p=document.createElement("div");
+        p.className="cg-msg";
+        p.textContent="Aguardando configuração e dados para exibir os cards.";
+        root.appendChild(p);
+       
+        return;
+      }
+
+      // Se houver erro, suprime a mensagem vermelha e mostra o mesmo empty state do React
+      if(state.error){
+        console.warn("CardGroup HTML: erro suprimido e exibindo empty state:", state.error);
+        const p=document.createElement("div");
+        p.className="cg-msg";
+        p.textContent="Nenhum dado encontrado para exibir.";
+        root.appendChild(p);
+
+        return;
+      }
+
+      if(!state.rows.length){
+        const p=document.createElement("div");
+        p.className="cg-msg";
+        p.textContent="Nenhum dado encontrado para exibir.";
+        root.appendChild(p);
+
+        return;
+      }
+
+      /* ===== Layout ===== */
+      const {
+        layoutDirection="horizontal",
+        cardWidth="300px",
+        cardHeight="200px",
+        cardGap=16,
+        containerHeight="auto",
+        cardAlignment="left",
+        gridColumns="2",
+        cardContentAlignment="left",
+      }=(config||{});
+
+      const alignmentMap={ left:"flex-start", center:"center", right:"flex-end" };
+      const outer=document.createElement("div"); outer.className="cg-outer"; outer.style.justifyContent=alignmentMap[cardAlignment]||"flex-start";
+      const cont=document.createElement("div"); cont.className="cg-container"; cont.style.gap=(Number(cardGap)||16)+"px";
+      outer.appendChild(cont); root.appendChild(outer);
+
+      if(layoutDirection==="grid"){
+        cont.classList.add("cg-grid");
+        cont.style.gridTemplateColumns=`repeat(${gridColumns}, 1fr)`;  // mantém igual ao React/config
+      }else if(layoutDirection==="vertical"){
+        cont.classList.add("cg-vertical");
+      }else{
+        cont.classList.add("cg-horizontal");
+        cont.style.height=containerHeight;
+        cont.style.width=(cardWidth==="auto"?"100%":"auto");
+
+        // >>> idêntico ao React:
+        // React: containerStyle.overflowX = cardWidth === 'auto' ? 'hidden' : 'auto';
+        cont.style.overflowX = (cardWidth === "auto" ? "hidden" : "auto");
+        // não setar overflowY aqui (React também não seta)
+      }
+
+      const {
+        idColumn, cardDescription, cardTitle, cardTitlePrefix, cardTitleSuffix,
+        footerPrimaryText, footerSecondaryText,
+        cardAction, icon, iconColor, iconBgColor, iconBgColor2,
+        universalTextColor, titleColor, cardBgColor, cardBgColor2
+      }=(config||{});
+
+      const maxTitle=isMobile()?20:24, minTitle=12;
+
+      state.rows.forEach(data=>{
+        const itemId     = data[getIndex(idColumn)];
+        const itemAction = data[getIndex(cardAction)];
+
+        const card=document.createElement("div"); card.className="cg-card";
+const hasFixedH = cardHeight && String(cardHeight).toLowerCase() !== "auto";
+
+if (layoutDirection === "grid" || layoutDirection === "vertical") {
+  card.style.width = "100%";
+} else {
+  if (cardWidth === "auto") { card.style.flex = "1 1 0"; card.style.width = "0"; }
+  else { card.style.width = cardWidth; card.style.flexShrink = "0"; }
+}
+
+/* ✅ regra única: se houver cardHeight, usar como ALTURA FIXA
+    caso contrário, manter o comportamento original por direção */
+card.style.height = hasFixedH
+  ? cardHeight
+  : (layoutDirection === "horizontal" ? "100%" : "auto");
+
+/* ✅ garantir que nada “trave” a redução do card */
+card.style.minHeight = "0";
+/* se quiser rolagem, troque hidden por auto */
+card.style.overflow = "hidden";
+
+
+        // BG do card (gradiente/flat)
+        const c1 = cardBgColor  ? data[getIndex(cardBgColor)]  : null;
+        const c2 = cardBgColor2 ? data[getIndex(cardBgColor2)] : null;
+        if(c1&&c2) card.style.background=`linear-gradient(to right, ${c1}, ${c2})`;
+        else if(c1) card.style.backgroundColor=c1;
+        if(c1 && String(c1).toUpperCase()!=="#FFFFFF") card.classList.add("no-border"); else card.style.borderColor="var(--border)";
+
+if (itemAction) {
+  card.setAttribute("aria-disabled","false");
+  card.dataset.action    = itemAction;   // guarda a ação no dataset
+  card.dataset.contentId = itemId;       // guarda o id no dataset
+} else {
+  card.setAttribute("aria-disabled","true");
+  delete card.dataset.action;
+  delete card.dataset.contentId;
+}
+
+
+        /* Header */
+        const header=document.createElement("div");
+        header.className="cg-header "+(cardContentAlignment==="center"?"center":"");
+
+        const rowEl=document.createElement("div");
+        rowEl.className="cg-row "+(cardContentAlignment==="center"?"center":"");
+        header.appendChild(rowEl);
+
+        // Ícone
+        const iconVal = icon ? data[getIndex(icon)] : null;
+        if(icon && iconVal){
+          const wrap=document.createElement("div"); wrap.className="cg-icon-wrap";
+          const bg1 = iconBgColor  ? data[getIndex(iconBgColor)]  : null;
+          const bg2 = iconBgColor2 ? data[getIndex(iconBgColor2)] : null;
+          if(bg1&&bg2) wrap.style.background=`linear-gradient(to right, ${bg1}, ${bg2})`;
+          else if(bg1) wrap.style.backgroundColor=bg1;
+
+          const ico=document.createElement("i");
+          ico.setAttribute("data-lucide", pascalToKebab(String(iconVal)));
+          const iconColorVal = iconColor ? data[getIndex(iconColor)] : null;
+          if(iconColorVal) ico.style.color = iconColorVal;
+
+          wrap.appendChild(ico); rowEl.appendChild(wrap);
+        }
+
+        const text=document.createElement("div"); text.className="cg-text-wrap";
+        const desc=document.createElement("div"); desc.className="cg-description";
+        desc.textContent = data[getIndex(cardDescription)];
+        const title=document.createElement("div"); title.className="cg-title";
+        
+        // --- INÍCIO DA LÓGICA DE FORMATAÇÃO PADRÃO ---
+        let titleValue = data[getIndex(cardTitle)] ?? ""; 
+
+        if (titleValue !== null && titleValue !== '') {
+            let titleValueStr = String(titleValue);
+            let numericValue;
+
+            const hasComma = titleValueStr.includes(',');
+            const dotCount = (titleValueStr.match(/\./g) || []).length;
+
+            if (hasComma) {
+                // Caso 1: Formato brasileiro detectado ("1.234,56")
+                const cleanedValue = titleValueStr.replaceAll('.', '').replace(',', '.');
+                numericValue = parseFloat(cleanedValue);
+            } else if (dotCount > 1) {
+                // Caso 2: Sem vírgula, múltiplos pontos ("1.234.567") -> Assume que são milhares
+                const cleanedValue = titleValueStr.replaceAll('.', '');
+                numericValue = parseFloat(cleanedValue);
+            } else if (dotCount === 1) {
+                // Caso 3: Sem vírgula, um ponto (ambíguo: "1.234" vs "12.34")
+                const partAfterDot = titleValueStr.substring(titleValueStr.lastIndexOf('.') + 1);
+                if (partAfterDot.length === 3) {
+                     // Heurística: Provavelmente é um separador de milhar
+                     const cleanedValue = titleValueStr.replace('.', '');
+                     numericValue = parseFloat(cleanedValue);
+                } else {
+                     // Provavelmente é um separador decimal
+                     numericValue = parseFloat(titleValueStr);
+                }
+            } else {
+                // Caso 4: Sem separadores
+                numericValue = parseFloat(titleValueStr);
+            }
+
+            // Apenas formata se for um número válido.
+            if (!isNaN(numericValue)) {
+                const isInteger = numericValue % 1 === 0;
+                // Volta para a lógica de 0 casas para inteiros e 2 para decimais
+                const options = {
+                    minimumFractionDigits: isInteger ? 0 : 2,
+                    maximumFractionDigits: isInteger ? 0 : 2,
+                };
+                titleValue = new Intl.NumberFormat('pt-BR', options).format(numericValue);
+            }
+        }
+        
+        const prefix = data[getIndex(cardTitlePrefix)] || "";
+        const suffix = data[getIndex(cardTitleSuffix)] || "";
+        title.textContent = prefix + titleValue + suffix;
+        // --- FIM DA LÓGICA DE FORMATAÇÃO PADRÃO ---
+
+        /* Cores de texto */
+        const uni = universalTextColor ? data[getIndex(universalTextColor)] : null;
+        if(uni){ desc.style.color=uni; title.style.color=uni }
+        const tcolor = titleColor ? data[getIndex(titleColor)] : null;
+        if(tcolor) title.style.color=tcolor;
+
+        text.appendChild(desc); text.appendChild(title);
+        rowEl.appendChild(text);
+
+        /* Footer */
+        const footer=document.createElement("div"); footer.className="cg-footer "+(cardContentAlignment==="center"?"center":"");
+        if(footerPrimaryText){
+          const fp=document.createElement("div"); fp.className="cg-footer-primary";
+          if(uni) fp.style.color=uni; fp.textContent = data[getIndex(footerPrimaryText)] ?? "";
+          footer.appendChild(fp);
+        }
+        if(footerSecondaryText){
+          const fs=document.createElement("div"); fs.className="cg-footer-secondary";
+          if(uni) fs.style.color=uni; fs.textContent = data[getIndex(footerSecondaryText)] ?? "";
+          footer.appendChild(fs);
+        }
+
+       card.appendChild(header); card.appendChild(footer); cont.appendChild(card);
+
+    });
+
+// agenda ajuste imediato + uma passagem tardia (evita ficar “preso” até dar F5)
+layout.poke();
+
+try { if (window.lucide?.createIcons) window.lucide.createIcons(); } catch {}
+
+// Observa mudanças de tamanho no container E no wrapper externo (.cg-outer)
+if (window.__cgContainerRO) {
+  try { window.__cgContainerRO.disconnect(); } catch {}
+  window.__cgContainerRO = null;
+}
+const contEl  = document.querySelector('.cg-container');
+const outerEl = document.querySelector('.cg-outer');
+if (contEl || outerEl) {
+  window.__cgContainerRO = new ResizeObserver(() => layout.poke());
+  if (contEl)  window.__cgContainerRO.observe(contEl);
+  if (outerEl) window.__cgContainerRO.observe(outerEl);
+}
+
+
+      // Ajusta overflow vertical do body conforme necessidade real
+
+    }
+
+(function init(){
+  showLoader();
+
+  // 🔹 observa SOMENTE o root do componente
+  const root = document.getElementById('card-group-root');
+  const roRoot = new ResizeObserver(() => layout.run());
+  if (root) roRoot.observe(root);
+
+window.addEventListener('resize', layout.poke, { passive: true });
+window.addEventListener('orientationchange', layout.poke);
+window.addEventListener('load', layout.poke);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) layout.poke();
+});
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => layout.poke());
+}
+
+  // 🔹 API pública da plataforma
+  window.updateMitra = async () => {
+    console.log("CardGroup HTML: updateMitra -> refreshData(true)");
+    await refreshData(true);
+    layout.run(); // garante relayout pós-dados
+  };
+
+  // 🔹 primeira carga
+  refreshData(false);
+})();
+
+    
+// ✅ Delegação global para cliques em cards
+if (!window.__cgDelegated) {
+  window.__cgDelegated = true;
+  document.addEventListener("click", (ev) => {
+    const card = ev.target.closest(".cg-card[aria-disabled='false']");
+    if (!card) return;
+
+    const action = card.dataset.action;
+    const contentId = card.dataset.contentId;
+    if (!action) return;
+
+    // usa a config atual no momento do clique
+    handleCardClick(action, contentId, getConfig());
+  }, { passive: true });
+}
+
+
+  </script>
+</body>
+</html>

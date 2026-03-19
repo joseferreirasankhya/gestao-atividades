@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<!--
+  DOCUMENTAÇÃO DE QUERIES PARA AJUSTE
+
+  Este componente utiliza 3 conceitos de query que podem ser ajustados conforme sua necessidade.
+  A query final do componente (em `componentData.queryDados`) combina todas elas.
+
+  1. CÁLCULO DO VALOR REALIZADO:
+     Esta query deve retornar um único número representando o total de itens concluídos/realizados.
+     Exemplo:
+     (SELECT COUNT(*) FROM SUAS_TAREFAS WHERE STATUS = 'CONCLUIDO')
+
+  2. CÁLCULO DO VALOR PREVISTO:
+     Esta query deve retornar um único número representando o total de itens previstos.
+     Exemplo:
+     (SELECT COUNT(*) FROM SUAS_TAREFAS)
+
+  3. CÁLCULO DE CONCLUSÃO DENTRO DO PRAZO (Usado para a barra de progresso):
+     Esta query é a base para o cálculo do percentual. No exemplo abaixo, usamos o realizado/previsto.
+     Exemplo:
+     (SELECT COUNT(*) FROM SUAS_TAREFAS WHERE STATUS = 'CONCLUIDO_NO_PRAZO')
+
+  -------------------------------------------------------------------------------------------------
+
+  COMO AJUSTAR A QUERY PRINCIPAL DO COMPONENTE:
+  Vá até as configurações do componente na plataforma e edite a variável 'queryDados'.
+  Substitua os trechos de exemplo pelas suas queries reais.
+
+  Exemplo da query final combinada:
+  SELECT
+    'CHECK IN EXPERIÊNCIA' AS TITULO,
+    'CONCLUSÃO NO PRAZO:' AS SUBTITULO,
+    (SELECT COUNT(*) FROM SUAS_TAREFAS WHERE STATUS = 'CONCLUIDO') AS REALIZADO,
+    (SELECT COUNT(*) FROM SUAS_TAREFAS) AS PREVISTO
+  FROM DUAL;
+-->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card de Indicador Editável</title>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light-border.css"/>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        .dark {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --primary: 210 40% 98%;
+            --primary-foreground: 222.2 47.4% 11.2%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 217.2 32.6% 17.5%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 212.7 26.8% 83.9%;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background-color: hsl(var(--background));
+            /* CORREÇÃO: Garante que o conteúdo não cause overflow no body */
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="w-full h-full p-4 box-border">
+
+    <div id="indicator-card-container" class="w-full h-full">
+        <!-- O conteúdo será renderizado aqui -->
+    </div>
+
+    <script>
+        const MITRA_UPDATE_EVENT_NAME = 'mitra-update-indicador-card';
+
+        function updateMitra() {
+            console.log("Sinal de update para [Card Indicador] recebido. Disparando evento.");
+            document.body.dispatchEvent(new CustomEvent(MITRA_UPDATE_EVENT_NAME));
+        }
+        
+        const container = document.getElementById('indicator-card-container');
+
+        const renderLoadingState = () => {
+            container.innerHTML = `
+                <div class="rounded-lg border bg-background text-foreground shadow-sm p-6 w-full h-full animate-pulse">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="h-6 w-48 bg-muted rounded"></div>
+                            <div class="h-4 w-32 bg-muted rounded mt-2"></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="h-6 w-24 bg-muted rounded"></div>
+                            <div class="h-4 w-20 bg-muted rounded mt-2 ml-auto"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-full bg-muted rounded-full h-4"></div>
+                        <div class="h-5 w-12 bg-muted rounded"></div>
+                    </div>
+                </div>`;
+        };
+
+        const renderErrorState = (message) => {
+            container.innerHTML = `
+                <div class="rounded-lg border border-destructive/50 bg-destructive/5 text-destructive p-6 w-full h-full flex flex-col justify-center items-center text-center">
+                    <h3 class="font-semibold">Erro no Componente</h3>
+                    <p class="text-sm mt-1">${message}</p>
+                </div>`;
+        };
+        
+        const renderCard = (data) => {
+            const { titulo, subtitulo, realizado, previsto } = data;
+            
+            const realizadoNum = parseFloat(realizado);
+            const previstoNum = parseFloat(previsto);
+
+            if (isNaN(realizadoNum) || isNaN(previstoNum)) {
+                renderErrorState("Os valores de 'REALIZADO' ou 'PREVISTO' não são números válidos.");
+                return;
+            }
+
+            const percentage = previstoNum > 0 ? (realizadoNum / previstoNum) * 100 : 0;
+            const percentageClamped = Math.min(percentage, 100);
+
+            let progressColor = '#b6edb6'; // Sucesso
+            if (percentage < 50) {
+                progressColor = '#f8c7bf'; // Risco
+            } else if (percentage < 90) {
+                progressColor = '#f8ecbb'; // Alerta
+            }
+
+            container.innerHTML = `
+                <div class="rounded-lg border bg-background text-foreground shadow-sm p-6 w-full h-full flex flex-col justify-between">
+                    <div class="flex justify-between items-start mb-4 gap-4">
+                        <div class="min-w-0"> <!-- CORREÇÃO: Adicionado para permitir que o flex item encolha e o texto quebre a linha corretamente. -->
+                            <h2 id="card-title" class="text-lg font-bold text-primary break-words">${titulo}</h2>
+                            <p id="card-subtitle" class="text-sm text-muted-foreground mt-1 break-words">${subtitulo}</p>
+                        </div>
+                        <div class="flex flex-col items-end flex-shrink-0">
+                            <div class="mb-1">
+                                <svg data-tippy-content="<div style='font-size: 0.7rem;'>Conversa estruturada com o cliente sobre sua experiência atual, satisfação e percepções, com data alinhada durante a passagem de bastão. <br><strong>Pontos importantes:</strong> Utilize o roteiro como apoio na conversa, mantendo escuta ativa. Defina e monitore o plano de ação até a conclusão. Deve ser realizado em até 30 dias após a passagem de bastão.</div>" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground cursor-pointer">
+                                    <circle cx="10" cy="10" r="10"></circle><line x1="10" y1="16" x2="10" y2="10"></line><line x1="10" y1="8" x2="10.01" y2="8"></line>
+                                </svg>
+                            </div>
+                            <div class="text-lg font-semibold text-foreground">
+                                <span data-type="realizado" class="cursor-pointer hover:bg-secondary p-1 rounded-md transition-colors">${realizadoNum}</span>
+                                /
+                                <span data-type="previsto" class="cursor-pointer hover:bg-secondary p-1 rounded-md transition-colors">${previstoNum}</span>
+                            </div>
+                            <p class="text-sm text-muted-foreground">realizadas</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-full bg-[#eaebf0] rounded-full h-4 overflow-hidden">
+                            <div id="progress-bar" class="h-4 rounded-full transition-all duration-500" style="width: ${percentageClamped}%; background-color: ${progressColor};"></div>
+                        </div>
+                        <span id="progress-text" class="text-base font-semibold text-foreground">${Math.round(percentage)}%</span>
+                    </div>
+                </div>`;
+            
+            tippy('[data-tippy-content]', {
+                // CORREÇÃO: Anexa o tooltip ao body para escapar do contêiner do card e evitar ser cortado.
+                appendTo: () => document.body,
+                theme: 'light-border',
+                interactive: true,
+                allowHTML: true,
+                // CORREÇÃO: Define um posicionamento explícito para maior consistência.
+                placement: 'bottom-end',
+                // CORREÇÃO: Aumenta a largura máxima do tooltip para evitar que o texto seja cortado.
+                maxWidth: 350,
+            });
+        };
+
+        async function loadAndRenderData() {
+            renderLoadingState();
+            try {
+                const result = await queryMitra({ query: componentData.queryDados });
+                
+                if (!result || !result.data || result.data.length === 0) {
+                    renderErrorState("A query não retornou dados.");
+                    return;
+                }
+
+                const headers = result.headers.map(h => h.name.toUpperCase());
+                const headerMap = {
+                    TITULO: headers.indexOf('TITULO'),
+                    SUBTITULO: headers.indexOf('SUBTITULO'),
+                    REALIZADO: headers.indexOf('REALIZADO'),
+                    PREVISTO: headers.indexOf('PREVISTO'),
+                };
+
+                if (Object.values(headerMap).some(index => index === -1)) {
+                    renderErrorState("A query precisa retornar as colunas: TITULO, SUBTITULO, REALIZADO, PREVISTO.");
+                    return;
+                }
+
+                const row = result.data[0];
+                const data = {
+                    titulo: row[headerMap.TITULO],
+                    subtitulo: row[headerMap.SUBTITULO],
+                    realizado: row[headerMap.REALIZADO],
+                    previsto: row[headerMap.PREVISTO],
+                };
+                
+                renderCard(data);
+
+            } catch (error) {
+                console.error("Erro ao carregar dados do indicador:", error);
+                renderErrorState("Falha ao executar a query. Verifique o console para mais detalhes.");
+            }
+        }
+
+        function makeEditable(span) {
+            const type = span.dataset.type;
+            const currentValue = span.textContent;
+
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.value = currentValue;
+            input.dataset.type = type;
+            input.dataset.originalValue = currentValue;
+            input.className = "w-20 text-center rounded-md border border-input bg-background px-2 py-1 text-lg ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+
+            span.replaceWith(input);
+            input.focus();
+            input.select();
+            
+            input.addEventListener('blur', () => saveValue(input));
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    input.blur();
+                } else if (e.key === 'Escape') {
+                    loadAndRenderData(); // Revert by reloading
+                }
+            });
+        }
+
+        async function saveValue(input) {
+            const type = input.dataset.type;
+            const originalValue = input.dataset.originalValue;
+            const newValue = input.value;
+            
+            if (newValue === originalValue || newValue.trim() === '') {
+                loadAndRenderData();
+                return;
+            }
+
+            input.disabled = true;
+            input.style.opacity = '0.7';
+
+            try {
+                await setVariableMitra({ name: ':VAR_NOVO_VALOR', content: newValue });
+
+                let dbActionId;
+                if (type === 'realizado') {
+                    dbActionId = parseInt(componentData.dbActionIdRealizado, 10);
+                } else if (type === 'previsto') {
+                    dbActionId = parseInt(componentData.dbActionIdPrevisto, 10);
+                }
+
+                if (isNaN(dbActionId)) {
+                    throw new Error(`DBAction ID para '${type}' não está configurado ou é inválido.`);
+                }
+
+                await dbactionMitra(dbActionId);
+                
+                if (typeof updateComponentsMitra === 'function') {
+                    await updateComponentsMitra({ all: true });
+                }
+
+            } catch (error) {
+                console.error(`Falha ao salvar o valor para ${type}:`, error);
+                // Opcional: mostrar um toast de erro.
+            } finally {
+                await loadAndRenderData(); // Sempre recarrega para refletir o estado atual do banco
+            }
+        }
+
+        function setupEventListeners() {
+            container.addEventListener('click', (event) => {
+                const target = event.target;
+                if (target.tagName === 'SPAN' && (target.dataset.type === 'realizado' || target.dataset.type === 'previsto')) {
+                    makeEditable(target);
+                }
+            });
+        }
+        
+        async function initializeComponent() {
+            setupEventListeners();
+            await loadAndRenderData();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.addEventListener(MITRA_UPDATE_EVENT_NAME, loadAndRenderData);
+            
+            const waitForMitraAndInit = () => {
+                const maxWaitTime = 5000;
+                const intervalTime = 100;
+                const startTime = Date.now();
+
+                const checkInterval = setInterval(() => {
+                    if (window.componentData && 
+                        window.componentData.queryDados &&
+                        window.componentData.dbActionIdRealizado &&
+                        window.componentData.dbActionIdPrevisto) {
+                        
+                        clearInterval(checkInterval);
+                        initializeComponent();
+                    } else if (Date.now() - startTime > maxWaitTime) {
+                        clearInterval(checkInterval);
+                        console.error("Erro: As configurações do componente (componentData) não foram carregadas a tempo.");
+                        renderErrorState("Erro Crítico: As variáveis obrigatórias (queryDados, dbActionIdRealizado, dbActionIdPrevisto) não foram carregadas da plataforma.");
+                    }
+                }, intervalTime);
+            };
+
+            waitForMitraAndInit();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+WITH REALIZADO AS (
+    SELECT
+        COUNT(DISTINCT t1.ID_PARCEIRO_CHAVE_LICENCA) AS REALIZADO
+    FROM CAD_11048 t1
+    INNER JOIN CAD_11062 t2
+        ON t1.ID = t2.ID_HISTORICO_AE
+    INNER JOIN CAD_CALENDARIO cal
+        ON cal.ID = DATE_FORMAT(t2.DT_CONCLUSAO_PLANO_DE_ACAO, '%Y%m%d')
+    LEFT JOIN CC_1325 t3
+        ON t3.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+       AND t3.ID_CALENDARIO = (
+            SELECT MAX(s.ID_CALENDARIO)
+            FROM CC_1325 s
+            WHERE s.ID_PARCEIRO = t1.ID_PARCEIRO_CHAVE_LICENCA
+        )
+    INNER JOIN CAD_11046 email
+        ON email.DESCR = t1.USUARIO_CRIACAO_HISTORICO_AE
+    WHERE t2.ID_TIPO_DE_ACOMPANHAMENTO = 2
+      AND t2.DESCRICAO_PLANO_DE_ACAO_CONCLUIDO = 'Sim'
+      AND t2.DT_CONCLUSAO_PLANO_DE_ACAO IS NOT NULL
+      AND (
+            cal.ID IN (:ID_CALENDARIO)
+            OR 'Todos' IN (:ID_CALENDARIO)
+          )
+      AND (
+            t3.ID_UNIDADE IN (:ID_UNIDADE)
+            OR 'Todos' IN (:ID_UNIDADE)
+          )
+      AND (
+            email.ID IN (:ID_USUARIO)
+            OR 'Todos' IN (:ID_USUARIO)
+          )
+),
+
+PREVISTO_BASE AS (
+    SELECT
+        SUM(cal.METAS_CS__META_UNIDADE) AS META_AE
+    FROM CC_1512 cal
+    INNER JOIN CAD_10931 cad
+        ON cad.ID = cal.ID_METAS_CS__GERENCIAMENTO_DE_METAS
+    WHERE cad.ID_METAS_CS = 1
+      AND (
+            cal.ID_CALENDARIO IN (:ID_CALENDARIO)
+            OR 'Todos' IN (:ID_CALENDARIO)
+          )
+      AND (
+            cal.ID_UNIDADE IN (:ID_UNIDADE)
+            OR 'Todos' IN (:ID_UNIDADE)
+          )
+      AND 'Todos' IN (:ID_USUARIO)
+
+    UNION ALL
+
+    SELECT
+        SUM(cal.METAS_CS__META_INDIVIDUAL) AS META_AE
+    FROM CC_1513 cal
+    INNER JOIN CAD_10931 cad
+        ON cad.ID = cal.ID_METAS_CS__GERENCIAMENTO_DE_METAS
+    INNER JOIN CAD_1039 u
+        ON u.ID = cal.ID_USUARIO
+    WHERE cad.ID_METAS_CS = 1
+      AND (
+            cal.ID_CALENDARIO IN (:ID_CALENDARIO)
+            OR 'Todos' IN (:ID_CALENDARIO)
+          )
+      AND (
+            cal.ID_UNIDADE IN (:ID_UNIDADE)
+            OR 'Todos' IN (:ID_UNIDADE)
+          )
+      AND u.ID IN (:ID_USUARIO)
+      AND 'Todos' NOT IN (:ID_USUARIO)
+),
+
+PREVISTO AS (
+    SELECT
+        COALESCE(SUM(META_AE), 0) AS PREVISTO
+    FROM PREVISTO_BASE
+),
+
+ATINGIMENTO AS (
+    SELECT
+        ROUND(
+            CAST(COALESCE(r.REALIZADO, 0) AS DECIMAL(18, 4))
+            / NULLIF(CAST(p.PREVISTO AS DECIMAL(18, 4)), 0) * 100,
+            2
+        ) AS ATINGIMENTO
+    FROM REALIZADO r
+    CROSS JOIN PREVISTO p
+)
+
+SELECT
+    r.REALIZADO AS REALIZADO,
+    p.PREVISTO AS PREVISTO,
+    a.ATINGIMENTO AS ATINGIMENTO
+FROM REALIZADO r
+CROSS JOIN PREVISTO p
+CROSS JOIN ATINGIMENTO a;
