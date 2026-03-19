@@ -1,190 +1,175 @@
-WITH REALIZADO_BASE AS (
-    SELECT
-        SUM(A.PERDAS) AS PERDAS,
-        SUM(A.BASE_MRR) AS BASE_MRR,
-        (SUM(A.PERDAS) / NULLIF(SUM(A.BASE_MRR), 0)) * 100 AS MRR_CHURN
-    FROM (
-        SELECT
-            SUM(PER.VLR_PERDA_MRR_CHURN) AS PERDAS,
-            0 AS BASE_MRR,
-            PER.ID_CALENDARIO
-        FROM CC_1671 PER
-        WHERE PER.ID_TIPO_DE_PERDA = 'DEFINITIVO '
-          AND (PER.ID_CALENDARIO IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
-          AND (PER.ID_PARCEIRO IN (:ID_PARCEIRO) OR 'Todos' IN (:ID_PARCEIRO))
-          AND (
-              EXISTS (
-                  SELECT 1
-                  FROM CC_1609
-                  WHERE ID_PARCEIRO = PER.ID_PARCEIRO
-                    AND ID_USUARIOS = :ID_USUARIOS
-              )
-              OR 'Todos' IN (:ID_USUARIOS)
-          )
-        GROUP BY PER.ID_CALENDARIO
+WITH CALENDARIO_REF AS (
+    SELECT DISTINCT
+        DATE_FORMAT(STR_TO_DATE(CAST(ID AS CHAR), '%Y%m%d'), '%Y%m01') AS ID_CALENDARIO
+    FROM CAD_CALENDARIO
+    WHERE ID BETWEEN DATE_FORMAT(:DT_INICIO, '%Y%m%d')
+                 AND DATE_FORMAT(:DT_FIM, '%Y%m%d')
+),
 
-        UNION ALL
-
-        SELECT
-            0 AS PERDAS,
-            SUM(MRR.MRR_HISTORICO) AS BASE_MRR,
-            MRR.ID_CALENDARIO
-        FROM CC_1333 MRR
-        WHERE (
-                  CASE
-                      WHEN MOD(MRR.ID_CALENDARIO, 10000) = 101
-                          THEN (MRR.ID_CALENDARIO - 10000) + 1100
-                      ELSE MRR.ID_CALENDARIO - 100
-                  END IN (:ID_CALENDARIO)
-                  OR 'Todos' IN (:ID_CALENDARIO)
-              )
-          AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR 'Todos' IN (:ID_PARCEIRO))
-          AND (
-              EXISTS (
-                  SELECT 1
-                  FROM CC_1609
-                  WHERE ID_PARCEIRO = MRR.ID_PARCEIRO
-                    AND ID_USUARIOS = :ID_USUARIOS
-              )
-              OR 'Todos' IN (:ID_USUARIOS)
-          )
-        GROUP BY MRR.ID_CALENDARIO
-    ) A
-),
-REALIZADO_FINAL AS (
-    SELECT
-        CONCAT(
-            SUBSTR(
-                CAST(ROUND(CAST(AVG(MRR_CHURN) AS DECIMAL(10,2)), 2) + 100 AS CHAR(10)),
-                3
-            ),
-            '&#37;'
-        ) AS MRR_CHURN
-    FROM REALIZADO_BASE
-),
-PREVISTO_ULTIMO_MES AS (
-    SELECT MAX(cal.ID_CALENDARIO) AS ID_CALENDARIO_FINAL
-    FROM CC_1512 cal
-    INNER JOIN CAD_10931 cad
-        ON cad.ID = cal.ID_METAS_CS__GERENCIAMENTO_DE_METAS
-    WHERE cad.ID_METAS_CS = 3
-      AND (cal.ID_CALENDARIO IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
-      AND (cal.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
-),
-PREVISTO_META_UNIDADE AS (
-    SELECT AVG(cal.METAS_CS__META_UNIDADE) AS VALOR_META
-    FROM CC_1512 cal
-    INNER JOIN CAD_10931 cad
-        ON cad.ID = cal.ID_METAS_CS__GERENCIAMENTO_DE_METAS
-    INNER JOIN PREVISTO_ULTIMO_MES um
-        ON um.ID_CALENDARIO_FINAL = cal.ID_CALENDARIO
-    WHERE cad.ID_METAS_CS = 3
-      AND (cal.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
-),
-PREVISTO_REGRA_FIXA AS (
+-- Calcula o mês anterior de cada data em CALENDARIO_REF para filtrar CC_1333 sem aplicar função sobre a coluna
+-- Usa aritmética inteira (mesmo padrão de gestao_vista_donuts.sql) para evitar funções de data
+CALENDARIO_MRR AS (
     SELECT
         CASE
-            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2026' THEN 0.7
-            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2025' THEN 0.8
-            ELSE 1
-        END AS VALOR_META
-    FROM PREVISTO_ULTIMO_MES um
+            WHEN SUBSTRING(ID_CALENDARIO, 5, 2) = '01'
+                THEN CAST(CAST(ID_CALENDARIO AS UNSIGNED) - 8900 AS CHAR)
+            ELSE CAST(CAST(ID_CALENDARIO AS UNSIGNED) - 100 AS CHAR)
+        END AS ID_CALENDARIO_MRR
+    FROM CALENDARIO_REF
 ),
-PREVISTO_RESULTADO AS (
-    SELECT
-        CASE
-            WHEN 'Todos' IN (:ID_UNIDADE) THEN rf.VALOR_META
-            ELSE mu.VALOR_META
-        END AS VALOR_FINAL
-    FROM PREVISTO_REGRA_FIXA rf
-    CROSS JOIN PREVISTO_META_UNIDADE mu
+
+-- Materializa os parceiros do usuário uma única vez, evitando EXISTS correlacionado por linha
+PARCEIROS_USUARIO AS (
+    SELECT DISTINCT ID_PARCEIRO
+    FROM CC_1609
+    WHERE ID_USUARIOS = :ID_USUARIOS
 ),
-PREVISTO_FINAL AS (
-    SELECT
-        CONCAT(
-            SUBSTR(
-                CAST(ROUND(CAST(VALOR_FINAL AS DECIMAL(10,2)), 2) + 100 AS CHAR(10)),
-                3
-            ),
-            '%'
-        ) AS MRR_CHURN_RESULTADO
-    FROM PREVISTO_RESULTADO
-),
-ATING_BASE_FILTRADA AS (
+
+-- Leitura única de CC_1512 + CAD_10931 + CAD_1007 para ID_METAS_CS = 3 (MRR Churn)
+METAS_BASE AS (
     SELECT
         cal.ID_CALENDARIO,
         cal.ID_UNIDADE,
-        cal.METAS_CS__META_UNIDADE AS VALOR_META
+        cal.METAS_CS__META_UNIDADE,
+        uni.ID_CS_MATRIZ
     FROM CC_1512 cal
     INNER JOIN CAD_10931 cad
         ON cad.ID = cal.ID_METAS_CS__GERENCIAMENTO_DE_METAS
+    INNER JOIN CAD_1007 uni
+        ON uni.ID = cal.ID_UNIDADE
     WHERE cad.ID_METAS_CS = 3
-      AND (cal.ID_CALENDARIO IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
-      AND (cal.ID_UNIDADE IN (:ID_UNIDADE) OR 'Todos' IN (:ID_UNIDADE))
 ),
-ATING_ULTIMO_MES AS (
-    SELECT MAX(ID_CALENDARIO) AS ID_CALENDARIO_FINAL
-    FROM CC_1512
-    WHERE (ID_CALENDARIO IN (:ID_CALENDARIO) OR 'Todos' IN (:ID_CALENDARIO))
+
+ULTIMO_MES_ANO AS (
+    SELECT
+        MAX(mb.ID_CALENDARIO) AS ID_CALENDARIO_FINAL
+    FROM METAS_BASE mb
+    WHERE (
+            mb.ID_CALENDARIO IN (:ID_CALENDARIO)
+            OR mb.ID_CALENDARIO IN (SELECT ID_CALENDARIO FROM CALENDARIO_REF)
+            OR 'Todos' IN (:ID_CALENDARIO)
+          )
 ),
-ATING_META_REAL AS (
-    SELECT AVG(bf.VALOR_META) AS VALOR_META
-    FROM ATING_BASE_FILTRADA bf
-    INNER JOIN ATING_ULTIMO_MES um
-        ON um.ID_CALENDARIO_FINAL = bf.ID_CALENDARIO
+
+FILTRO_UNIDADE AS (
+    SELECT
+        COUNT(DISTINCT mb.ID_UNIDADE) AS QTD
+    FROM METAS_BASE mb
+    WHERE (
+            mb.ID_UNIDADE IN (:ID_UNIDADE)
+            OR 'Todos' IN (:ID_UNIDADE)
+          )
+      AND (
+            mb.ID_CS_MATRIZ IN (:ID_CS_MATRIZ)
+            OR 'Todos' IN (:ID_CS_MATRIZ)
+          )
 ),
-ATING_REGRA_FIXA AS (
+
+ULTIMO_MES AS (
+    SELECT
+        MAX(mb.ID_CALENDARIO) AS ID_CALENDARIO_FINAL
+    FROM METAS_BASE mb
+    WHERE (
+            mb.ID_CALENDARIO IN (:ID_CALENDARIO)
+            OR mb.ID_CALENDARIO IN (SELECT ID_CALENDARIO FROM CALENDARIO_REF)
+            OR 'Todos' IN (:ID_CALENDARIO)
+          )
+      AND (
+            mb.ID_UNIDADE IN (:ID_UNIDADE)
+            OR 'Todos' IN (:ID_UNIDADE)
+          )
+      AND (
+            mb.ID_CS_MATRIZ IN (:ID_CS_MATRIZ)
+            OR 'Todos' IN (:ID_CS_MATRIZ)
+          )
+),
+
+META_UNIDADE AS (
+    SELECT
+        AVG(mb.METAS_CS__META_UNIDADE) AS VALOR_META
+    FROM METAS_BASE mb
+    INNER JOIN ULTIMO_MES um
+        ON um.ID_CALENDARIO_FINAL = mb.ID_CALENDARIO
+    WHERE (
+            mb.ID_UNIDADE IN (:ID_UNIDADE)
+            OR 'Todos' IN (:ID_UNIDADE)
+          )
+      AND (
+            mb.ID_CS_MATRIZ IN (:ID_CS_MATRIZ)
+            OR 'Todos' IN (:ID_CS_MATRIZ)
+          )
+),
+
+REGRA_FIXA AS (
     SELECT
         CASE
-            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2026' THEN 0.7
-            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2025' THEN 0.8
-            WHEN LEFT(um.ID_CALENDARIO_FINAL, 4) = '2024' THEN 1
+            WHEN LEFT(uma.ID_CALENDARIO_FINAL, 4) = '2026' THEN 0.7
+            WHEN LEFT(uma.ID_CALENDARIO_FINAL, 4) = '2025' THEN 0.8
+            WHEN LEFT(uma.ID_CALENDARIO_FINAL, 4) = '2024' THEN 1
+            ELSE 1
         END AS VALOR_META
-    FROM ATING_ULTIMO_MES um
+    FROM ULTIMO_MES_ANO uma
 ),
-ATING_PREVISTO AS (
+
+PREVISTO AS (
     SELECT
         CASE
-            WHEN 'Todos' IN (:ID_UNIDADE) THEN rf.VALOR_META
-            ELSE COALESCE(mr.VALOR_META, rf.VALOR_META)
+            WHEN fu.QTD = 1 THEN COALESCE(mu.VALOR_META, rf.VALOR_META)
+            ELSE rf.VALOR_META
         END AS PREVISTO
-    FROM ATING_REGRA_FIXA rf
-    CROSS JOIN ATING_META_REAL mr
+    FROM REGRA_FIXA rf
+    LEFT JOIN META_UNIDADE mu
+        ON 1 = 1
+    CROSS JOIN FILTRO_UNIDADE fu
 ),
-ATING_REALIZADO AS (
+
+REALIZADO AS (
     SELECT
         (SUM(A.PERDAS) / NULLIF(SUM(A.BASE_MRR), 0)) * 100 AS REALIZADO
     FROM (
         SELECT
-            SUM(PER.PERDAS_MRR) * -1 AS PERDAS,
+            SUM(PER.VLR_PERDA_MRR_CHURN) AS PERDAS,
             0 AS BASE_MRR
-        FROM CC_1104 PER
-        WHERE PER.ID_TIPO_DE_PERDA = 'DEFINITIVO '
-          AND (PER.ID_CALENDARIO IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos')
-          AND (PER.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
-          AND ID_CATEGORIA_MRR IN (15, 14, 2, 1)
-          AND EXISTS (
-              SELECT 1
-              FROM CC_1609
-              WHERE ID_PARCEIRO = PER.ID_PARCEIRO
-                AND ID_USUARIOS = :ID_USUARIOS
-          )
-
-        UNION ALL
-
-        SELECT
-            SUM(CAN.VALOR_DE_CANCELAMENTO) AS PERDAS,
-            0 AS BASE_MRR
-        FROM CC_1173 CAN
-        WHERE CAN.ID_CANCELAMENTO_POR_LIMPEZA_DE_BASE <> 'S'
-          AND (CONCAT(LEFT(CAN.ID_CALENDARIO, 6), '01') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos')
-          AND (CAN.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
-          AND EXISTS (
-              SELECT 1
-              FROM CC_1609
-              WHERE ID_PARCEIRO = CAN.ID_PARCEIRO
-                AND ID_USUARIOS = :ID_USUARIOS
-          )
+        FROM CC_1671 PER
+        INNER JOIN CAD_1006 PAR
+            ON PAR.ID = PER.ID_PARCEIRO
+        INNER JOIN CAD_1007 UNI
+            ON UNI.ID = PER.ID_UNIDADE
+        -- TRIM removido: assume-se que ID_TIPO_DE_PERDA não possui espaços extras nos dados
+        WHERE PER.ID_TIPO_DE_PERDA = 'DEFINITIVO'
+          AND (
+                PER.ID_CALENDARIO IN (SELECT ID_CALENDARIO FROM CALENDARIO_REF)
+                OR PER.ID_CALENDARIO IN (:ID_CALENDARIO)
+                OR 'Todos' IN (:ID_CALENDARIO)
+              )
+          AND (
+                PER.ID_PARCEIRO IN (:ID_PARCEIRO)
+                OR 'Todos' IN (:ID_PARCEIRO)
+              )
+          AND (
+                PER.ID_UNIDADE IN (:ID_UNIDADE)
+                OR 'Todos' IN (:ID_UNIDADE)
+              )
+          AND (
+                PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL)
+                OR 'Todos' IN (:ID_SEGMENTO_PRINCIPAL)
+              )
+          AND (
+                PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL)
+                OR 'Todos' IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL)
+              )
+          AND (
+                UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ)
+                OR 'Todos' IN (:ID_CS_MATRIZ)
+              )
+          AND (
+                UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE)
+                OR 'Todos' IN (:ID_TIPO_UNIDADE)
+              )
+          AND (
+                PER.ID_PARCEIRO IN (SELECT ID_PARCEIRO FROM PARCEIROS_USUARIO)
+                OR 'Todos' IN (:ID_USUARIOS)
+              )
 
         UNION ALL
 
@@ -192,32 +177,57 @@ ATING_REALIZADO AS (
             0 AS PERDAS,
             SUM(MRR.MRR_HISTORICO) AS BASE_MRR
         FROM CC_1333 MRR
-        WHERE (
-                  DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d') IN (:ID_CALENDARIO)
-                  OR CONCAT(:ID_CALENDARIO) = 'Todos'
+        INNER JOIN CAD_1006 PAR
+            ON PAR.ID = MRR.ID_PARCEIRO
+        INNER JOIN CAD_1007 UNI
+            ON UNI.ID = MRR.ID_UNIDADE
+        -- Filtro invertido: função aplicada sobre CALENDARIO_MRR (poucos registros), não sobre cada linha de CC_1333
+        WHERE MRR.ID_CALENDARIO IN (SELECT ID_CALENDARIO_MRR FROM CALENDARIO_MRR)
+          AND (
+                MRR.ID_PARCEIRO IN (:ID_PARCEIRO)
+                OR 'Todos' IN (:ID_PARCEIRO)
               )
-          AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
-          AND EXISTS (
-              SELECT 1
-              FROM CC_1609
-              WHERE ID_PARCEIRO = MRR.ID_PARCEIRO
-                AND ID_USUARIOS = :ID_USUARIOS
-          )
+          AND (
+                MRR.ID_UNIDADE IN (:ID_UNIDADE)
+                OR 'Todos' IN (:ID_UNIDADE)
+              )
+          AND (
+                PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL)
+                OR 'Todos' IN (:ID_SEGMENTO_PRINCIPAL)
+              )
+          AND (
+                PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL)
+                OR 'Todos' IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL)
+              )
+          AND (
+                UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ)
+                OR 'Todos' IN (:ID_CS_MATRIZ)
+              )
+          AND (
+                UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE)
+                OR 'Todos' IN (:ID_TIPO_UNIDADE)
+              )
+          AND (
+                MRR.ID_PARCEIRO IN (SELECT ID_PARCEIRO FROM PARCEIROS_USUARIO)
+                OR 'Todos' IN (:ID_USUARIOS)
+              )
     ) A
 ),
-ATING_RESULTADO AS (
-    SELECT (((p.PREVISTO - r.REALIZADO) / NULLIF(p.PREVISTO, 0)) + 1) * 100 AS ATINGIMENTO
-    FROM ATING_PREVISTO p
-    CROSS JOIN ATING_REALIZADO r
-),
-ATING_FINAL AS (
-    SELECT CONCAT(ROUND(ATINGIMENTO, 2), '%') AS ATINGIMENTO_MRR_CHURN
-    FROM ATING_RESULTADO
+
+ATINGIMENTO AS (
+    SELECT
+        CASE
+            WHEN COALESCE(p.PREVISTO, 0) = 0 THEN NULL
+            ELSE (((p.PREVISTO - ROUND(r.REALIZADO, 2)) / p.PREVISTO) + 1) * 100
+        END AS ATINGIMENTO
+    FROM PREVISTO p
+    CROSS JOIN REALIZADO r
 )
+
 SELECT
-    rf.MRR_CHURN AS MRR_CHURN_REALIZADO,
-    pf.MRR_CHURN_RESULTADO AS MRR_CHURN_PREVISTO,
-    af.ATINGIMENTO_MRR_CHURN AS ATINGIMENTO_MRR_CHURN
-FROM REALIZADO_FINAL rf
-CROSS JOIN PREVISTO_FINAL pf
-CROSS JOIN ATING_FINAL af;
+    ROUND(p.PREVISTO, 2) AS PREVISTO,
+    ROUND(COALESCE(r.REALIZADO, 0), 2) AS REALIZADO,
+    ROUND(a.ATINGIMENTO, 2) AS ATINGIMENTO
+FROM PREVISTO p
+CROSS JOIN REALIZADO r
+CROSS JOIN ATINGIMENTO a;

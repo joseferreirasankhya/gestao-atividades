@@ -2245,7 +2245,7 @@
                 if (value === null || value === undefined || value === '') return NaN;
                 if (typeof value === 'number') return value;
 
-                const rawValue = String(value).trim().replace(/\s/g, '');
+                const rawValue = String(value).trim().replace(/\s/g, '').replace(/[R$]/g, '');
 
                 const hasComma = rawValue.includes(',');
                 const hasDot = rawValue.includes('.');
@@ -2459,9 +2459,9 @@
                         return undefined;
                     };
 
-                    const npsAtingimento = getCol('NPS_ATINGIMENTO');
-                    const npsRealizado = getCol('NPS_REALIZADO');
-                    const npsMeta = getCol('NPS_PREVISTO');
+                    const npsAtingimento = getCol('ATINGIMENTO');
+                    const npsRealizado = getCol('REALIZADO');
+                    const npsMeta = getCol('PREVISTO');
 
                     updateGestaoVistaDonut({
                         atingimentoNodeId: 'nps-atingimento',
@@ -2507,9 +2507,9 @@
                         return undefined;
                     };
 
-                    const mrrChurnAtingimento = getCol('MRR_CHURN_ATINGIMENTO');
-                    const mrrChurnRealizado = getCol('MRR_CHURN_REALIZADO');
-                    const mrrChurnMeta = getCol('MRR_CHURN_PREVISTO');
+                    const mrrChurnAtingimento = getCol('ATINGIMENTO');
+                    const mrrChurnRealizado = getCol('REALIZADO');
+                    const mrrChurnMeta = getCol('PREVISTO');
 
                     updateGestaoVistaDonut({
                         atingimentoNodeId: 'mrr-churn-atingimento',
@@ -2556,9 +2556,9 @@
                         return undefined;
                     };
 
-                    const aeAtingimento = getCol('AE_ATINGIMENTO');
-                    const aeRealizado = getCol('AE_REALIZADO');
-                    const aeMeta = getCol('AE_PREVISTO');
+                    const aeAtingimento = getCol('ATINGIMENTO');
+                    const aeRealizado = getCol('REALIZADO');
+                    const aeMeta = getCol('PREVISTO');
 
                     updateGestaoVistaDonut({
                         atingimentoNodeId: 'ae-atingimento',
@@ -2604,9 +2604,9 @@
                         return undefined;
                     };
 
-                    const clubeGestaoAtingimento = getCol('CLUBE_GESTAO_ATINGIMENTO');
-                    const clubeGestaoRealizado = getCol('CLUBE_GESTAO_REALIZADO');
-                    const clubeGestaoMeta = getCol('CLUBE_GESTAO_PREVISTO');
+                    const clubeGestaoAtingimento = getCol('ATINGIMENTO');
+                    const clubeGestaoRealizado = getCol('REALIZADO');
+                    const clubeGestaoMeta = getCol('PREVISTO');
 
                     updateGestaoVistaDonut({
                         atingimentoNodeId: 'clube-gestao-atingimento',
@@ -3059,17 +3059,10 @@
 
                         const bugTitle = titleInput.value;
                         const bugDescription = descriptionInput.value;
-                        const githubToken = window.componentData ? componentData.githubToken : null;
 
                         if (!bugTitle.trim()) {
                             showValidationMessage("O título do bug é obrigatório.");
                             titleInput.focus();
-                            return;
-                        }
-
-                        if (!githubToken) {
-                            console.error("Token do GitHub não encontrado em componentData.githubToken");
-                            showValidationMessage("Erro de configuração: Token do GitHub não encontrado.");
                             return;
                         }
 
@@ -3084,7 +3077,6 @@
                         try {
                             await setVariableMitra({ name: ':VAR_GSC_TITULO_BUG', content: bugTitle });
                             await setVariableMitra({ name: ':VAR_GSC_DESCR_BUG', content: bugDescription });
-                            await setVariableMitra({ name: ':VAR_GSC_GITHUB_TOKEN', content: githubToken });
 
                             await actionMitra({ id: 47 });
                             
