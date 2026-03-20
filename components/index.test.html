@@ -169,9 +169,10 @@
         .toast-danger-icon {
             border-color: hsl(var(--destructive-foreground) / 0.5);
         }
-        
+
         .toast-success {
-            background-color: #059669; /* emerald-600 */
+            background-color: #059669;
+            /* emerald-600 */
             color: white;
             border-color: rgba(255, 255, 255, 0.25);
         }
@@ -586,14 +587,17 @@
             cursor: pointer;
             transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
         }
+
         .report-bug-btn:hover {
             background: hsl(var(--accent));
             border-color: hsl(var(--primary));
             color: hsl(var(--foreground));
         }
+
         .report-bug-btn:active {
             transform: scale(0.95);
         }
+
         .report-bug-btn svg {
             width: 1rem;
             height: 1rem;
@@ -612,6 +616,7 @@
             justify-content: center;
             padding: 1rem;
         }
+
         .report-bug-modal-overlay.active {
             display: flex;
         }
@@ -622,11 +627,13 @@
                 opacity: 0;
                 transform: scale(0.95) translateY(8px);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
             }
         }
+
         .report-bug-modal {
             background: hsl(var(--background));
             border: 1px solid hsl(var(--border));
@@ -635,6 +642,7 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
             animation: reportBugModalIn 0.2s ease-out;
         }
+
         .dark .report-bug-modal {
             background: hsl(var(--secondary));
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
@@ -647,6 +655,7 @@
             gap: 0.75rem;
             padding: 1.25rem 1.5rem 1rem;
         }
+
         .report-bug-modal-icon {
             display: inline-flex;
             align-items: center;
@@ -658,11 +667,13 @@
             color: hsl(var(--destructive));
             flex-shrink: 0;
         }
+
         .report-bug-modal-icon svg {
             width: 1.125rem;
             height: 1.125rem;
             stroke-width: 2;
         }
+
         .report-bug-modal-title {
             font-size: 1rem;
             font-weight: 600;
@@ -670,6 +681,7 @@
             flex: 1;
             margin: 0;
         }
+
         .report-bug-close-btn {
             display: inline-flex;
             align-items: center;
@@ -683,10 +695,12 @@
             cursor: pointer;
             transition: background 0.15s, color 0.15s;
         }
+
         .report-bug-close-btn:hover {
             background: hsl(var(--accent));
             color: hsl(var(--foreground));
         }
+
         .report-bug-close-btn svg {
             width: 1rem;
             height: 1rem;
@@ -707,24 +721,29 @@
             flex-direction: column;
             gap: 1rem;
         }
+
         .report-bug-form-group {
             display: flex;
             flex-direction: column;
             gap: 0.375rem;
         }
+
         .report-bug-label {
             font-size: 0.875rem;
             font-weight: 500;
             color: hsl(var(--foreground));
         }
+
         .report-bug-required {
             color: hsl(var(--destructive));
             margin-left: 0.125rem;
         }
+
         .report-bug-textarea {
             resize: vertical;
             min-height: 6rem;
         }
+
         .report-bug-form .search-input {
             background-color: hsl(var(--background));
             color: hsl(var(--foreground));
@@ -734,6 +753,7 @@
             width: 100%;
             box-sizing: border-box;
         }
+
         .dark .report-bug-form .search-input {
             background-color: hsl(var(--muted));
             border-color: hsl(var(--border));
@@ -747,6 +767,7 @@
             gap: 0.5rem;
             padding-top: 0.25rem;
         }
+
         .report-bug-btn-cancel {
             display: inline-flex;
             align-items: center;
@@ -761,10 +782,12 @@
             cursor: pointer;
             transition: background 0.15s, color 0.15s;
         }
+
         .report-bug-btn-cancel:hover {
             background: hsl(var(--accent));
             color: hsl(var(--foreground));
         }
+
         .report-bug-btn-submit {
             display: inline-flex;
             align-items: center;
@@ -780,10 +803,12 @@
             cursor: pointer;
             transition: filter 0.15s, box-shadow 0.15s;
         }
+
         .report-bug-btn-submit:hover {
             filter: brightness(1.1);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
+
         .report-bug-btn-submit svg {
             width: 0.875rem;
             height: 0.875rem;
@@ -859,7 +884,8 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button id="report-bug-btn" class="report-bug-btn" aria-label="Reportar bug" title="Reportar um bug">
+                    <button id="report-bug-btn" class="report-bug-btn" aria-label="Reportar bug"
+                        title="Reportar um bug">
                         <i data-lucide="bug"></i>
                     </button>
                     <button id="theme-toggle-btn" aria-label="Alternar tema" title="Alternar modo claro/escuro">
@@ -1007,7 +1033,7 @@
                                     <i data-lucide="info" class="w-4 h-4 cursor-help hover:text-foreground"></i>
                                 </span>
                                 <span style="cursor: pointer;">
-                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTQzMS4x"
+                                    <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF80MzEyLjUuMjI2NQ=="
                                         target="_blank">
                                         <i data-lucide="layout-grid"
                                             class="w-4 h-4 cursor-pointer hover:text-foreground"></i>
@@ -1810,7 +1836,7 @@
                 acc[config.key] = document.getElementById(config.containerId);
                 return acc;
             }, {});
-            
+
             const validationToast = document.getElementById('validation-toast');
             const validationToastContent = document.getElementById('validation-toast-content');
             const validationToastText = document.getElementById('validation-toast-text');
@@ -1826,7 +1852,7 @@
             let totalPages = 1;
             let totalItems = 0;
             const activeFilters = { PLAYBOOK: '', RESPONSAVEL: '', PARCEIRO: '', ATIVIDADE: '', STATUS_LABEL: '' };
-            
+
             const hideToast = () => {
                 if (!validationToast || !validationToastContent) return;
                 clearTimeout(toastTimeout);
@@ -1848,13 +1874,13 @@
 
                 validationToastContent.classList.remove('toast-danger', 'toast-success');
                 const iconSpan = validationToastContent.querySelector('span');
-                
+
                 if (type === 'success') {
                     validationToastContent.classList.add('toast-success');
                     if (iconSpan) {
-                         iconSpan.classList.remove('toast-danger-icon');
-                         iconSpan.classList.add('toast-success-icon');
-                         iconSpan.textContent = '✓';
+                        iconSpan.classList.remove('toast-danger-icon');
+                        iconSpan.classList.add('toast-success-icon');
+                        iconSpan.textContent = '✓';
                     }
                 } else { // danger (default)
                     validationToastContent.classList.add('toast-danger');
@@ -1877,7 +1903,7 @@
                     hideToast();
                 }, 5000);
             };
-            
+
             const showValidationMessage = (message) => {
                 showToast(message, 'danger');
             };
@@ -3015,7 +3041,7 @@
                         }
                     });
                 }
-                
+
                 // ===== Report Bug Modal Logic =====
                 const reportBugOverlay = document.getElementById('report-bug-overlay');
                 const reportBugOpenBtn = document.getElementById('report-bug-btn');
@@ -3102,7 +3128,7 @@
                             await setVariableMitra({ name: ':VAR_GSC_DESCR_BUG', content: bugDescription });
 
                             await actionMitra({ id: 47 });
-                            
+
                             closeReportBugModal();
                             reportBugForm.reset();
 
@@ -3342,7 +3368,8 @@
     </script>
 
     <!-- Modal: Reportar Bug -->
-    <div id="report-bug-overlay" class="report-bug-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="report-bug-title">
+    <div id="report-bug-overlay" class="report-bug-modal-overlay" role="dialog" aria-modal="true"
+        aria-labelledby="report-bug-title">
         <div class="report-bug-modal">
             <div class="report-bug-modal-header">
                 <div class="report-bug-modal-icon">
@@ -3356,12 +3383,16 @@
             <hr class="report-bug-divider" />
             <form class="report-bug-form">
                 <div class="report-bug-form-group">
-                    <label for="bug-title-input" class="report-bug-label">Título <span class="report-bug-required" aria-hidden="true">*</span></label>
-                    <input id="bug-title-input" type="text" class="search-input" placeholder="Ex: Botão não responde ao clique" required />
+                    <label for="bug-title-input" class="report-bug-label">Título <span class="report-bug-required"
+                            aria-hidden="true">*</span></label>
+                    <input id="bug-title-input" type="text" class="search-input"
+                        placeholder="Ex: Botão não responde ao clique" required />
                 </div>
                 <div class="report-bug-form-group">
-                    <label for="bug-impact-select" class="report-bug-label">Nível de Impacto <span class="report-bug-required" aria-hidden="true">*</span></label>
-                    <select id="bug-impact-select" class="filter-select" style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
+                    <label for="bug-impact-select" class="report-bug-label">Nível de Impacto <span
+                            class="report-bug-required" aria-hidden="true">*</span></label>
+                    <select id="bug-impact-select" class="filter-select"
+                        style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
                         <option value="">Selecione...</option>
                         <option value="Baixo">Baixo</option>
                         <option value="Médio">Médio</option>
@@ -3370,8 +3401,10 @@
                     </select>
                 </div>
                 <div class="report-bug-form-group">
-                    <label for="bug-type-select" class="report-bug-label">Tipo de Chamado <span class="report-bug-required" aria-hidden="true">*</span></label>
-                    <select id="bug-type-select" class="filter-select" style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
+                    <label for="bug-type-select" class="report-bug-label">Tipo de Chamado <span
+                            class="report-bug-required" aria-hidden="true">*</span></label>
+                    <select id="bug-type-select" class="filter-select"
+                        style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
                         <option value="">Selecione...</option>
                         <option value="Melhoria">Melhoria</option>
                         <option value="Erro">Erro</option>
@@ -3379,8 +3412,10 @@
                     </select>
                 </div>
                 <div class="report-bug-form-group">
-                    <label for="bug-screen-select" class="report-bug-label">Tela <span class="report-bug-required" aria-hidden="true">*</span></label>
-                    <select id="bug-screen-select" class="filter-select" style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
+                    <label for="bug-screen-select" class="report-bug-label">Tela <span class="report-bug-required"
+                            aria-hidden="true">*</span></label>
+                    <select id="bug-screen-select" class="filter-select"
+                        style="width: 100%; height: 2.25rem; padding: 0 0.75rem;" required>
                         <option value="">Selecione...</option>
                         <option value="Gestão à Vista">Gestão à Vista</option>
                         <option value="Atividades">Atividades</option>
@@ -3389,7 +3424,8 @@
                 </div>
                 <div class="report-bug-form-group">
                     <label for="bug-description-input" class="report-bug-label">Descrição</label>
-                    <textarea id="bug-description-input" class="search-input report-bug-textarea" rows="4" placeholder="Descreva o comportamento esperado e o que aconteceu..."></textarea>
+                    <textarea id="bug-description-input" class="search-input report-bug-textarea" rows="4"
+                        placeholder="Descreva o comportamento esperado e o que aconteceu..."></textarea>
                 </div>
                 <div class="report-bug-actions">
                     <button type="button" id="report-bug-cancel" class="report-bug-btn-cancel">Cancelar</button>
