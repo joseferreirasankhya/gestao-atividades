@@ -1,8 +1,17 @@
+-- COLUNAS
+-- CAD_1 = Calendário
+-- CAD_1006 = Parceiro
+-- CAD_1007 = Unidade
+-- CAD_10931 = Gerenciamento de Metas
+-- CC_1512 = Metas CS
+-- CC_1643 = Clube de Gestão
+-- CC_1039 = Usuários
+
 WITH REALIZADO AS (
     SELECT
         COUNT(*) AS REALIZADO
     FROM CC_1643 c
-    INNER JOIN CAD_CALENDARIO cal
+    INNER JOIN CAD_1 cal
         ON cal.ID = DATE_FORMAT(c.CG_DT_APROVACAO_, '%Y%m%d')
     INNER JOIN CAD_1007 un
         ON un.ID = c.ID_UNIDADE

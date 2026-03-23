@@ -1,3 +1,8 @@
+-- COLUNAS
+-- CAD_10929 = Atividades
+-- CAD_10967 = Playbooks
+-- CAD_1006 = Parceiro
+
 SELECT
     'OUTRAS ATIVIDADES' AS TITULO,
     'CONCLUSÃO NO PRAZO:' AS SUBTITULO,

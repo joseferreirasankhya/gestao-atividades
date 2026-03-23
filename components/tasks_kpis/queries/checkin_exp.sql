@@ -1,3 +1,8 @@
+-- COLUNAS
+-- CAD_10929 = Atividades
+-- CAD_10967 = Playbooks
+-- CAD_1006 = Parceiro
+
 SELECT
     'CHECK IN EXPERIÊNCIA' AS TITULO,
     'CONCLUSÃO NO PRAZO:' AS SUBTITULO,
@@ -5,8 +10,8 @@ SELECT
         SELECT COUNT(*)
         FROM (
             SELECT PB.ID
-            FROM CAD_PLAYBOOKS PB
-            JOIN CAD_ATIVIDADES ATIV ON PB.ID = ATIV.ID_PLAYBOOKS
+            FROM CAD_10967 PB
+            JOIN CAD_10929 ATIV ON PB.ID = ATIV.ID_PLAYBOOKS
             WHERE PB.ID_TIPO_DE_PLAYBOOK = 8
             GROUP BY PB.ID
             HAVING SUM(
@@ -20,7 +25,7 @@ SELECT
     ) AS REALIZADO,
     (
         SELECT COUNT(ID)
-        FROM CAD_PLAYBOOKS
+        FROM CAD_10967
         WHERE ID_TIPO_DE_PLAYBOOK = 8
     ) AS PREVISTO
 FROM DUAL
