@@ -2758,6 +2758,15 @@
                         <td class="px-5 py-3.5 align-top text-center">
                             <div class="flex justify-center items-center gap-1">
                                 <button data-action="edit" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Visualizar/Editar'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="eye" class="w-4 h-4 pointer-events-none"></i></button>
+                                <button class="btn-action"
+                                    data-action="download"
+                                    data-id="${row[colMap.ID]}"
+                                    data-anexo="${row[colMap.ANEXO] || ''}"
+                                    title="${row[colMap.ANEXO] ? 'Baixar Anexo' : 'Nenhum anexo disponível'}"
+                                    ${!row[colMap.ANEXO] ? 'disabled' : ''}
+                                    aria-label="${row[colMap.ANEXO] ? 'Baixar anexo da atividade' : 'Nenhum anexo disponível'}">
+                                    <i data-lucide="paperclip" class="w-4 h-4 pointer-events-none"></i>
+                                </button>
                                 <button data-action="complete" data-id="${row[colMap.ID]}" data-locked="${isCompletedStatus ? 'true' : 'false'}" data-notes-length="${notesLength}" class="btn-action" title="${isCompletedStatus ? 'Atividade já concluída' : 'Concluir Atividade'}" ${isCompletedStatus ? 'disabled' : ''}><i data-lucide="check" class="w-4 h-4 pointer-events-none" style="${completeIconColorStyle}"></i></button>
                             </div>
                         </td>
@@ -2861,7 +2870,8 @@
                         STATUS_COLOR: headers.indexOf('STATUS_COLOR'),
                         DATA_CRIACAO: headers.indexOf('DATA_CRIACAO'),
                         DATA_PREVISAO: headers.indexOf('DATA_PREVISAO'),
-                        ANOTACOES: headers.indexOf('ANOTACOES')
+                        ANOTACOES: headers.indexOf('ANOTACOES'),
+                        ANEXO: headers.indexOf('ANEXO')
                     };
 
                     rawTableData = { data: result.data, colMap, headers };
@@ -3008,6 +3018,17 @@
                                 await updateComponentsMitra({ all: true });
                             }
                             await refreshAllData();
+                        } else if (action === 'download') {
+                            const anexoUrl = button.dataset.anexo;
+                            if (!anexoUrl) return;
+                            const link = document.createElement('a');
+                            link.href = anexoUrl;
+                            link.target = '_blank';
+                            link.rel = 'noopener noreferrer';
+                            link.download = '';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
                         }
                     } catch (error) {
                         console.error(`Erro ao executar ação '${action}' para o ID ${id}:`, error);
