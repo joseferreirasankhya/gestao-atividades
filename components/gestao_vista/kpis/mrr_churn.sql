@@ -1,7 +1,16 @@
+-- CAD_1 = Calendário
+-- CAD_1006 = Parceiro
+-- CAD_1007 = Unidade
+-- CAD_10931 = Gerenciamento de Metas
+-- CC_1512 = Metas CS
+-- CC_1333 = MRR Histórico
+-- CC_1609 = Usuários
+-- CC_1671 = Perdas
+
 WITH CALENDARIO_REF AS (
     SELECT DISTINCT
         DATE_FORMAT(STR_TO_DATE(CAST(ID AS CHAR), '%Y%m%d'), '%Y%m01') AS ID_CALENDARIO
-    FROM CAD_CALENDARIO
+    FROM CAD_1
     WHERE ID BETWEEN DATE_FORMAT(:DT_INICIO, '%Y%m%d')
                  AND DATE_FORMAT(:DT_FIM, '%Y%m%d')
 ),

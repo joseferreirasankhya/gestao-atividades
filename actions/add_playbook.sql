@@ -1,6 +1,11 @@
+-- COLUNAS
+-- CAD_10929 = Atividades
+-- CAD_10967 = Playbooks
+-- CAD_1006 = Parceiro
+
 -- [ATIV] Salvar playbook
 
-INSERT INTO CAD_PLAYBOOKS (
+INSERT INTO CAD_10967 (
     ID_CLIENTE_1, 
     ID_USUARIO, 
     ID_TIPO_DE_PLAYBOOK, 

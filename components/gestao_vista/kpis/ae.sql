@@ -1,3 +1,13 @@
+-- COLUNAS
+-- CAD_1 = Calendário
+-- CAD_1006 = Parceiro
+-- CAD_1007 = Unidade
+-- CAD_10931 = Gerenciamento de Metas
+-- CC_1512 = Metas CS
+-- CC_1333 = MRR Histórico
+-- CC_1609 = Usuários
+-- CC_1671 = Perdas
+
 WITH REALIZADO AS (
     SELECT
         COUNT(DISTINCT t1.ID_PARCEIRO_CHAVE_LICENCA) AS REALIZADO
