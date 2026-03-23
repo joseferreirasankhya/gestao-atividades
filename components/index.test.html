@@ -1595,6 +1595,8 @@
                                             style="font-weight:600">Data de Criação</th>
                                         <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
                                             style="font-weight:600">Previsão de Conclusão</th>
+                                        <th class="text-left text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider hide-on-mobile"
+                                            style="font-weight:600">Conclusão</th>
                                         <th class="text-left text-xs text-muted-foreground font-600 px-3 py-3.5 uppercase tracking-wider hide-on-mobile"
                                             style="font-weight:600">Anotações</th>
                                         <th class="text-center text-xs text-muted-foreground font-600 px-5 py-3.5 uppercase tracking-wider"
@@ -2754,6 +2756,7 @@
                         <td class="px-5 py-3.5 align-top min-w-[200px]"><span class="badge badge-${statusColor}">${statusLabelRaw || '-'}</span></td>
                         <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CRIACAO] || '-'}</td>
                         <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_PREVISAO] || '-'}</td>
+                        <td class="px-5 py-3.5 align-top text-muted-foreground hide-on-mobile">${row[colMap.DATA_CONCLUSAO] || '-'}</td>
                         <td class="px-3 py-3.5 align-top text-muted-foreground hide-on-mobile">${anotacoesContent}</td>
                         <td class="px-5 py-3.5 align-top text-center">
                             <div class="flex justify-center items-center gap-1">
@@ -2870,6 +2873,7 @@
                         STATUS_COLOR: headers.indexOf('STATUS_COLOR'),
                         DATA_CRIACAO: headers.indexOf('DATA_CRIACAO'),
                         DATA_PREVISAO: headers.indexOf('DATA_PREVISAO'),
+                        DATA_CONCLUSAO: headers.indexOf('DATA_CONCLUSAO'),
                         ANOTACOES: headers.indexOf('ANOTACOES'),
                         ANEXO: headers.indexOf('ANEXO')
                     };
