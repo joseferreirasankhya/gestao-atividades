@@ -849,7 +849,9 @@
                     </li>
                     <li>
                         <a id="link-links-uteis" style="cursor: pointer;"
-                            class="flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white">
+                            class="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-slate-300 transition-all hover:bg-slate-700/50 hover:text-white nav-link">
+                            <span
+                                class="nav-indicator absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#00E676] rounded-r-full hidden"></span>
                             <i data-lucide="book-open" class="w-5 h-5"></i>
                             <span class="text-sm font-medium">Links Úteis</span>
                         </a>
@@ -1655,6 +1657,18 @@
                     </div>
                 </section>
             </div>
+
+            <!-- VIEW: LINKS ÚTEIS -->
+            <div id="view-links-uteis"
+                class="flex flex-col gap-6 transition-opacity duration-300 flex-1 hidden opacity-0">
+                <div id="links-columns-container"
+                    class="flex-shrink-0 flex items-start gap-6 pb-6 overflow-x-auto custom-scrollbar">
+                    <div class="w-full text-center py-10 text-muted-foreground">Carregando links...</div>
+                </div>
+                <div id="links-social-container"
+                    class="flex-shrink-0 pt-6 mt-auto border-t border-border flex justify-center items-center gap-4 hidden">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2079,7 +2093,7 @@
                     <div class="h-full flex flex-col justify-between gap-4">
                         <div class="flex justify-between items-start gap-4">
                             <div class="min-w-0">
-                                <h3 class="text-base font-semibold text-foreground break-words mt-1">${titulo || config.defaultTitle}</h3>
+                                <h3 class="text-base font-semibold text-foreground break-words mt-1">${config.defaultTitle}</h3>
                             </div>
                             <button type="button" data-tippy-content="${config.tooltip}" class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
                                 <i data-lucide="info" class="w-4 h-4"></i>
@@ -2192,6 +2206,120 @@
             };
 
             // =============================
+            // LINKS ÚTEIS
+            // =============================
+
+            const PLACEHOLDER_SVG_LINKS = 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%20viewBox%3D%220%200%20400%20300%22%20role%3D%22img%22%20aria-label%3D%22Placeholder%3A%20Imagem%20indispon%C3%ADvel%22%3E%3Ctitle%3EPlaceholder%3A%20Imagem%20Indispon%C3%ADvel%3C%2Ftitle%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E5E7EB%22%3E%3C%2Frect%3E%3Cg%20fill%3D%22%239CA3AF%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220px%22%20text-anchor%3D%22middle%22%3E%3Cpath%20d%3D%22M120%2090%20L180%20150%20L220%20130%20L280%20190%20L120%20190%20Z%22%20stroke%3D%22%239CA3AF%22%20stroke-width%3D%222%22%20fill%3D%22none%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22110%22%20r%3D%2210%22%3E%3C%2Fcircle%3E%3Ctext%20x%3D%22200%22%20y%3D%22230%22%3EImagem%20Indispon%C3%ADvel%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E';
+
+            const loadLinksUteisData = async () => {
+                const container = document.getElementById('links-columns-container');
+                if (!container) return;
+                try {
+                    if (!componentData.queryColumns) return;
+                    const result = await queryMitra({ query: componentData.queryColumns });
+
+                    if (!result || !result.data || result.data.length === 0) {
+                        container.innerHTML = `<div class="w-full text-center py-10 text-muted-foreground">Nenhum link encontrado.</div>`;
+                        return;
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const idIndex = headers.indexOf('ID');
+                    const titleIndex = headers.indexOf('TITLE');
+                    const iconUrlIndex = headers.indexOf('ICONURL');
+                    const linksIndex = headers.indexOf('LINKS');
+
+                    if ([idIndex, titleIndex, iconUrlIndex, linksIndex].includes(-1)) {
+                        throw new Error('A query de colunas não retornou os campos esperados (ID, TITLE, ICONURL, LINKS).');
+                    }
+
+                    const colorMap = {
+                        'Gestão de Equipe & Liderança': { bg: '#2E3C50', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Plataformas & Acessos': { bg: '#66CC66', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Desenvolvimento & Academia de Produto Sankhya': { bg: '#66246B', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Ferramentas & Guias da Atuação CS': { bg: '#CCA95C', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Painéis de Carteira & Saúde do Cliente': { bg: '#7A97CC', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' }
+                    };
+                    const defaultColor = { bg: '#F3F4F6', text: 'text-primary', link: 'text-primary', hover: 'hover:text-primary/80', icon: 'text-muted-foreground', iconHover: 'group-hover:text-primary' };
+
+                    const columnsHtml = result.data.map((row) => {
+                        const id = row[idIndex];
+                        const title = row[titleIndex] || 'Sem Título';
+                        const iconUrl = row[iconUrlIndex];
+                        const linksJson = row[linksIndex] || '[]';
+                        let links = [];
+                        try {
+                            links = JSON.parse(linksJson);
+                            if (!Array.isArray(links)) links = [];
+                        } catch (e) {
+                            console.error(`Falha ao parsear JSON de links para a coluna ID ${id}:`, linksJson);
+                        }
+
+                        const colors = colorMap[title] || defaultColor;
+
+                        const linksHtml = links.map(link => `
+                            <a href="${link.url || '#'}" target="_blank" rel="noopener noreferrer" class="flex items-center text-sm ${colors.link} ${colors.hover} group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 ${colors.icon} ${colors.iconHover}"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                <span>${link.label || 'Link sem texto'}</span>
+                            </a>
+                        `).join('');
+
+                        return `
+                            <div style="background-color: ${colors.bg};" class="flex-1 min-w-[300px] rounded-lg p-4 flex flex-col border border-transparent">
+                                <div class="relative w-16 h-16 mx-auto mb-4">
+                                    <img src="${iconUrl}" onerror="this.onerror=null; this.src='${PLACEHOLDER_SVG_LINKS}';" alt="${title}" class="w-full h-full object-contain rounded-full bg-background/50 shadow-sm" />
+                                </div>
+                                <h3 class="text-lg font-semibold text-center ${colors.text} mb-4">${title}</h3>
+                                <div class="space-y-2 flex-grow">${linksHtml}</div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    container.innerHTML = columnsHtml;
+                } catch (error) {
+                    console.error("Erro ao carregar Links Úteis:", error);
+                    container.innerHTML = `<div class="w-full text-center py-10 text-destructive bg-destructive/10 p-4 rounded-md">Falha ao carregar os links.</div>`;
+                }
+            };
+
+            const loadSocialLinksData = async () => {
+                const container = document.getElementById('links-social-container');
+                if (!container) return;
+                try {
+                    if (!componentData.querySocial) { container.classList.add('hidden'); return; }
+                    const result = await queryMitra({ query: componentData.querySocial });
+
+                    if (!result || !result.data || result.data.length === 0) {
+                        container.classList.add('hidden');
+                        return;
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const linkUrlIndex = headers.indexOf('LINKURL');
+                    const iconUrlIndex = headers.indexOf('ICONURL');
+
+                    if ([linkUrlIndex, iconUrlIndex].includes(-1)) {
+                        throw new Error('A query de redes sociais não retornou os campos esperados (LINKURL, ICONURL).');
+                    }
+
+                    const socialHtml = result.data.map(row => {
+                        const linkUrl = row[linkUrlIndex];
+                        const iconUrl = row[iconUrlIndex];
+                        return `
+                            <a href="${linkUrl}" target="_blank" rel="noopener noreferrer" class="transition-transform hover:scale-110">
+                                <img src="${iconUrl}" onerror="this.onerror=null; this.src='${PLACEHOLDER_SVG_LINKS}';" alt="Social Icon" class="w-6 h-6 object-contain" />
+                            </a>
+                        `;
+                    }).join('');
+
+                    container.innerHTML = socialHtml;
+                    container.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Erro ao carregar redes sociais:", error);
+                }
+            };
+
+            // =============================
             // GERAL
             // =============================
 
@@ -2209,7 +2337,11 @@
                     loadDonutData(),
                     loadKpiData(),
                     loadTableData(),
-                    ...executionCardConfigs.map(loadExecutionCardData)
+                    ...executionCardConfigs.map(loadExecutionCardData),
+
+                    // Links Úteis
+                    loadLinksUteisData(),
+                    loadSocialLinksData(),
                 ]);
             };
 
@@ -3055,15 +3187,9 @@
                 }
 
                 if (linkLinksUteis) {
-                    linkLinksUteis.addEventListener('click', async () => {
-                        try {
-                            const actionId = 46; // ID de ação padrão para "Links Úteis"
-                            if (!isNaN(actionId)) {
-                                await actionMitra({ id: actionId });
-                            }
-                        } catch (e) {
-                            console.error("Erro ao executar ação para 'Links Úteis':", e);
-                        }
+                    linkLinksUteis.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigateToView('links-uteis', 'Links Úteis');
                     });
                 }
 
@@ -3315,6 +3441,10 @@
                 'atividades': {
                     element: document.getElementById('view-atividades'),
                     link: document.getElementById('link-atividades')
+                },
+                'links-uteis': {
+                    element: document.getElementById('view-links-uteis'),
+                    link: document.getElementById('link-links-uteis')
                 }
             };
 
