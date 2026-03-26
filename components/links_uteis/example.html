@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocos de Links</title>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+
+        .dark {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --primary: 210 40% 98%;
+            --primary-foreground: 222.2 47.4% 11.2%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 217.2 32.6% 17.5%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 212.7 26.8% 83.9%;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            /* background-color: hsl(var(--background)); */
+            color: hsl(var(--foreground));
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: hsl(var(--secondary));
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: hsl(var(--border));
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: hsl(var(--muted-foreground));
+        }
+
+        .upload-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .group:hover .upload-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="w-full h-full">
+
+    <div id="component-container" class="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 box-border">
+        <div id="columns-container" class="flex-shrink-0 flex items-start gap-6 pb-6 custom-scrollbar overflow-x-auto">
+            <div id="columns-placeholder" class="w-full text-center py-10 text-muted-foreground">Carregando colunas...
+            </div>
+        </div>
+
+        <div id="social-container"
+            class="flex-shrink-0 pt-6 mt-auto border-t border-border flex justify-center items-center gap-4">
+            <div id="social-placeholder" class="w-full text-center text-sm text-muted-foreground">Carregando redes
+                sociais...</div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed top-5 right-5 z-50"></div>
+
+
+    <script>
+        const PLACEHOLDER_SVG = 'data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%20viewBox%3D%220%200%20400%20300%22%20role%3D%22img%22%20aria-label%3D%22Placeholder%3A%20Imagem%20indispon%C3%ADvel%22%3E%3Ctitle%3EPlaceholder%3A%20Imagem%20indispon%C3%ADvel%3C%2Ftitle%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23E5E7EB%22%3E%3C%2Frect%3E%3Cg%20fill%3D%22%239CA3AF%22%20font-family%3D%22sans-serif%22%20font-size%3D%2220px%22%20text-anchor%3D%22middle%22%3E%3Cpath%20d%3D%22M120%2090%20L180%20150%20L220%20130%20L280%20190%20L120%20190%20Z%22%20stroke%3D%22%239CA3AF%22%20stroke-width%3D%222%22%20fill%3D%22none%22%3E%3C%2Fpath%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22110%22%20r%3D%2210%22%3E%3C%2Fcircle%3E%3Ctext%20x%3D%22200%22%20y%3D%22230%22%3EImagem%20Indispon%C3%ADvel%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fsvg%3E';
+        const MITRA_UPDATE_EVENT_NAME = 'mitra-update-link-blocks-component';
+
+        function updateMitra() {
+            document.body.dispatchEvent(new CustomEvent(MITRA_UPDATE_EVENT_NAME));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const columnsContainer = document.getElementById('columns-container');
+            const socialContainer = document.getElementById('social-container');
+
+            const renderError = (container, message) => {
+                container.innerHTML = `<div class="w-full text-center py-10 text-destructive bg-destructive/10 p-4 rounded-md">${message}</div>`;
+            };
+
+            const renderEmpty = (container, message) => {
+                container.innerHTML = `<div class="w-full text-center py-10 text-muted-foreground">${message}</div>`;
+            }
+
+            const renderColumns = async () => {
+                try {
+                    const result = await queryMitra({ query: componentData.queryColumns });
+
+                    if (!result || !result.data || result.data.length === 0) {
+                        renderEmpty(columnsContainer, 'Nenhuma coluna de links encontrada.');
+                        return;
+                    }
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const idIndex = headers.indexOf('ID');
+                    const titleIndex = headers.indexOf('TITLE');
+                    const iconUrlIndex = headers.indexOf('ICONURL');
+                    const linksIndex = headers.indexOf('LINKS');
+
+                    if ([idIndex, titleIndex, iconUrlIndex, linksIndex].includes(-1)) {
+                        throw new Error('A query de colunas não retornou os campos esperados (ID, TITLE, ICONURL, LINKS).');
+                    }
+
+                    const isEditMode = componentData.editModeVariable === '1';
+
+                    const colorMap = {
+                        'Gestão de Equipe & Liderança': { bg: '#2E3C50', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Plataformas & Acessos': { bg: '#66CC66', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Desenvolvimento & Academia de Produto Sankhya': { bg: '#66246B', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Ferramentas & Guias da Atuação CS': { bg: '#CCA95C', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' },
+                        'Painéis de Carteira & Saúde do Cliente': { bg: '#7A97CC', text: 'text-white', link: 'text-white/80', hover: 'hover:text-white', icon: 'text-white/60', iconHover: 'group-hover:text-white' }
+                    };
+                    const defaultColor = { bg: '#F3F4F6', text: 'text-primary', link: 'text-primary', hover: 'hover:text-primary/80', icon: 'text-muted-foreground', iconHover: 'group-hover:text-primary' };
+
+                    const columnsHtml = result.data.map((row, index) => {
+                        const id = row[idIndex];
+                        const title = row[titleIndex] || 'Sem Título';
+                        const iconUrl = row[iconUrlIndex];
+                        const linksJson = row[linksIndex] || '[]';
+                        let links = [];
+
+                        try {
+                            links = JSON.parse(linksJson);
+                            if (!Array.isArray(links)) links = [];
+                        } catch (e) {
+                            console.error(`Falha ao parsear JSON de links para a coluna ID ${id}:`, linksJson);
+                        }
+
+                        const colors = colorMap[title] || defaultColor;
+
+                        const linksHtml = links.map(link => `
+                            <a href="${link.url || '#'}" target="_blank" rel="noopener noreferrer" class="flex items-center text-sm ${colors.link} ${colors.hover} group">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 mr-2 ${colors.icon} ${colors.iconHover}"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                <span>${link.label || 'Link sem texto'}</span>
+                            </a>
+                        `).join('');
+
+                        const editButtonHtml = isEditMode ? `
+                            <div class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center upload-overlay">
+                                <button data-action="upload-icon" data-column-id="${id}" class="p-2 bg-background/80 hover:bg-background rounded-full transition-colors shadow-lg" title="Trocar Ícone">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-foreground"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                </button>
+                                <input type="file" accept="image/*" class="hidden" data-input-for="${id}" data-column-id="${id}">
+                            </div>
+                        ` : '';
+
+                        return `
+                            <div style="background-color: ${colors.bg};" class="flex-1 min-w-[300px] rounded-lg p-4 flex flex-col border border-transparent">
+                                <div class="relative w-16 h-16 mx-auto mb-4 group">
+                                    <img src="${iconUrl}" onerror="this.onerror=null; this.src=PLACEHOLDER_SVG;" alt="${title}" class="w-full h-full object-contain rounded-full bg-background/50 shadow-sm" />
+                                    ${editButtonHtml}
+                                </div>
+                                <h3 class="text-lg font-semibold text-center ${colors.text} mb-4">${title}</h3>
+                                <div class="space-y-2 flex-grow">${linksHtml}</div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    columnsContainer.innerHTML = columnsHtml;
+
+                } catch (error) {
+                    console.error("Erro ao renderizar colunas:", error);
+                    renderError(columnsContainer, "Falha ao carregar as colunas de links. Verifique a configuração e o console.");
+                }
+            };
+
+            const renderSocialLinks = async () => {
+                try {
+                    const result = await queryMitra({ query: componentData.querySocial });
+                    if (!result || !result.data || result.data.length === 0) {
+                        socialContainer.innerHTML = '';
+                        socialContainer.classList.add('hidden');
+                        return;
+                    }
+
+                    socialContainer.classList.remove('hidden');
+
+                    const headers = result.headers.map(h => h.name.toUpperCase());
+                    const linkUrlIndex = headers.indexOf('LINKURL');
+                    const iconUrlIndex = headers.indexOf('ICONURL');
+
+                    if ([linkUrlIndex, iconUrlIndex].includes(-1)) {
+                        throw new Error('A query de redes sociais não retornou os campos esperados (LINKURL, ICONURL).');
+                    }
+
+                    const socialHtml = result.data.map(row => {
+                        const linkUrl = row[linkUrlIndex];
+                        const iconUrl = row[iconUrlIndex];
+                        return `
+                            <a href="${linkUrl}" target="_blank" rel="noopener noreferrer" class="transition-transform hover:scale-110">
+                                <img src="${iconUrl}" onerror="this.onerror=null; this.src=PLACEHOLDER_SVG;" alt="Social Icon" class="w-6 h-6 object-contain" />
+                            </a>
+                        `;
+                    }).join('');
+
+                    socialContainer.innerHTML = socialHtml;
+                } catch (error) {
+                    console.error("Erro ao renderizar redes sociais:", error);
+                    renderError(socialContainer, "Falha ao carregar redes sociais.");
+                }
+            };
+
+            const refreshAllData = async () => {
+                await Promise.all([renderColumns(), renderSocialLinks()]);
+            };
+
+            const handleIconUpload = async (file, columnId) => {
+                try {
+                    if (!componentData.updateIconDbActionId || !componentData.newIconUrlVariable || !componentData.targetIdVariable) {
+                        throw new Error("Variáveis de configuração para upload (dbAction, newIconUrl, targetId) não estão definidas.");
+                    }
+
+                    const newUrl = await uploadFileMitra(file);
+
+                    await setVariableMitra({ name: componentData.newIconUrlVariable, content: newUrl });
+                    await setVariableMitra({ name: componentData.targetIdVariable, content: columnId.toString() });
+
+                    const dbActionId = parseInt(componentData.updateIconDbActionId, 10);
+                    await dbactionMitra(dbActionId);
+
+                    if (typeof updateComponentsMitra === 'function') {
+                        await updateComponentsMitra({ all: true });
+                    }
+
+                    await refreshAllData();
+
+                } catch (error) {
+                    console.error(`Falha ao atualizar o ícone para a coluna ${columnId}:`, error);
+                }
+            };
+
+            const setupEventListeners = () => {
+                const container = document.getElementById('component-container');
+
+                container.addEventListener('click', (e) => {
+                    const uploadButton = e.target.closest('[data-action="upload-icon"]');
+                    if (uploadButton) {
+                        const columnId = uploadButton.dataset.columnId;
+                        const fileInput = container.querySelector(`[data-input-for="${columnId}"]`);
+                        if (fileInput) {
+                            fileInput.click();
+                        }
+                    }
+                });
+
+                container.addEventListener('change', (e) => {
+                    const fileInput = e.target;
+                    if (fileInput.matches('input[type="file"]') && fileInput.files.length > 0) {
+                        const columnId = fileInput.dataset.columnId;
+                        const file = fileInput.files[0];
+                        if (columnId && file) {
+                            handleIconUpload(file, columnId);
+                        }
+                    }
+                });
+
+                document.body.addEventListener(MITRA_UPDATE_EVENT_NAME, refreshAllData);
+            };
+
+            async function initializeComponent() {
+                setupEventListeners();
+                await refreshAllData();
+            }
+
+            const waitForMitraAndInit = () => {
+                const maxWaitTime = 5000;
+                const intervalTime = 100;
+                const startTime = Date.now();
+
+                const checkInterval = setInterval(() => {
+                    if (window.componentData && window.componentData.queryColumns && window.componentData.querySocial) {
+                        clearInterval(checkInterval);
+                        initializeComponent();
+                    } else if (Date.now() - startTime > maxWaitTime) {
+                        clearInterval(checkInterval);
+                        console.error("Erro: As configurações do componente (componentData) não foram carregadas a tempo.");
+                        document.body.innerHTML = `<div class="p-8 text-center text-red-700 bg-red-50 h-full flex items-center justify-center">Erro Crítico: As configurações do componente (queryColumns, querySocial) não foram carregadas da plataforma.</div>`;
+                    }
+                }, intervalTime);
+            };
+
+            waitForMitraAndInit();
+        });
+    </script>
+</body>
+
+</html>
