@@ -1740,7 +1740,7 @@
                     key: 'passagemBastao',
                     containerId: 'passagem-bastao-card',
                     queryKey: 'passagemBastaoQuery',
-                    defaultTitle: 'Passagem de Bastão',
+                    defaultTitle: 'PASSAGEM DE BASTÃO',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão da passagem de bastão',
                     errorLabel: 'Passagem de Bastão',
@@ -1750,7 +1750,7 @@
                     key: 'checkinExperiencia',
                     containerId: 'checkin-experiencia-card',
                     queryKey: 'checkinExperienciaQuery',
-                    defaultTitle: 'Check-in de Experiência',
+                    defaultTitle: 'CHECK-IN DE EXPERIÊNCIA',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão do check-in de experiência',
                     errorLabel: 'Check-in de Experiência',
@@ -1760,7 +1760,7 @@
                     key: 'acompanhamentoInicial',
                     containerId: 'acompanhamento-inicial-card',
                     queryKey: 'acompanhamentoInicialQuery',
-                    defaultTitle: 'Acompanhamento Inicial (AI)',
+                    defaultTitle: 'ACOMPANHAMENTO INICIAL (AI)',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão do acompanhamento inicial',
                     errorLabel: 'Acompanhamento Inicial (AI)',
@@ -1770,7 +1770,7 @@
                     key: 'acompanhamentoEvolutivo',
                     containerId: 'acompanhamento-evolutivo-card',
                     queryKey: 'acompanhamentoEvolutivoQuery',
-                    defaultTitle: 'Acompanhamento Evolutivo (AE)',
+                    defaultTitle: 'ACOMPANHAMENTO EVOLUTIVO (AE)',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão do acompanhamento evolutivo',
                     errorLabel: 'Acompanhamento Evolutivo (AE)',
@@ -1780,7 +1780,7 @@
                     key: 'monitoramentoNps',
                     containerId: 'monitoramento-nps-card',
                     queryKey: 'monitoramentoNpsQuery',
-                    defaultTitle: 'Monitoramento de NPS',
+                    defaultTitle: 'MONITORAMENTO DE NPS',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão do monitoramento de NPS',
                     errorLabel: 'Monitoramento de NPS',
@@ -1790,7 +1790,7 @@
                     key: 'followDetratores',
                     containerId: 'follow-detratores-card',
                     queryKey: 'followDetratoresQuery',
-                    defaultTitle: 'Follow de Detratores',
+                    defaultTitle: 'FOLLOW DE DETRATORES',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão do follow de detratores',
                     errorLabel: 'Follow de Detratores',
@@ -1800,7 +1800,7 @@
                     key: 'followNeutros',
                     containerId: 'follow-neutros-card',
                     queryKey: 'followNeutrosQuery',
-                    defaultTitle: 'Follow de Neutros',
+                    defaultTitle: 'FOLLOW DE NEUTROS',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão do follow de neutros',
                     errorLabel: 'Follow de Neutros',
@@ -1810,7 +1810,7 @@
                     key: 'clubeGestao',
                     containerId: 'clube-gestao-card',
                     queryKey: 'clubeGestaoQuery',
-                    defaultTitle: 'Clube de Gestão',
+                    defaultTitle: 'CLUBE DE GESTÃO',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão do clube de gestão',
                     errorLabel: 'Clube de Gestão',
@@ -1820,7 +1820,7 @@
                     key: 'entregaValor',
                     containerId: 'entrega-valor-card',
                     queryKey: 'entregaValorQuery',
-                    defaultTitle: 'Entrega de Valor - Digital',
+                    defaultTitle: 'ENTREGA DE VALOR - DIGITAL',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão da entrega de valor digital',
                     errorLabel: 'Entrega de Valor - Digital',
@@ -1830,7 +1830,7 @@
                     key: 'reversao',
                     containerId: 'reversao-card',
                     queryKey: 'reversaoQuery',
-                    defaultTitle: 'Reversão',
+                    defaultTitle: 'REVERSÃO',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão da reversão',
                     errorLabel: 'Reversão',
@@ -1840,7 +1840,7 @@
                     key: 'outrasAtividades',
                     containerId: 'outras-atividades-card',
                     queryKey: 'outrasAtividadesQuery',
-                    defaultTitle: 'Outras Atividades',
+                    defaultTitle: 'OUTRAS ATIVIDADES',
                     defaultSubtitle: 'Conclusão no prazo',
                     ariaLabel: 'Percentual de conclusão de outras atividades',
                     errorLabel: 'Outras Atividades',
@@ -2071,7 +2071,7 @@
                 `;
             };
 
-            const renderExecutionCard = (config, { titulo, subtitulo, realizado, previsto }) => {
+            const renderExecutionCard = (config, { realizado, previsto }) => {
                 const container = executionCardContainers[config.key];
                 if (!container) return;
 
@@ -2141,20 +2141,16 @@
 
                     const headers = result.headers.map(h => h.name.toUpperCase());
                     const map = {
-                        TITULO: headers.indexOf('TITULO'),
-                        SUBTITULO: headers.indexOf('SUBTITULO'),
                         REALIZADO: headers.indexOf('REALIZADO'),
                         PREVISTO: headers.indexOf('PREVISTO')
                     };
 
                     if (Object.values(map).some(index => index === -1)) {
-                        throw new Error('Retorne as colunas TITULO, SUBTITULO, REALIZADO e PREVISTO.');
+                        throw new Error('Retorne as colunas REALIZADO e PREVISTO.');
                     }
 
                     const row = result.data[0];
                     renderExecutionCard(config, {
-                        titulo: row[map.TITULO],
-                        subtitulo: row[map.SUBTITULO],
                         realizado: row[map.REALIZADO],
                         previsto: row[map.PREVISTO]
                     });
@@ -2215,8 +2211,22 @@
                 const container = document.getElementById('links-columns-container');
                 if (!container) return;
                 try {
-                    if (!componentData.queryColumns) return;
-                    const result = await queryMitra({ query: componentData.queryColumns });
+                    const queryColumns = `
+                        SELECT 
+                            ID, 
+                            TITLE, 
+                            ICONURL, 
+                            CASE 
+                                WHEN ID = 1 THEN '[ { \"label\": \"Sensedata - Atividades e dia a dia do CS\", \"url\": \"https://sankhya.sensedata.io/\" }, { \"label\": \"Indecx - NPS\", \"url\": \"https://indecx.com.br/\" }, { \"label\": \"Zendesk - Análise de chamados\", \"url\": \"https://login.sankhya.com.br/?brand_id=360003747033&locale_id=19&return_to=https%3A%2F%2Fajuda.sankhya.com.br%2Fhc%2Fpt-br&timestamp=1761759738\" } ]' 
+                                WHEN ID = 2 THEN '[ { \"label\": \"Solicitação de Acesso ao SenseData\", \"url\": \"https://docs.google.com/forms/d/e/1FAIpQLScEyaeVsR3PXJNd_sac2HEO-Nz5o4PYJPHxs4Z54yaGb2Ek7g/viewform?usp=send_form\" }, { \"label\": \"Gerenciamento de Metas - Unidade e Individual (CS)\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwuQURfR1JDTUVOVA==\" }, { \"label\": \"Mapa de Carreira\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjA1NS4x\" }, { \"label\": \"PDI & Performance\", \"url\": \"https://performance.mindsight.com.br/sankhya/\" }, { \"label\": \"Ciclo 4.0 - Remuneração\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjE4NS4x\" }, { \"label\": \"Apuração de Resultados (GPD)\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYXB1cmFjYW8ucmVzdWx0YWRv\" }, { \"label\": \"Campanha CS\", \"url\": \"https://drive.google.com/drive/folders/1BEwyPP8fVoxP3xr-EvmMYrXcFre3Dztf\" }, { \"label\": \"Jeito Sankhya de Atender\", \"url\": \"https://drive.google.com/drive/folders/1oU32ZNCVv50oXHTj9XEFTl2B-QTAbEbe\" } ]' 
+                                WHEN ID = 3 THEN '[ { \"label\": \"Portfólio Sankhya | Benefícios e Vantagens\", \"url\": \"https://docs.google.com/presentation/d/e/2PACX-1vQUsfUhtCuagQiYNP4OxRzjRr3qu-s0j8K9kV6nLR31ZvwZ177VVudugetWa1hqv0bdmREqLiaFentD/pub?start=false&loop=false&delayms=3000&slide=id.gfdf00a8237_2_0\" }, { \"label\": \"Novidades da Solução Sankhya\", \"url\": \"https://produtos.sankhya.com.br/\" }, { \"label\": \"Novidades da Versão Sankhya\", \"url\": \"https://downloads.sankhya.com.br/novidades.php?versao=4.35\" }, { \"label\": \"PLGs | Tours Guiados - Soluções Sankhya\", \"url\": \"https://docs.google.com/spreadsheets/d/15NfiWyLCO4_DkOV3orkFML-7l76KQJesqim3jXunXa8/edit?gid=0#gid=0\" }, { \"label\": \"Pacotes Place\", \"url\": \"https://login.sankhya.com.br/?redirect_to=https://place.sankhya.com.br/#/store/pacotes&application_id=3\" }, { \"label\": \"Cases de sucesso | Sankhya\", \"url\": \"https://www.sankhya.com.br/nossos-clientes/\" }, { \"label\": \"Eventos Sankhya\", \"url\": \"https://www.sankhya.com.br/sobre-a-sankhya/eventos-sankhya-erp/\" }, { \"label\": \"Modelos e Guias de Comunicação de Eventos\", \"url\": \"https://drive.google.com/drive/folders/1E-9LezcnknhJJm8jW28fA4DWIKbcQMlv\" }, { \"label\": \"Central de Ajuda Sankhya\", \"url\": \"https://ajuda.sankhya.com.br/hc/pt-br\" }, { \"label\": \"Universidade Sankhya\", \"url\": \"https://ead.sankhya.com.br/login.php\" }, { \"label\": \"Comunidade Sankhya\", \"url\": \"https://community.sankhya.com.br/combinados\" }, { \"label\": \"Portal de Inteligência de Mercado\", \"url\": \"https://sites.google.com/sankhya.com.br/portal-inteligencia-sankhya/p%C3%A1gina-inicial?authuser=0\" }, { \"label\": \"Blog Sankhya\", \"url\": \"https://www.sankhya.com.br/gestao-de-negocios/\" } ]' 
+                                WHEN ID = 4 THEN '[ { \"label\": \"Material da Jornada do Cliente\", \"url\": \"https://drive.google.com/drive/u/0/folders/1yZw1wHcOmkA3ln5C_zieHOi8ElA6Fe5q\" }, { \"label\": \"Playbook Cliente Case\", \"url\": \"https://drive.google.com/drive/u/0/folders/1WXU5Sf6J4vCGqOcTO9VSUgHeg4sAO4ia\" }, { \"label\": \"FAQ NPS\", \"url\": \"https://drive.google.com/drive/folders/1g6raVosMTeK85hTLBwj_FVXhq4d1LFQX\" }, { \"label\": \"Monitoramento NPS\", \"url\": \"https://drive.google.com/drive/u/0/folders/1up4iukpig5J35Deb_nytXRP9t-r5BZVa\" }, { \"label\": \"Follow up NPS\", \"url\": \"https://drive.google.com/drive/u/0/folders/1JoHn08t8f51DHMfUDZ5tG7O1y-Ey6ZQT\" }, { \"label\": \"Material de Gatilhos de Proteção\", \"url\": \"https://drive.google.com/drive/u/0/folders/1ODjo0g6fQWHfYQWLwoH4sGO3SlzCrveC\" }, { \"label\": \"Metodologia para Acompanhamento Evolutivo\", \"url\": \"https://drive.google.com/drive/folders/1JZBXBsvyVjrNUtL30-fIE66-lToc-N3K\" }, { \"label\": \"Book de Práticas para Acompanhamento Evolutivo\", \"url\": \"https://drive.google.com/drive/folders/1GuUU98D-KrEwprSNlkcTrR3VBa5jmhzb\" }, { \"label\": \"Aceleradores para Demonstração de Análises Gerenciais\", \"url\": \"https://drive.google.com/drive/folders/1DU3RT0Zt-ipOnQs6nCmsZV0yY2m0Pzv8\" }, { \"label\": \"PRO - Exemplo de Todos os Componentes\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuODkxLjE=/e30=&pk-refresh=1761760053171\" },  { \"label\": \"Política de Solicitação de Perdas\", \"url\": \"https://drive.google.com/drive/u/0/folders/13DryDKBH6tsKS3fbg_xJ2a7yuPZhoiYN\" }, { \"label\": \"Política de Solicitação de Perdas - Gestão de Consequências para Unidades\", \"url\": \"https://drive.google.com/file/d/1dGha4MQMkPfiVFzedSQrPXdPVZqDeMxc/view?usp=sharing\" }, { \"label\": \"Lançamento de Negociação com Origem Acompanhamento\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEub3MuY2FkLm5lZ29jaWFjYW9QcmVWZW5kYQ==\" } ]' 
+                                WHEN ID = 5 THEN '[ { \"label\": \"Agenda de Recursos\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEub3MubW92LmFnZW5kYS5yZWN1cnNvcw==/e30=&pk-refresh=1761760285464\" }, { \"label\": \"Consulta de OS\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEub3MuY29uLmNvbnN1bHRhT3M=/e30=&pk-refresh=1761760297152\" }, { \"label\": \"Contrato\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEub3MuY2FkLmNvbnRyYXRvcw==/e30=&pk-refresh=1761760309010\" }, { \"label\": \"Consulta FAP\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEub3MuY29uLnByb2pldG9z/e30=&pk-refresh=1761760325247\" }, { \"label\": \"Segmentação de Parceiro\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuY29yZS5jYWQucGFyY2Vpcm9zX18xNTUxNjQxNzM4ODMwLjE=\" }, { \"label\": \"CS - Carteira de Clientes Ativos\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTA0NC4x/e30=&pk-refresh=1761760337251\" }, { \"label\": \"Acompanhamento Visita\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTAwMy4x/e30=&pk-refresh=1761760565771\" }, { \"label\": \"CS - Acompanhamento Evolutivo (Novo)\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF80MzEyLjUuMjI2NQ==\" }, { \"label\": \"CS - Score de Uso Novo AE\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF80MzEyLjUuMjQ3MQ==\" }, { \"label\": \"CS - NPS\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTQzMS4x/e30=&pk-refresh=1761760436530\" }, { \"label\": \"Planos de Ação - Satisfação (Unidade)\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwuQURfVFNJUEFT\" }, { \"label\": \"CS - Análise de Reclamações\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTQzNy4x/e30=&pk-refresh=1761760548329\" }, { \"label\": \"Uso Nativo no Sensedata\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTY5MS4x\" }, { \"label\": \"CS MRR - Ganhos e Perdas\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTE5NC4x/e30=&pk-refresh=1761760493686\" }, { \"label\": \"CS - Análise Retenção (NRR)\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMTg0Ni4x/e30=&pk-refresh=1761760422806\" }, { \"label\": \"CS - Análise de Perdas (MRR Churn)\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF80MzEyLjUuMjM0NQ==\" }, { \"label\": \"CS - Análise de Cancelamento (Logo Churn)\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF80MzEyLjUuMjMyNA==\" }, { \"label\": \"CS - Acompanhamento Solicitações de Perdas\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjI4Mi4x\" }, { \"label\": \"SER - Health Score de Projetos\", \"url\": \"https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEubWVudS5hZGljaW9uYWwubnVEc2IuMjA4Ni4x\" } ]' 
+                            END AS LINKS 
+                        FROM CAD_PAINELCSLINKS 
+                        ORDER BY ID          
+                    `
+                    const result = await queryMitra({ query: queryColumns });
 
                     if (!result || !result.data || result.data.length === 0) {
                         container.innerHTML = `<div class="w-full text-center py-10 text-muted-foreground">Nenhum link encontrado.</div>`;
@@ -2287,7 +2297,38 @@
                 if (!container) return;
                 try {
                     if (!componentData.querySocial) { container.classList.add('hidden'); return; }
-                    const result = await queryMitra({ query: componentData.querySocial });
+                    const querySocial = `
+                        SELECT 
+                            1 AS ID, 
+                            'https://upload.wikimedia.org/wikipedia/commons/c/cd/Facebook_logo_%28square%29.png' AS ICONURL, 
+                            'https://pt-br.facebook.com/sankhyagestao/' AS LINKURL 
+                        FROM DUAL 
+                        UNION ALL 
+                        SELECT 
+                            2 AS ID, 
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1200px-Instagram_logo_2022.svg.png' AS ICONURL, 
+                            'https://www.instagram.com/sankhyagestao/' AS LINKURL 
+                        FROM DUAL 
+                        UNION ALL 
+                        SELECT 
+                            3 AS ID, 
+                            'https://static.vecteezy.com/system/resources/previews/018/910/721/original/linkedin-logo-linkedin-symbol-linkedin-icon-free-free-vector.jpg' AS ICONURL, 
+                            'https://www.linkedin.com/company/sankhyagestao' AS LINKURL 
+                        FROM DUAL 
+                        UNION ALL 
+                        SELECT 
+                            4 AS ID, 
+                            'https://img.freepik.com/vetores-premium/icone-do-youtube_1144164-269.jpg?semt=ais_hybrid&w=740&q=80' AS ICONURL, 
+                            'https://www.youtube.com/user/sankhyagestao' AS LINKURL 
+                        FROM DUAL 
+                        UNION ALL 
+                        SELECT 
+                            5 AS ID, 
+                            'https://img.freepik.com/vetores-premium/logotipo-google-drive_578229-303.jpg?semt=ais_hybrid&w=740&q=80' AS ICONURL, 
+                            'https://drive.google.com/drive/folders/0AL59upN3sJsHUk9PVA' AS LINKURL 
+                        FROM DUAL
+                    `
+                    const result = await queryMitra({ query: querySocial });
 
                     if (!result || !result.data || result.data.length === 0) {
                         container.classList.add('hidden');
