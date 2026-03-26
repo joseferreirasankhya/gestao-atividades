@@ -1123,7 +1123,141 @@
                     </div>
                 </section>
 
-                <!-- Bloco 3: Tabela Resumo (Classificações) -->
+                <!-- Bloco 3: Cards Numéricos -->
+                <section class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-3 xl:gap-4 mb-2 lg:mb-3">
+                    <!-- Logo Churn -->
+                    <div id="card-logo-churn"
+                        class="kpi-layout-card relative flex flex-col justify-center items-center text-center px-4 py-5 min-h-[140px] transition-colors duration-300 bg-slate-50 dark:bg-secondary">
+                        <div class="absolute top-3 right-3 flex items-center gap-2 text-muted-foreground">
+                            <span
+                                data-tippy-content="Percentual de clientes cancelado em relação aos clientes ativos no início do período.">
+                                <i data-lucide="info"
+                                    class="w-4 h-4 cursor-help hover:text-foreground transition-colors"></i>
+                            </span>
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                target="_blank" title="Abrir Painel">
+                                <i data-lucide="layout-grid"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground transition-colors"></i>
+                            </a>
+                        </div>
+                        <div class="flex flex-col items-center justify-center w-full mt-2">
+                            <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">Logo
+                                Churn</p>
+                            <h2 id="valor-logo-churn" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
+                        </div>
+                    </div>
+
+                    <!-- MRR Inadimplentes -->
+                    <div id="card-mrr-inadimplentes"
+                        class="kpi-layout-card relative flex flex-col justify-center items-center text-center px-4 py-5 min-h-[140px] transition-colors duration-300 bg-slate-50 dark:bg-secondary">
+                        <div class="absolute top-3 right-3 flex items-center gap-2 text-muted-foreground">
+                            <span
+                                data-tippy-content="Clientes suspensos no intervalo de 15 a 30 dias. Valor apresentado conforme data final informada">
+                                <i data-lucide="info"
+                                    class="w-4 h-4 cursor-help hover:text-foreground transition-colors"></i>
+                            </span>
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                target="_blank" title="Abrir Painel">
+                                <i data-lucide="layout-grid"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground transition-colors"></i>
+                            </a>
+                        </div>
+                        <div class="flex flex-col items-center justify-center w-full mt-2">
+                            <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">MRR
+                                Inadimplentes</p>
+                            <h2 id="valor-mrr-inadimp" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
+                        </div>
+                    </div>
+
+                    <!-- MRR em Risco -->
+                    <div id="card-mrr-risco"
+                        class="kpi-layout-card relative flex flex-col justify-center items-center text-center px-4 py-5 min-h-[140px] transition-colors duration-300 bg-slate-50 dark:bg-secondary">
+                        <div class="absolute top-3 right-3 flex items-center gap-2 text-muted-foreground">
+                            <span
+                                data-tippy-content="Clientes suspensos com menos de 120 dias. Valor apresentado conforme data final informada">
+                                <i data-lucide="info"
+                                    class="w-4 h-4 cursor-help hover:text-foreground transition-colors"></i>
+                            </span>
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                target="_blank" title="Abrir Painel">
+                                <i data-lucide="layout-grid"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground transition-colors"></i>
+                            </a>
+                        </div>
+                        <div class="flex flex-col items-center justify-center w-full mt-2">
+                            <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">MRR
+                                em Risco</p>
+                            <h2 id="valor-mrr-risco" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
+                        </div>
+                    </div>
+
+                    <!-- Perdas Temporárias -->
+                    <div id="card-perdas-temp"
+                        class="kpi-layout-card relative flex flex-col justify-center items-center text-center px-4 py-5 min-h-[140px] transition-colors duration-300 bg-slate-50 dark:bg-secondary">
+                        <div class="absolute top-3 right-3 flex items-center gap-2 text-muted-foreground">
+                            <span data-tippy-content="Perdas com data prevista de retorno.">
+                                <i data-lucide="info"
+                                    class="w-4 h-4 cursor-help hover:text-foreground transition-colors"></i>
+                            </span>
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                target="_blank" title="Abrir Painel">
+                                <i data-lucide="layout-grid"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground transition-colors"></i>
+                            </a>
+                        </div>
+                        <div class="flex flex-col items-center justify-center w-full mt-2">
+                            <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">
+                                Perdas Temporárias</p>
+                            <h2 id="valor-perdas-temp" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
+                        </div>
+                    </div>
+
+                    <!-- Contact Rate -->
+                    <div id="card-contact-rate"
+                        class="kpi-layout-card relative flex flex-col justify-center items-center text-center px-4 py-5 min-h-[140px] transition-colors duration-300 bg-slate-50 dark:bg-secondary">
+                        <div class="absolute top-3 right-3 flex items-center gap-2 text-muted-foreground">
+                            <span
+                                data-tippy-content="O Contact Rate calcula a quantidade de tickets criados em relação à base ativa de clientes (exceto suspensos). Quanto maior o índice, maior é a dependência do suporte para utilizar o produto.">
+                                <i data-lucide="info"
+                                    class="w-4 h-4 cursor-help hover:text-foreground transition-colors"></i>
+                            </span>
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                target="_blank" title="Abrir Painel">
+                                <i data-lucide="layout-grid"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground transition-colors"></i>
+                            </a>
+                        </div>
+                        <div class="flex flex-col items-center justify-center w-full mt-2">
+                            <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">
+                                Contact Rate</p>
+                            <h2 id="valor-contact-rate" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
+                        </div>
+                    </div>
+
+                    <!-- Chamados Direcionados para Unidade -->
+                    <div id="card-chamados-dir"
+                        class="kpi-layout-card relative flex flex-col justify-center items-center text-center px-4 py-5 min-h-[140px] transition-colors duration-300 bg-slate-50 dark:bg-secondary">
+                        <div class="absolute top-3 right-3 flex items-center gap-2 text-muted-foreground">
+                            <span
+                                data-tippy-content="OS direcionadas para a Unidade é o indicador que representa o total de chamados recebidos pelo centro de suporte cuja responsabilidade de atendimento é da Unidade. Nesse caso, a Unidade deve atuar na tratativa e na devolutiva dessas OS.">
+                                <i data-lucide="info"
+                                    class="w-4 h-4 cursor-help hover:text-foreground transition-colors"></i>
+                            </span>
+                            <a href="https://skw.sankhya.com.br/mge/system.jsp#app/YnIuY29tLnNhbmtoeWEuYW5hbHl0aWNzMi5uZXcuc2MudF8yMDI5My41LjExMg=="
+                                target="_blank" title="Abrir Painel">
+                                <i data-lucide="layout-grid"
+                                    class="w-4 h-4 cursor-pointer hover:text-foreground transition-colors"></i>
+                            </a>
+                        </div>
+                        <div class="flex flex-col items-center justify-center w-full mt-2">
+                            <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">
+                                Chamados Direcionados</p>
+                            <h2 id="valor-chamados-dir" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bloco 4: Tabela Resumo (Classificações) -->
                 <div class="table-container shadow-sm border border-border">
                     <div class="px-6 py-4 border-b border-border flex justify-end">
                         <button
@@ -1945,9 +2079,9 @@
 
             const PROGRESS_THRESHOLDS = { LOW: 50, MID: 90 };
             const PROGRESS_COLORS = {
-                kpi:       { low: '#dc2626', mid: '#d97706', high: '#16a34a' },
+                kpi: { low: '#dc2626', mid: '#d97706', high: '#16a34a' },
                 execution: { low: '#f8c7bf', mid: '#f8ecbb', high: '#b6edb6' },
-                donut:     { low: '#facaca', mid: '#f8ecbb', high: '#b6edb6', over: '#bde4e6' }
+                donut: { low: '#facaca', mid: '#f8ecbb', high: '#b6edb6', over: '#bde4e6' }
             };
 
             const getKpiProgressColor = (percentage) => {
@@ -2384,6 +2518,7 @@
                     loadGestaoVistaMrrChurnDonutData(),
                     loadGestaoVistaAcompEvolData(),
                     loadGestaoVistaClubeGestaoDonutData(),
+                    loadGestaoVistaNumericCardsData(),
 
                     // Atividades
                     loadDonutData(),
@@ -2569,9 +2704,9 @@
             };
 
             const getGestaoVistaDonutColor = (percentage) => {
-                if (percentage < PROGRESS_THRESHOLDS.LOW)  return PROGRESS_COLORS.donut.low;
-                if (percentage < PROGRESS_THRESHOLDS.MID)  return PROGRESS_COLORS.donut.mid;
-                if (percentage <= 100)                     return PROGRESS_COLORS.donut.high;
+                if (percentage < PROGRESS_THRESHOLDS.LOW) return PROGRESS_COLORS.donut.low;
+                if (percentage < PROGRESS_THRESHOLDS.MID) return PROGRESS_COLORS.donut.mid;
+                if (percentage <= 100) return PROGRESS_COLORS.donut.high;
                 return PROGRESS_COLORS.donut.over;
             };
 
@@ -3040,6 +3175,161 @@
                 } catch (error) {
                     console.error('Falha ao carregar os dados do CLUBE GESTÃO:', error);
                 }
+            }
+
+            async function loadGestaoVistaNumericCardsData() {
+                const cardsConfig = [
+                    {
+                        cardId: 'card-logo-churn',
+                        valorId: 'valor-logo-churn',
+                        queryCard: `
+                            SELECT
+                                'Logo Churn' AS CARD_DESCRIPTION,
+                                FORMAT(VALOR_CHURN, 2, 'de_DE') AS CARD_TITLE,
+                                '%' AS CARD_SUFFIX,
+                                CASE
+                                    WHEN VALOR_CHURN < 0.35 THEN '#ceecf1'
+                                    WHEN VALOR_CHURN >= 0.35 AND VALOR_CHURN < 0.83 THEN '#b6edb6'
+                                    WHEN VALOR_CHURN >= 0.83 AND VALOR_CHURN <= 1.00  THEN '#f8ecbb'
+                                    ELSE '#f8c7bf'
+                                END AS CARD_BG_COLOR
+                            FROM (
+                                SELECT AVG(Z.LOGO_CHURN) AS VALOR_CHURN
+                                FROM (
+                                    SELECT
+                                        SUM(X.QTD_CANC) AS QTD_CANC,
+                                        SUM(X.QTD_BASE_CLIENTES) AS QTD_BASE_CLIENTES,
+                                        (SUM(X.QTD_CANC) / NULLIF(SUM(X.QTD_BASE_CLIENTES), 0)) * 100 AS LOGO_CHURN,
+                                            X.ID_CALENDARIO
+                                    FROM (
+                                        SELECT
+                                            COUNT(CAN.ID_PARCEIRO) AS QTD_CANC,
+                                            0 AS QTD_BASE_CLIENTES,
+                                            CONCAT(LEFT(CAN.ID_CALENDARIO, 6), '01') AS ID_CALENDARIO
+                                        FROM CC_1173 CAN
+                                        INNER JOIN CAD_1006 PAR ON PAR.ID = CAN.ID_PARCEIRO
+                                        INNER JOIN CAD_1007 UNI ON UNI.ID = PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL
+                                        WHERE CAN.ID_CANCELAMENTO_POR_LIMPEZA_DE_BASE <> 'S'AND
+                                            (CONCAT(LEFT(CAN.ID_CALENDARIO, 6), '01') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND
+                                            (CAN.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND
+                                            (PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND
+                                            (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND
+                                            (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND
+                                            (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND
+                                            (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND
+                                            (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND
+                                            EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = CAN.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) AND
+                                            CAN.ID_CALENDARIO >= '20260101'
+                                        GROUP BY CONCAT(LEFT(CAN.ID_CALENDARIO, 6), '01')
+                                        UNION ALL
+                                        SELECT
+                                            0 AS QTD_CANC,
+                                            COUNT(*) AS QTD_BASE_CLIENTES,
+                                            CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01') AS ID_CALENDARIO
+                                        FROM CC_1325 MRR
+                                        INNER JOIN CAD_1006 PAR ON PAR.ID = MRR.ID_PARCEIRO
+                                        INNER JOIN CAD_1007 UNI ON UNI.ID = MRR.ID_UNIDADE
+                                        WHERE MRR.ID_STATUS_CLIENTE IN (1, 2, 3, 4, 5)
+                                            AND LAST_DAY(MRR.ID_CALENDARIO) = MRR.ID_CALENDARIO
+                                            AND (DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos')
+                                            AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
+                                            AND (MRR.ID_UNIDADE IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos')
+                                            AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos')
+                                            AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos')
+                                            AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos')
+                                            AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos')
+                                            AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos')
+                                            AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = MRR.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS)
+                                            AND MRR.ID_CALENDARIO >= '20251201'
+                                        GROUP BY CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01')
+                                    ) X
+                                    GROUP BY X.ID_CALENDARIO
+                                ) Z ) CALC
+                        `
+                    },
+                    {
+                        cardId: 'card-mrr-inadimplentes',
+                        valorId: 'valor-mrr-inadimp',
+                        queryCard: `SELECT 'MRR Inadimplentes (15 a 30 dias)' AS CARD_DESCRIPTION, CONCAT('R$ ', FORMAT(VALOR_MRR, 2, 'de_DE')) AS CARD_TITLE, '' AS CARD_SUFFIX, CASE WHEN VALOR_MRR = 0 THEN '#eaebf0' ELSE '#eaebf0' END AS CARD_BG_COLOR FROM ( SELECT SUM(MRR.VLR_MRR_EM_RISCO) AS VALOR_MRR FROM CC_1667 MRR INNER JOIN CAD_1006 PAR ON PAR.ID = MRR.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = MRR.ID_UNIDADE INNER JOIN CC_1669 DIA ON DIA.ID_PARCEIRO = MRR.ID_PARCEIRO AND DIA.ID_CALENDARIO = MRR.ID_CALENDARIO INNER JOIN CC_1668 SUS ON SUS.ID_PARCEIRO = MRR.ID_PARCEIRO AND SUS.DT_INCIO_DA_SUSPENSAO_RISCO = ( SELECT MAX(S2.DT_INCIO_DA_SUSPENSAO_RISCO) FROM CC_1668 S2 WHERE S2.ID_PARCEIRO = MRR.ID_PARCEIRO ) WHERE (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND DIA.TEMPO_EM_RISCO_DIAS <= 120 AND DATEDIFF(CURDATE(), SUS.DT_INCIO_DA_SUSPENSAO_RISCO) BETWEEN 15 AND 40 AND (MRR.ID_UNIDADE IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND MRR.ID_CALENDARIO = (SELECT MAX(C.ID) FROM CAD_1 C WHERE (C.ID IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND C.ID <= DATE_FORMAT(NOW(), '%Y%m%d') AND C.ID LIKE '2026%01') ) CALC`
+                    },
+                    {
+                        cardId: 'card-mrr-risco',
+                        valorId: 'valor-mrr-risco',
+                        queryCard: `
+                            SELECT
+                                'MRR em Risco (Suspenso)' AS CARD_DESCRIPTION,
+                                CONCAT('R$ ', FORMAT(VALOR_MRR, 2, 'de_DE')) AS CARD_TITLE,
+                                '' AS CARD_SUFFIX,
+                                CASE
+                                    WHEN VALOR_MRR = 0 THEN '#eaebf0'
+                                    ELSE '#eaebf0'
+                                END AS CARD_BG_COLOR
+                            FROM (
+                                SELECT SUM(MRR.VLR_MRR_EM_RISCO) AS VALOR_MRR
+                                FROM CC_1667 MRR
+                                INNER JOIN CAD_1006 PAR ON PAR.ID = MRR.ID_PARCEIRO
+                                INNER JOIN CAD_1007 UNI ON UNI.ID = MRR.ID_UNIDADE
+                                INNER JOIN CC_1669 DIA ON DIA.ID_PARCEIRO = MRR.ID_PARCEIRO AND DIA.ID_CALENDARIO = MRR.ID_CALENDARIO
+                                WHERE (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos')
+                                    AND DIA.TEMPO_EM_RISCO_DIAS <= 120
+                                    AND (MRR.ID_UNIDADE IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos')
+                                    AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos')
+                                    AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos')
+                                    AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos')
+                                    AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos')
+                                    AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos')
+                                    AND MRR.ID_CALENDARIO = (
+                                        SELECT MAX(C.ID)
+                                        FROM CAD_1 C
+                                        WHERE (C.ID IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos')
+                                        AND C.ID <= DATE_FORMAT(NOW(), '%Y%m%d')
+                                        AND C.ID LIKE '2026%01')
+                                    ) CALC
+                        `
+                    },
+                    {
+                        cardId: 'card-perdas-temp',
+                        valorId: 'valor-perdas-temp',
+                        queryCard: `SELECT 'Perdas Temporárias' AS CARD_DESCRIPTION, CONCAT('R$ ', FORMAT(VALOR_PERDA, 2, 'de_DE')) AS CARD_TITLE, '' AS CARD_SUFFIX, CASE WHEN VALOR_PERDA = 0 THEN '#eaebf0' ELSE '#eaebf0' END AS CARD_BG_COLOR FROM ( SELECT SUM(PER.VLR_PERDA_MRR_CHURN) AS VALOR_PERDA FROM CC_1671 PER INNER JOIN CAD_1006 PAR ON PAR.ID = PER.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = PER.ID_UNIDADE WHERE PER.ID_TIPO_DE_PERDA = 'TEMPORARIO' AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = PER.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) AND (PER.ID_CALENDARIO IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (PER.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (PER.ID_UNIDADE IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND PER.ID_CALENDARIO >= '20260101' ) CALC`
+                    },
+                    {
+                        cardId: 'card-contact-rate',
+                        valorId: 'valor-contact-rate',
+                        queryCard: `SELECT 'Contact Rate' AS CARD_DESCRIPTION, FORMAT(VALOR_CONTACT_RATE, 2, 'de_DE') AS CARD_TITLE, '%' AS CARD_SUFFIX, CASE WHEN VALOR_CONTACT_RATE < 2.85 THEN '#ceecf1' WHEN VALOR_CONTACT_RATE >= 2.85 AND VALOR_CONTACT_RATE < 3.15 THEN '#b6edb6' WHEN VALOR_CONTACT_RATE >= 3.15 AND VALOR_CONTACT_RATE <= 3.9 THEN '#f8ecbb' ELSE '#f8c7bf' END AS CARD_BG_COLOR FROM ( SELECT AVG(Z.CONTACT_RATE) AS VALOR_CONTACT_RATE FROM ( SELECT ROUND((tickets.TOTAL_TICKETS / NULLIF(base.TOTAL_PARCEIROS, 0)), 2) AS CONTACT_RATE, tickets.ID_CALENDARIO FROM ( SELECT CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') AS ID_CALENDARIO, COUNT(DISTINCT t.ID_TICKET) AS TOTAL_TICKETS FROM CC_1401 t INNER JOIN CAD_1294 cal ON cal.ID = t.ID_TICKET INNER JOIN CAD_1006 PAR ON PAR.ID = t.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL WHERE (CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (t.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = t.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) GROUP BY CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') ) tickets INNER JOIN ( SELECT CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01') AS ID_CALENDARIO, COUNT(DISTINCT MRR.ID_PARCEIRO) AS TOTAL_PARCEIROS FROM CC_1325 MRR INNER JOIN CAD_1006 PAR ON PAR.ID = MRR.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = MRR.ID_UNIDADE WHERE MRR.ID_STATUS_CLIENTE IN (1, 2, 3, 4, 5) AND LAST_DAY(MRR.ID_CALENDARIO) = MRR.ID_CALENDARIO AND (DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (MRR.ID_UNIDADE IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = MRR.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) AND MRR.ID_CALENDARIO >= '20251201' GROUP BY CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01') ) base ON tickets.ID_CALENDARIO = base.ID_CALENDARIO ) Z ) CALC`
+                    },
+                    {
+                        cardId: 'card-chamados-dir',
+                        valorId: 'valor-chamados-dir',
+                        queryCard: `SELECT 'Chamados Direcionados para Unidade' AS CARD_DESCRIPTION, FORMAT(VALOR_TOTAL_CHAMADOS, 0, 'de_DE') AS CARD_TITLE, '' AS CARD_SUFFIX, CASE WHEN VALOR_TOTAL_CHAMADOS < 100 THEN '#eaebf0' WHEN VALOR_TOTAL_CHAMADOS < 200 THEN '#eaebf0' WHEN VALOR_TOTAL_CHAMADOS <= 300 THEN '#eaebf0' ELSE '#eaebf0' END AS CARD_BG_COLOR FROM ( SELECT SUM(Z.TOTAL_TICKETS) AS VALOR_TOTAL_CHAMADOS FROM ( SELECT COUNT(DISTINCT t.ID_TICKET) AS TOTAL_TICKETS, CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') AS ID_CALENDARIO FROM CC_1401 t INNER JOIN CAD_1294 cal ON cal.ID = t.ID_TICKET INNER JOIN CAD_1006 PAR ON PAR.ID = t.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL WHERE cal.STATUS_RESOLVIDO_DO_TICKET = 'direcionado_para_unidade' AND (CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (t.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = t.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) GROUP BY CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') ) Z ) CALC`
+                    }
+                ];
+
+                await Promise.all(cardsConfig.map(async (card) => {
+                    try {
+                        const result = await queryMitra({ query: card.queryCard });
+                        if (!result || !result.data || result.data.length === 0) return;
+
+                        const headers = result.headers.map(h => h.name.toUpperCase());
+                        const dataRow = result.data[0];
+                        const titleIdx = headers.indexOf('CARD_TITLE');
+                        const suffixIdx = headers.indexOf('CARD_SUFFIX');
+                        const bgColorIdx = headers.indexOf('CARD_BG_COLOR');
+
+                        const cardTitle = titleIdx !== -1 ? dataRow[titleIdx] : '';
+                        const cardSuffix = suffixIdx !== -1 ? dataRow[suffixIdx] : '';
+                        const cardBgColor = bgColorIdx !== -1 ? dataRow[bgColorIdx] : null;
+
+                        const valor = document.getElementById(card.valorId);
+                        if (valor) valor.textContent = `${cardTitle}${cardSuffix}`;
+
+                        const cardDiv = document.getElementById(card.cardId);
+                        if (cardDiv && cardBgColor && /^#([0-9A-F]{3}){1,2}$/i.test(cardBgColor)) {
+                            cardDiv.style.backgroundColor = cardBgColor;
+                        }
+                    } catch (error) {
+                        console.error(`Falha ao carregar dados do card [${card.cardId}]:`, error);
+                    }
+                }));
             }
 
             const normalizeStatus = (value) => String(value || '')
