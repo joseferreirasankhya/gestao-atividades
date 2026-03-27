@@ -814,6 +814,20 @@
             height: 0.875rem;
             stroke-width: 2;
         }
+
+        html:not(.dark) .dynamic-card-bg {
+            background-color: var(--card-dynamic-color) !important;
+        }
+
+        html:not(.dark) .dynamic-card-bg p,
+        html:not(.dark) .dynamic-card-bg h2,
+        html:not(.dark) .dynamic-card-bg .text-muted-foreground {
+            color: #000000 !important;
+        }
+
+        .dark .dynamic-kpi-text {
+            color: var(--card-dynamic-color) !important;
+        }
     </style>
 </head>
 
@@ -1164,7 +1178,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center w-full mt-2">
                             <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">MRR
-                                Inadimplentes</p>
+                                Inadimplentes (15 a 30 dias)</p>
                             <h2 id="valor-mrr-inadimp" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
                         </div>
                     </div>
@@ -1186,7 +1200,7 @@
                         </div>
                         <div class="flex flex-col items-center justify-center w-full mt-2">
                             <p class="text-[0.75rem] font-semibold text-muted-foreground tracking-wider uppercase">MRR
-                                em Risco</p>
+                                em Risco (Suspensões)</p>
                             <h2 id="valor-mrr-risco" class="text-2xl font-extrabold text-foreground mt-1">--</h2>
                         </div>
                     </div>
@@ -3295,7 +3309,7 @@
                     {
                         cardId: 'card-contact-rate',
                         valorId: 'valor-contact-rate',
-                        queryCard: `SELECT 'Contact Rate' AS CARD_DESCRIPTION, FORMAT(VALOR_CONTACT_RATE, 2, 'de_DE') AS CARD_TITLE, '%' AS CARD_SUFFIX, CASE WHEN VALOR_CONTACT_RATE < 2.85 THEN '#ceecf1' WHEN VALOR_CONTACT_RATE >= 2.85 AND VALOR_CONTACT_RATE < 3.15 THEN '#b6edb6' WHEN VALOR_CONTACT_RATE >= 3.15 AND VALOR_CONTACT_RATE <= 3.9 THEN '#f8ecbb' ELSE '#f8c7bf' END AS CARD_BG_COLOR FROM ( SELECT AVG(Z.CONTACT_RATE) AS VALOR_CONTACT_RATE FROM ( SELECT ROUND((tickets.TOTAL_TICKETS / NULLIF(base.TOTAL_PARCEIROS, 0)), 2) AS CONTACT_RATE, tickets.ID_CALENDARIO FROM ( SELECT CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') AS ID_CALENDARIO, COUNT(DISTINCT t.ID_TICKET) AS TOTAL_TICKETS FROM CC_1401 t INNER JOIN CAD_1294 cal ON cal.ID = t.ID_TICKET INNER JOIN CAD_1006 PAR ON PAR.ID = t.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL WHERE (CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (t.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = t.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) GROUP BY CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') ) tickets INNER JOIN ( SELECT CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01') AS ID_CALENDARIO, COUNT(DISTINCT MRR.ID_PARCEIRO) AS TOTAL_PARCEIROS FROM CC_1325 MRR INNER JOIN CAD_1006 PAR ON PAR.ID = MRR.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = MRR.ID_UNIDADE WHERE MRR.ID_STATUS_CLIENTE IN (1, 2, 3, 4, 5) AND LAST_DAY(MRR.ID_CALENDARIO) = MRR.ID_CALENDARIO AND (DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (MRR.ID_UNIDADE IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = MRR.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) AND MRR.ID_CALENDARIO >= '20251201' GROUP BY CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01') ) base ON tickets.ID_CALENDARIO = base.ID_CALENDARIO ) Z ) CALC`
+                        queryCard: `SELECT 'Contact Rate' AS CARD_DESCRIPTION, FORMAT(VALOR_CONTACT_RATE, 2, 'de_DE') AS CARD_TITLE, '' AS CARD_SUFFIX, CASE WHEN VALOR_CONTACT_RATE < 2.85 THEN '#ceecf1' WHEN VALOR_CONTACT_RATE >= 2.85 AND VALOR_CONTACT_RATE < 3.15 THEN '#b6edb6' WHEN VALOR_CONTACT_RATE >= 3.15 AND VALOR_CONTACT_RATE <= 3.9 THEN '#f8ecbb' ELSE '#f8c7bf' END AS CARD_BG_COLOR FROM ( SELECT AVG(Z.CONTACT_RATE) AS VALOR_CONTACT_RATE FROM ( SELECT ROUND((tickets.TOTAL_TICKETS / NULLIF(base.TOTAL_PARCEIROS, 0)), 2) AS CONTACT_RATE, tickets.ID_CALENDARIO FROM ( SELECT CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') AS ID_CALENDARIO, COUNT(DISTINCT t.ID_TICKET) AS TOTAL_TICKETS FROM CC_1401 t INNER JOIN CAD_1294 cal ON cal.ID = t.ID_TICKET INNER JOIN CAD_1006 PAR ON PAR.ID = t.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL WHERE (CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (t.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (PAR.ID_UNIDADE_DO_PARCEIRO_ATUAL IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = t.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) GROUP BY CONCAT(LEFT(DATE_FORMAT(cal.DT_CHAMADA, '%Y%m%d'), 6), '01') ) tickets INNER JOIN ( SELECT CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01') AS ID_CALENDARIO, COUNT(DISTINCT MRR.ID_PARCEIRO) AS TOTAL_PARCEIROS FROM CC_1325 MRR INNER JOIN CAD_1006 PAR ON PAR.ID = MRR.ID_PARCEIRO INNER JOIN CAD_1007 UNI ON UNI.ID = MRR.ID_UNIDADE WHERE MRR.ID_STATUS_CLIENTE IN (1, 2, 3, 4, 5) AND LAST_DAY(MRR.ID_CALENDARIO) = MRR.ID_CALENDARIO AND (DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d') IN (:ID_CALENDARIO) OR CONCAT(:ID_CALENDARIO) = 'Todos') AND (MRR.ID_PARCEIRO IN (:ID_PARCEIRO) OR CONCAT(:ID_PARCEIRO) = 'Todos') AND (MRR.ID_UNIDADE IN (:ID_UNIDADE) OR CONCAT(:ID_UNIDADE) = 'Todos') AND (PAR.ID_SEGMENTO_PRINCIPAL IN (:ID_SEGMENTO_PRINCIPAL) OR CONCAT(:ID_SEGMENTO_PRINCIPAL) = 'Todos') AND (PAR.ID_SEGMENTACAO_ATUAL IN (:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) OR CONCAT(:ID_CLASSIFICACAO.SEGMENTACAO_ATUAL) = 'Todos') AND (UNI.ID_CS_MATRIZ IN (:ID_CS_MATRIZ) OR CONCAT(:ID_CS_MATRIZ) = 'Todos') AND (UNI.ID_TIPO_UNIDADE IN (:ID_TIPO_UNIDADE) OR CONCAT(:ID_TIPO_UNIDADE) = 'Todos') AND (PAR.ID_CONSULTOR_CS IN (:ID_USUARIO.CONSULTOR_CS) OR CONCAT(:ID_USUARIO.CONSULTOR_CS) = 'Todos') AND EXISTS (SELECT 1 FROM CC_1609 WHERE ID_PARCEIRO = MRR.ID_PARCEIRO AND ID_USUARIOS = :ID_USUARIOS) AND MRR.ID_CALENDARIO >= '20251201' GROUP BY CONCAT(LEFT(DATE_FORMAT(DATE_ADD(MRR.ID_CALENDARIO, INTERVAL 1 MONTH), '%Y%m%d'), 6), '01') ) base ON tickets.ID_CALENDARIO = base.ID_CALENDARIO ) Z ) CALC`
                     },
                     {
                         cardId: 'card-chamados-dir',
@@ -3324,7 +3338,16 @@
 
                         const cardDiv = document.getElementById(card.cardId);
                         if (cardDiv && cardBgColor && /^#([0-9A-F]{3}){1,2}$/i.test(cardBgColor)) {
-                            cardDiv.style.backgroundColor = cardBgColor;
+                            cardDiv.style.borderColor = cardBgColor;
+                            cardDiv.style.borderWidth = '5px';
+                            cardDiv.style.setProperty('--card-dynamic-color', cardBgColor);
+                            cardDiv.classList.add('dynamic-card-bg');
+
+                            if (valor) {
+                                valor.classList.add('dynamic-kpi-text');
+                                const titleEl = valor.previousElementSibling;
+                                if (titleEl) titleEl.classList.add('dynamic-kpi-text');
+                            }
                         }
                     } catch (error) {
                         console.error(`Falha ao carregar dados do card [${card.cardId}]:`, error);
