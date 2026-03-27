@@ -815,6 +815,250 @@
             stroke-width: 2;
         }
 
+        /* ===== Playbook Modal ===== */
+        .pb-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .pb-modal-overlay.active {
+            display: flex;
+        }
+
+        @keyframes pbModalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .pb-modal {
+            background: hsl(var(--background));
+            border: 1px solid hsl(var(--border));
+            border-radius: 0.75rem;
+            width: min(520px, calc(100vw - 2rem));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+            animation: pbModalIn 0.2s ease-out;
+        }
+
+        .dark .pb-modal {
+            background: hsl(var(--secondary));
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .pb-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 1.5rem 1rem;
+        }
+
+        .pb-modal-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 0.5rem;
+            background: color-mix(in srgb, #22c55e 12%, transparent);
+            color: #16a34a;
+            flex-shrink: 0;
+        }
+
+        .dark .pb-modal-icon {
+            background: color-mix(in srgb, #22c55e 18%, transparent);
+            color: #4ade80;
+        }
+
+        .pb-modal-icon svg {
+            width: 1.125rem;
+            height: 1.125rem;
+            stroke-width: 2;
+        }
+
+        .pb-modal-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            flex: 1;
+            margin: 0;
+        }
+
+        .pb-modal-close-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.375rem;
+            border: 1px solid transparent;
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .pb-modal-close-btn:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--foreground));
+        }
+
+        .pb-modal-close-btn svg {
+            width: 1rem;
+            height: 1rem;
+            stroke-width: 2;
+        }
+
+        .pb-modal-divider {
+            border: none;
+            border-top: 1px solid hsl(var(--border));
+            margin: 0;
+        }
+
+        .pb-modal-form {
+            padding: 1.25rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pb-modal-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+        }
+
+        .pb-modal-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--foreground));
+        }
+
+        .pb-modal-required {
+            color: hsl(var(--destructive));
+            margin-left: 0.125rem;
+        }
+
+        .pb-modal-select {
+            width: 100%;
+            height: 2.5rem;
+            padding: 0 2rem 0 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid hsl(var(--border));
+            background-color: hsl(var(--background));
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.65rem center;
+            color: hsl(var(--foreground));
+            font-size: 0.875rem;
+            font-family: 'Work Sans', sans-serif;
+            appearance: none;
+            -webkit-appearance: none;
+            box-sizing: border-box;
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .pb-modal-select:focus {
+            outline: none;
+            border-color: hsl(var(--primary) / 0.5);
+            box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
+        }
+
+        .pb-modal-select.pb-error {
+            border-color: hsl(var(--destructive));
+            box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.1);
+        }
+
+        .dark .pb-modal-select {
+            background-color: hsl(var(--muted));
+            border-color: hsl(var(--border));
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        }
+
+        .pb-modal-error-msg {
+            font-size: 0.75rem;
+            color: hsl(var(--destructive));
+            display: none;
+        }
+
+        .pb-modal-error-msg.visible {
+            display: block;
+        }
+
+        .pb-modal-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding-top: 0.25rem;
+        }
+
+        .pb-modal-btn-cancel {
+            display: inline-flex;
+            align-items: center;
+            height: 2.25rem;
+            padding: 0 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid hsl(var(--border));
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: 'Work Sans', sans-serif;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .pb-modal-btn-cancel:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--foreground));
+        }
+
+        .pb-modal-btn-save {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            height: 2.25rem;
+            padding: 0 1.125rem;
+            border-radius: 0.5rem;
+            border: 1px solid transparent;
+            background: #16a34a;
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: 'Work Sans', sans-serif;
+            cursor: pointer;
+            transition: filter 0.15s, box-shadow 0.15s;
+        }
+
+        .pb-modal-btn-save:hover:not(:disabled) {
+            filter: brightness(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .pb-modal-btn-save:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .pb-modal-btn-save svg {
+            width: 0.875rem;
+            height: 0.875rem;
+            stroke-width: 2;
+        }
+
         html:not(.dark) .dynamic-card-bg {
             background-color: var(--card-dynamic-color) !important;
         }
@@ -1884,7 +2128,6 @@
             const donutKpiContainer = document.getElementById('donut-kpi-card');
             const searchInput = document.getElementById('search-input');
             const addActivityBtn = document.getElementById('add-activity-btn');
-            const addPlaybookBtn = document.getElementById('add-playbook-btn');
             const exportBtn = document.getElementById('export-btn');
             const executionCardConfigs = [
                 {
@@ -3655,18 +3898,6 @@
                     }
                 });
 
-                addPlaybookBtn.addEventListener('click', async () => {
-                    try {
-                        const formId = parseInt(componentData.addPlaybookFormId, 10);
-                        if (!isNaN(formId)) {
-                            await formMitra({ id: formId });
-                            await refreshAllData();
-                        }
-                    } catch (e) {
-                        console.error("Erro ao abrir formulário de playbook:", e);
-                    }
-                });
-
                 exportBtn.addEventListener('click', async () => {
                     exportBtn.disabled = true;
                     exportBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 mr-1.5 animate-spin"></i> Exportando...`;
@@ -3772,6 +4003,220 @@
                         navigateToView('links-uteis', 'Links Úteis');
                     });
                 }
+
+                // ===== Playbook Modal Logic =====
+                (() => {
+                    const pbOverlay = document.getElementById('pb-modal-overlay');
+                    const pbCloseBtn = document.getElementById('pb-modal-close');
+                    const pbCancelBtn = document.getElementById('pb-modal-cancel');
+                    const pbForm = document.getElementById('pb-modal-form');
+                    const pbSaveBtn = document.getElementById('pb-modal-save');
+                    const pbSelectResp = document.getElementById('pb-select-responsavel');
+                    const pbSelectParc = document.getElementById('pb-select-parceiro');
+                    const pbSelectTipo = document.getElementById('pb-select-tipo');
+                    const addPlaybookBtn = document.getElementById('add-playbook-btn');
+
+                    // Cache de dados para evitar queries repetidas
+                    const pbCache = { consultores: null, parceiros: null, tipos: null };
+
+                    const pbQueryConsultores = `
+                        SELECT DISTINCT
+                            PAR.ID_CONSULTOR_CS,
+                            USU.DESCR AS NOME_CONSULTOR
+                        FROM CC_1325 AS HIST_CLI
+                        INNER JOIN (
+                            SELECT ID_PARCEIRO, MAX(ID_CALENDARIO) AS MAX_ID_CALENDARIO
+                            FROM CC_1325 WHERE ID_STATUS_CLIENTE <> 6
+                            GROUP BY ID_PARCEIRO
+                        ) AS LATEST_HIST ON HIST_CLI.ID_PARCEIRO = LATEST_HIST.ID_PARCEIRO
+                          AND HIST_CLI.ID_CALENDARIO = LATEST_HIST.MAX_ID_CALENDARIO
+                        LEFT JOIN CAD_PARCEIRO AS PAR ON PAR.ID = HIST_CLI.ID_PARCEIRO
+                        LEFT JOIN CAD_USUARIO  AS USU ON USU.ID = PAR.ID_CONSULTOR_CS
+                        WHERE PAR.ID_CONSULTOR_CS IS NOT NULL
+                          AND PAR.ID_CONSULTOR_CS <> -999
+                          AND TRIM(USU.DESCR) NOT LIKE '%Z'
+                        ORDER BY USU.DESCR
+                    `;
+
+                    const pbQueryParceiros = `
+                        WITH LATEST_HIST AS (
+                            SELECT ID_PARCEIRO, MAX(ID_CALENDARIO) AS MAX_ID_CALENDARIO
+                            FROM CC_1325 WHERE ID_STATUS_CLIENTE <> 6
+                            GROUP BY ID_PARCEIRO
+                        )
+                        SELECT HIST_CLI.ID_PARCEIRO, PAR.DESCR
+                        FROM CC_1325 AS HIST_CLI
+                        INNER JOIN LATEST_HIST ON HIST_CLI.ID_PARCEIRO = LATEST_HIST.ID_PARCEIRO
+                          AND HIST_CLI.ID_CALENDARIO = LATEST_HIST.MAX_ID_CALENDARIO
+                        LEFT JOIN CAD_1006 AS PAR ON PAR.ID = HIST_CLI.ID_PARCEIRO
+                        WHERE HIST_CLI.ID_STATUS_CLIENTE <> 6
+                        GROUP BY HIST_CLI.ID_PARCEIRO, PAR.DESCR
+                        ORDER BY PAR.DESCR
+                    `;
+
+                    const pbQueryTipos = `SELECT ID, DESCR FROM CAD_10767 WHERE ID <> -999 ORDER BY DESCR`;
+
+                    // Preenche um <select> com dados da query
+                    async function pbFillSelect(selectEl, queryStr, cacheKey, valueCol, labelCol) {
+                        if (pbCache[cacheKey]) {
+                            pbPopulateSelect(selectEl, pbCache[cacheKey]);
+                            return;
+                        }
+                        selectEl.disabled = true;
+                        const opt = selectEl.options[0];
+                        opt.textContent = 'Carregando...';
+                        try {
+                            const result = await queryMitra({ query: queryStr });
+                            const headers = result.headers.map(h => h.name.toUpperCase());
+                            const vIdx = headers.indexOf(valueCol.toUpperCase());
+                            const lIdx = headers.indexOf(labelCol.toUpperCase());
+                            if (vIdx === -1 || lIdx === -1) throw new Error('Colunas não encontradas.');
+                            const items = result.data.map(row => ({ value: row[vIdx], label: row[lIdx] }));
+                            pbCache[cacheKey] = items;
+                            pbPopulateSelect(selectEl, items);
+                        } catch (err) {
+                            console.error(`[Playbook Modal] Falha ao carregar ${cacheKey}:`, err);
+                            opt.textContent = 'Erro ao carregar';
+                        } finally {
+                            selectEl.disabled = false;
+                        }
+                    }
+
+                    function pbPopulateSelect(selectEl, items) {
+                        const placeholder = selectEl.options[0].textContent.replace('Carregando...', 'Selecione...');
+                        selectEl.innerHTML = `<option value="">${placeholder.includes('Carregando') ? 'Selecione...' : placeholder}</option>`;
+                        items.forEach(({ value, label }) => {
+                            const opt = document.createElement('option');
+                            opt.value = value;
+                            opt.textContent = label || String(value);
+                            selectEl.appendChild(opt);
+                        });
+                    }
+
+                    function pbSetFieldError(selectEl, errorEl, show) {
+                        if (show) {
+                            selectEl.classList.add('pb-error');
+                            errorEl.classList.add('visible');
+                        } else {
+                            selectEl.classList.remove('pb-error');
+                            errorEl.classList.remove('visible');
+                        }
+                    }
+
+                    function pbClearErrors() {
+                        [pbSelectResp, pbSelectParc, pbSelectTipo].forEach(sel => sel.classList.remove('pb-error'));
+                        document.querySelectorAll('.pb-modal-error-msg').forEach(el => el.classList.remove('visible'));
+                    }
+
+                    function pbResetForm() {
+                        if (pbForm) pbForm.reset();
+                        pbClearErrors();
+                    }
+
+                    async function pbLoadSelects() {
+                        await Promise.all([
+                            pbFillSelect(pbSelectResp, pbQueryConsultores, 'consultores', 'ID_CONSULTOR_CS', 'NOME_CONSULTOR'),
+                            pbFillSelect(pbSelectParc, pbQueryParceiros, 'parceiros', 'ID_PARCEIRO', 'DESCR'),
+                            pbFillSelect(pbSelectTipo, pbQueryTipos, 'tipos', 'ID', 'DESCR')
+                        ]);
+                        lucide.createIcons();
+                    }
+
+                    function openPbModal() {
+                        pbResetForm();
+                        pbOverlay.classList.add('active');
+                        // Carrega dados (com cache)
+                        pbLoadSelects();
+                        // Foca no primeiro select após a animação
+                        setTimeout(() => { if (pbSelectResp && !pbSelectResp.disabled) pbSelectResp.focus(); }, 220);
+                    }
+
+                    function closePbModal() {
+                        pbOverlay.classList.remove('active');
+                    }
+
+                    // Focus trap dentro do modal
+                    pbOverlay && pbOverlay.addEventListener('keydown', (e) => {
+                        if (e.key !== 'Tab') return;
+                        const focusables = pbOverlay.querySelectorAll(
+                            'button:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                        );
+                        const first = focusables[0];
+                        const last = focusables[focusables.length - 1];
+                        if (e.shiftKey) {
+                            if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+                        } else {
+                            if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+                        }
+                    });
+
+                    // Listeners de abertura/fechamento
+                    addPlaybookBtn && addPlaybookBtn.addEventListener('click', openPbModal);
+                    pbCloseBtn && pbCloseBtn.addEventListener('click', closePbModal);
+                    pbCancelBtn && pbCancelBtn.addEventListener('click', closePbModal);
+                    pbOverlay && pbOverlay.addEventListener('click', (e) => { if (e.target === pbOverlay) closePbModal(); });
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && pbOverlay && pbOverlay.classList.contains('active')) {
+                            closePbModal();
+                        }
+                    });
+
+                    // Limpa erro no campo ao interagir
+                    pbSelectResp && pbSelectResp.addEventListener('change', () => pbSetFieldError(pbSelectResp, document.getElementById('pb-error-responsavel'), false));
+                    pbSelectParc && pbSelectParc.addEventListener('change', () => pbSetFieldError(pbSelectParc, document.getElementById('pb-error-parceiro'), false));
+                    pbSelectTipo && pbSelectTipo.addEventListener('change', () => pbSetFieldError(pbSelectTipo, document.getElementById('pb-error-tipo'), false));
+
+                    // Submit
+                    pbForm && pbForm.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        pbClearErrors();
+
+                        const respVal = pbSelectResp ? pbSelectResp.value : '';
+                        const parcVal = pbSelectParc ? pbSelectParc.value : '';
+                        const tipoVal = pbSelectTipo ? pbSelectTipo.value : '';
+
+                        let hasError = false;
+                        if (!respVal) { pbSetFieldError(pbSelectResp, document.getElementById('pb-error-responsavel'), true); hasError = true; }
+                        if (!parcVal) { pbSetFieldError(pbSelectParc, document.getElementById('pb-error-parceiro'), true); hasError = true; }
+                        if (!tipoVal) { pbSetFieldError(pbSelectTipo, document.getElementById('pb-error-tipo'), true); hasError = true; }
+
+                        if (hasError) {
+                            // Foca no primeiro campo com erro
+                            const errSel = pbOverlay.querySelector('.pb-error');
+                            if (errSel) errSel.focus();
+                            return;
+                        }
+
+                        // Loading state
+                        const originalContent = pbSaveBtn.innerHTML;
+                        pbSaveBtn.disabled = true;
+                        pbSaveBtn.innerHTML = `<i data-lucide="loader-2" class="animate-spin" style="width:0.875rem;height:0.875rem;margin-right:0.375rem;"></i> Salvando...`;
+                        lucide.createIcons();
+
+                        try {
+                            await setVariableMitra({ name: ':VAR_GSC_PB_RESPONSAVEL', content: respVal });
+                            await setVariableMitra({ name: ':VAR_GSC_PB_PARCEIRO', content: parcVal });
+                            await setVariableMitra({ name: ':VAR_GSC_PB_TIPO_DE_PLAYBOOK', content: tipoVal });
+
+                            await actionMitra({ id: parseInt(componentData.addPlaybookActionId || '0', 10) });
+
+                            closePbModal();
+                            showToast('Playbook criado com sucesso!', 'success');
+
+                            if (typeof updateComponentsMitra === 'function') {
+                                await updateComponentsMitra({ all: true });
+                            }
+                            await refreshAllData();
+                        } catch (err) {
+                            console.error('[Playbook Modal] Falha ao salvar:', err);
+                            showToast('Erro ao salvar o playbook. Tente novamente.', 'error');
+                        } finally {
+                            pbSaveBtn.disabled = false;
+                            pbSaveBtn.innerHTML = originalContent;
+                            lucide.createIcons();
+                        }
+                    });
+                })();
 
                 // ===== Report Bug Modal Logic =====
                 const reportBugOverlay = document.getElementById('report-bug-overlay');
@@ -4101,6 +4546,68 @@
         });
 
     </script>
+
+    <!-- Modal: Novo Playbook -->
+    <div id="pb-modal-overlay" class="pb-modal-overlay" role="dialog" aria-modal="true"
+        aria-labelledby="pb-modal-title">
+        <div class="pb-modal" id="pb-modal">
+            <div class="pb-modal-header">
+                <div class="pb-modal-icon">
+                    <i data-lucide="book-plus"></i>
+                </div>
+                <h2 id="pb-modal-title" class="pb-modal-title">Novo Playbook</h2>
+                <button id="pb-modal-close" class="pb-modal-close-btn" aria-label="Fechar modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <hr class="pb-modal-divider" />
+            <form id="pb-modal-form" class="pb-modal-form" novalidate>
+                <!-- Responsável -->
+                <div class="pb-modal-form-group">
+                    <label for="pb-select-responsavel" class="pb-modal-label">
+                        Responsável <span class="pb-modal-required" aria-hidden="true">*</span>
+                    </label>
+                    <select id="pb-select-responsavel" class="pb-modal-select" aria-required="true"
+                        aria-describedby="pb-error-responsavel">
+                        <option value="">Selecione um consultor...</option>
+                    </select>
+                    <span id="pb-error-responsavel" class="pb-modal-error-msg" role="alert">Selecione um
+                        responsável.</span>
+                </div>
+                <!-- Parceiro -->
+                <div class="pb-modal-form-group">
+                    <label for="pb-select-parceiro" class="pb-modal-label">
+                        Parceiro <span class="pb-modal-required" aria-hidden="true">*</span>
+                    </label>
+                    <select id="pb-select-parceiro" class="pb-modal-select" aria-required="true"
+                        aria-describedby="pb-error-parceiro">
+                        <option value="">Selecione um parceiro...</option>
+                    </select>
+                    <span id="pb-error-parceiro" class="pb-modal-error-msg" role="alert">Selecione um parceiro.</span>
+                </div>
+                <!-- Tipo do Playbook -->
+                <div class="pb-modal-form-group">
+                    <label for="pb-select-tipo" class="pb-modal-label">
+                        Tipo do Playbook <span class="pb-modal-required" aria-hidden="true">*</span>
+                    </label>
+                    <select id="pb-select-tipo" class="pb-modal-select" aria-required="true"
+                        aria-describedby="pb-error-tipo">
+                        <option value="">Selecione o tipo...</option>
+                    </select>
+                    <span id="pb-error-tipo" class="pb-modal-error-msg" role="alert">Selecione o tipo do
+                        playbook.</span>
+                </div>
+                <!-- Ações -->
+                <div class="pb-modal-actions">
+                    <button type="button" id="pb-modal-cancel" class="pb-modal-btn-cancel">Cancelar</button>
+                    <button type="submit" id="pb-modal-save" class="pb-modal-btn-save">
+                        <i data-lucide="save"></i>
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Modal: Reportar Bug -->
     <div id="report-bug-overlay" class="report-bug-modal-overlay" role="dialog" aria-modal="true"
